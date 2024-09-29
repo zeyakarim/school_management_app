@@ -1,12 +1,29 @@
-import Navbar from "@/components/Navbar";
+import BarChartContainer from "@/components/BarChartContainer";
+import StudentsChartContainer from "@/components/StudentsChartContainer";
+import UserCards from "@/components/UserCards";
 
 export default function Home() {
   return (
-    <div className="h-screen flex">
-      <div className="w-1/6">
-        <Navbar />
+    <div className='flex flex-wrap px-4 gap-2'>
+      {/* LEFT */}
+      <div className="w-[70%]">
+        <UserCards />
+        <div className="flex justify-between items-center gap-2">
+          {/* STUDENT CHART */}
+          <div className="w-full lg:w-1/3 pt-4 h-[430px]">
+            <StudentsChartContainer />
+          </div>
+
+          {/* ATTENDANCE CHART */}
+          <div className="w-full lg:w-2/3 pt-4 h-[430px]">
+            <BarChartContainer />
+          </div>
+        </div>
+        
       </div>
-      <main className="w-5/6 bg-slate-50">main section</main>
+
+      {/* RIGHT */}
+      <div className='w-[29%]'>r</div>
     </div>
   );
 }

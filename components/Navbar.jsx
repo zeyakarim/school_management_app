@@ -21,7 +21,7 @@ const Navbar = () => {
             <p className='text-gray-400 text-xs pb-2 pt-6 px-5 '>MENU</p>
             <div className='px-5 py-2 overflow-hidden h-[80vh] hover:overflow-y-scroll scrollbar'>
                 {navLists?.map((nav) => (
-                    <Link key={nav?.title} className='flex items-center gap-4 py-2 px-2 justify-center md:justify-start hover:cursor-pointer hover:bg-slate-100' href={nav?.link}>
+                    <Link key={nav?.title} className='flex items-center gap-4 py-2 px-2 justify-center md:justify-start hover:cursor-pointer hover:bg-[#EDF9FD]' href={nav?.link}>
                         <Image 
                             src={nav?.icon} 
                             alt={nav?.title}
@@ -35,7 +35,7 @@ const Navbar = () => {
                 <div className='pt-6'>
                     <p className='text-gray-400 text-xs pb-2'>OTHER</p>
                     {otherLists?.map((list) => (
-                        <div key={list?.title} className='flex items-center gap-4 py-2 px-2 justify-center md:justify-start hover:cursor-pointer hover:bg-slate-100'>
+                        <div key={list?.title} className='flex items-center gap-4 py-2 px-2 justify-center md:justify-start hover:cursor-pointer hover:bg-[#EDF9FD]'>
                             <Image 
                                 src={list?.icon} 
                                 alt={list?.title}

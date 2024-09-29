@@ -87,4 +87,27 @@ export const otherLists = [
         title: 'Logout',
         link: '/logout'
     },
+];
+
+export const adminDashboardCards = [
+    {
+        title: 'Admins',
+        count: 5,
+        session: '2024/25'
+    },
+    {
+        title: 'Teachers',
+        count: 24,
+        session: '2024/25'
+    },
+    {
+        title: 'Students',
+        count: 540,
+        session: '2024/25'
+    },
+    {
+        title: 'Parents',
+        count: 350,
+        session: '2024/25'
+    }
 ]
