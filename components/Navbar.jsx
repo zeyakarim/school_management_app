@@ -6,7 +6,7 @@ import Link from 'next/link';
 
 const Navbar = () => {
   return (
-    <div>
+    <div className='sticky top-0'>
         <div className='flex items-center gap-2 px-5 pt-5 justify-center md:justify-start'>
             <Image 
                 src='/logo.png'
@@ -19,7 +19,7 @@ const Navbar = () => {
         
         <div >
             <p className='text-gray-400 text-xs pb-2 pt-6 px-5 '>MENU</p>
-            <div className='px-5 py-2 overflow-hidden h-[80vh] hover:overflow-y-scroll scrollbar'>
+            <div className='px-5 py-2 relative overflow-hidden h-[80vh] hover:overflow-y-scroll scrollbar'>
                 {navLists?.map((nav) => (
                     <Link key={nav?.title} className='flex items-center gap-4 py-2 px-2 justify-center md:justify-start hover:cursor-pointer hover:bg-[#EDF9FD]' href={nav?.link}>
                         <Image 

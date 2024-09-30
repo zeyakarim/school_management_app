@@ -11,7 +11,7 @@ export default function DashboardLayout({ children }) {
   return (
     <html lang="en">
       <body>
-        <div className="h-screen flex">
+        <div className="flex">
           {/* LEFT */}
           <div className="w-[16%] md:w-[8%] lg:w-[16%]">
             <Navbar />
