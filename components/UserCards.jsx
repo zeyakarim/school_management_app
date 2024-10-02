@@ -1,4 +1,4 @@
-import { adminDashboardCards } from "@/data/navList";
+import { adminDashboardCards } from "@/lib/data";
 import Image from "next/image";
 
 const UserCards = () => {

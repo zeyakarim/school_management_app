@@ -1,8 +1,8 @@
 'use client'
 import React from 'react'
 import Image from 'next/image';
-import { menuItems } from '@/data/navList';
 import Link from 'next/link';
+import { menuItems } from '@/lib/data';
 
 const Navbar = () => {
   return (

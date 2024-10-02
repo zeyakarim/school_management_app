@@ -2,14 +2,8 @@ import Image from 'next/image';
 import React from 'react'
 
 const Header = () => {
-  return (
-    <div className='flex items-center justify-between p-4'>
-        <div className='flex items-center px-2 rounded-full ring-[1.5px] ring-gray-300'>
-            <Image src='/search.png' alt='search' width={14} height={14} />
-            <input type='text' placeholder='Search...' className='bg-transparent w-[200px] outline-none px-2' />
-        </div>
-
-        <div className='flex items-center justify-end gap-6 w-full'>
+    return (
+        <div className="flex items-center justify-end gap-6 p-4 w-full">
             <div className='pt-3'>
                 <Image src='/message.png' alt='messages' width={18} height={18} />
             </div>
@@ -25,8 +19,7 @@ const Header = () => {
                 <Image src='/avatar.png' alt='avatar' width={28} height={28} className='rounded-full object-cover' />
             </div>
         </div>
-    </div>
-  )
-}
+    )
+};
 
 export default Header;
