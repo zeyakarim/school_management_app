@@ -131,3 +131,8 @@
   color: gray !important;
   margin-bottom: 5px;
 }
+
+.table-custom-css > div:first-child {
+  border-radius: 0px 0px 14px 14px !important;
+  box-shadow: none !important;
+}

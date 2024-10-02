@@ -6,7 +6,7 @@ import Link from 'next/link';
 
 const Navbar = () => {
   return (
-    <div className='sticky top-0'>
+    <div className='sticky top-0 shadow-small'>
         <div className='flex items-center gap-2 px-5 pt-5 justify-center md:justify-start'>
             <Image 
                 src='/logo.png'
