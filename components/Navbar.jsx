@@ -1,7 +1,7 @@
 'use client'
 import React from 'react'
 import Image from 'next/image';
-import { navLists, otherLists } from '@/data/navList';
+import { menuItems } from '@/data/navList';
 import Link from 'next/link';
 
 const Navbar = () => {
@@ -17,38 +17,26 @@ const Navbar = () => {
             <p className='font-semibold hidden md:block'>Alfalah School</p>
         </div>
         
-        <div >
-            <p className='text-gray-400 text-xs pb-2 pt-6 px-5 '>MENU</p>
-            <div className='px-5 py-2 relative overflow-hidden h-[80vh] hover:overflow-y-scroll scrollbar'>
-                {navLists?.map((nav) => (
-                    <Link key={nav?.title} className='flex items-center gap-4 py-2 px-2 justify-center md:justify-start hover:cursor-pointer hover:bg-[#EDF9FD]' href={nav?.link}>
-                        <Image 
-                            src={nav?.icon} 
-                            alt={nav?.title}
-                            height={16}
-                            width={16} 
-                        />
-                        <p className='text-sm text-gray-500 hidden md:block'>{nav?.title}</p>
-                    </Link>
-                ))}
-
-                <div className='pt-6'>
-                    <p className='text-gray-400 text-xs pb-2'>OTHER</p>
-                    {otherLists?.map((list) => (
-                        <div key={list?.title} className='flex items-center gap-4 py-2 px-2 justify-center md:justify-start hover:cursor-pointer hover:bg-[#EDF9FD]'>
-                            <Image 
-                                src={list?.icon} 
-                                alt={list?.title}
-                                height={16}
-                                width={16} 
-                            />
-                            <p className='text-sm text-gray-500 hidden md:block'>{list?.title}</p>
-                        </div>
+        <div className="mt-4 text-sm relative overflow-hidden h-[85vh] hover:overflow-y-scroll scrollbar">
+            {menuItems.map((i) => (
+                <div className="flex flex-col gap-2 lg:px-3" key={i.title}>
+                    <span className="hidden lg:block text-gray-400 font-light my-4">
+                        {i.title}
+                    </span>
+                    {i.items.map((item) => (
+                        <Link
+                            href={item.href}
+                            key={item.label}
+                            className="flex items-center justify-center lg:justify-start gap-4 text-gray-500 py-2 md:px-2 rounded-md hover:bg-[#EDF9FD]"
+                        >
+                            <Image src={item.icon} alt="" width={20} height={20} />
+                            <span className="hidden lg:block">{item.label}</span>
+                        </Link>
                     ))}
                 </div>
+            ))}
             </div>
         </div>
-    </div>
   )
 }
 
