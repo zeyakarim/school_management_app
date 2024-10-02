@@ -3,7 +3,7 @@ import Image from "next/image";
 
 const UserCards = () => {
   return (
-    <div className='flex gap-2 flex-wrap'>
+    <div className='flex justify-between gap-2 flex-wrap '>
       {adminDashboardCards?.map((card) => (
         <div key={card?.title} className='rounded-2xl odd:bg-[#CFCEFF] even:bg-[#FAE27C] py-4 px-4 w-full md:w-[185px]'>
           <div className='flex justify-between'>

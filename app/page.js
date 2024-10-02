@@ -11,18 +11,18 @@ export default function Home() {
         <UserCards />
         <div className="flex gap-4 flex-col lg:flex-row">
           {/* STUDENT CHART */}
-          <div className="w-full lg:w-1/3 h-[430px]">
+          <div className="w-full lg:w-1/3 h-[380px]">
             <StudentsChartContainer />
           </div>
 
           {/* ATTENDANCE CHART */}
-          <div className="w-full lg:w-2/3 h-[430px]">
+          <div className="w-full lg:w-2/3 h-[380px]">
             <BarChartContainer />
           </div>
         </div>
         
         {/* BOTTOM CHART */}
-        <div className="w-full h-[500px]">
+        <div className="w-full h-[430px]">
           <FinanceChatContainer />
         </div>
       </div>

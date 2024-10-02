@@ -22,7 +22,7 @@ const CountChat = () => {
     ];
 
     return (
-        <div className='h-[75%]'>
+        <div className='h-[65%]'>
             <ResponsiveContainer>
                 <RadialBarChart
                     cx="50%"
