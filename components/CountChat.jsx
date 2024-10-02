@@ -1,4 +1,5 @@
 'use client'
+import Image from 'next/image';
 import React from 'react'
 import { RadialBar, RadialBarChart, ResponsiveContainer, Legend } from 'recharts';
 
@@ -22,7 +23,7 @@ const CountChat = () => {
     ];
 
     return (
-        <div className='h-[65%]'>
+        <div className='relative h-[65%]'>
             <ResponsiveContainer>
                 <RadialBarChart
                     cx="50%"
@@ -38,6 +39,14 @@ const CountChat = () => {
                     />
                 </RadialBarChart>
             </ResponsiveContainer>
+
+            <Image
+                src="/maleFemale.png"
+                alt=""
+                width={50}
+                height={50}
+                className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2"
+            />
         </div>
     )
 }

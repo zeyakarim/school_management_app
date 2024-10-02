@@ -9,7 +9,7 @@ const Header = () => {
             <input type='text' placeholder='Search...' className='bg-transparent w-[200px] outline-none px-2' />
         </div>
 
-        <div className='flex items-center gap-6'>
+        <div className='flex items-center justify-end gap-6 w-full'>
             <div className='pt-3'>
                 <Image src='/message.png' alt='messages' width={18} height={18} />
             </div>
