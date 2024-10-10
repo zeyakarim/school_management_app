@@ -26,11 +26,11 @@ const EventCalendar = () => {
     const [value, onChange] = useState(new Date());
     return (
         <div>
-            <div className='p-4 bg-white rounded-md'>
+            <div className='p-4 bg-white rounded-md shadow-small'>
                 <Calendar onChange={onChange} value={value} />
             </div>
 
-            <div className='bg-white rounded-md mt-2 p-4'>
+            <div className='bg-white rounded-md mt-3 p-4 shadow-small'>
                 <div className='flex justify-between items-center'>
                     <p className='font-semibold'>Events</p>
                     <Image src='/moreDark.png' alt='moreDark' width={16} height={16} />

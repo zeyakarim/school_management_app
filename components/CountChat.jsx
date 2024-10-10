@@ -1,7 +1,6 @@
 'use client'
 import Image from 'next/image';
-import React from 'react'
-import { RadialBar, RadialBarChart, ResponsiveContainer, Legend } from 'recharts';
+import { RadialBar, RadialBarChart, ResponsiveContainer } from 'recharts';
 
 const CountChat = () => {
     const data = [

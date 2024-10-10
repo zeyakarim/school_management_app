@@ -3,7 +3,7 @@ import CountChat from './CountChat';
 
 const StudentsChartContainer = () => {
   return (
-    <div className='bg-white w-ful h-full rounded'>
+    <div className='bg-white w-full h-full rounded shadow-small'>
       <div className='flex justify-between items-center p-3'>
         <p className='font-bold'>Students</p>
         <Image src='/moreDark.png' alt='more' width={14} height={14} className='color' />
