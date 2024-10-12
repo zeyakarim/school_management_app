@@ -1,5 +1,6 @@
 'use client'
 import { ActionRenderCell, InfoRenderCell, StudentRenderCell, SubjectsRenderCell, TeacherRenderCell } from '@/components/RenderCell';
+import { Chip } from '@nextui-org/react';
 
 export const teacherColumns = [
     {
@@ -95,6 +96,27 @@ export const subjectColumns = [
         field: 'teachers',
         headerName: 'Teachers',
         renderCell: (row) => TeacherRenderCell(row)
+    },
+    {
+        field: 'actions',
+        headerName: 'Actions',
+        renderCell: (row) => ActionRenderCell(row)
+    }
+];
+
+export const classesColumns = [
+    {
+        field: 'name',
+        headerName: 'Subject Name'
+    },
+    {
+        field: 'capacity',
+        headerName: 'Capacity'
+    },
+    {
+        field: 'supervisor',
+        headerName: 'Supervisor',
+        renderCell: (row) => <Chip color="warning" variant='flat'>{row?.supervisor}</Chip>
     },
     {
         field: 'actions',
