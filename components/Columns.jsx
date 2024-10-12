@@ -145,3 +145,53 @@ export const lessonColumns = [
         renderCell: (row) => ActionRenderCell(row)
     }
 ];
+
+export const examColumns = [
+    {
+        field: 'name',
+        headerName: 'Subject Name'
+    },
+    {
+        field: 'class',
+        headerName: 'Class'
+    },
+    {
+        field: 'teacher',
+        headerName: 'Teacher',
+        renderCell: (row) => <Chip color="warning" variant='flat'>{row?.teacher}</Chip>
+    },
+    {
+        field: 'date',
+        headerName: 'Date'
+    },
+    {
+        field: 'actions',
+        headerName: 'Actions',
+        renderCell: (row) => ActionRenderCell(row)
+    }
+];
+
+export const assignmentColumns = [
+    {
+        field: 'name',
+        headerName: 'Subject Name'
+    },
+    {
+        field: 'class',
+        headerName: 'Class'
+    },
+    {
+        field: 'teacher',
+        headerName: 'Teacher',
+        renderCell: (row) => <Chip color="warning" variant='flat'>{row?.teacher}</Chip>
+    },
+    {
+        field: 'submitDate',
+        headerName: 'Submit Date'
+    },
+    {
+        field: 'actions',
+        headerName: 'Actions',
+        renderCell: (row) => ActionRenderCell(row)
+    }
+];
