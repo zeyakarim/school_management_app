@@ -6,7 +6,7 @@ export const InfoRenderCell = (row) => {
         <User
             name={row?.name}
             description={row?.email}
-            avatarProps={{ src: row?.avatar }}
+            avatarProps={{ src: row?.avatar && row?.avatar }}
         />
     );
 };
@@ -53,4 +53,36 @@ export const ActionRenderCell = (row) => {
             </Tooltip>
         </div>
     );
+}
+
+export const StudentRenderCell = (row) => {
+    return (
+        <div>
+            {row?.studentName?.slice(0,2)?.map((student, index) => (
+                <Chip key={index} color="warning" variant='flat' className="mr-1">{student}</Chip>
+            ))}
+            {row?.studentName?.length > 2 ? (
+                <Tooltip content={
+                    <div>
+                        {row?.studentName?.slice(2)?.map((student, index) => (
+                            <p key={index}>{student},</p>
+                        ))}
+                    </div>
+                    } arrow
+                >
+                <Chip color="warning" variant="flat">{`+ ${row?.studentName?.length - 2} `}</Chip>
+                </Tooltip>
+            ) : null}
+        </div>
+    )
+}
+
+export const TeacherRenderCell = (row) => {
+    return (
+        <div>
+            {row?.teachers?.map((teacher, index) => (
+                <Chip key={index} color="warning" variant='flat' className="mr-1">{teacher}</Chip>
+            ))}
+        </div>
+    )
 }

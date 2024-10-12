@@ -1,5 +1,5 @@
 'use client'
-import { ActionRenderCell, InfoRenderCell, SubjectsRenderCell } from '@/components/RenderCell';
+import { ActionRenderCell, InfoRenderCell, StudentRenderCell, SubjectsRenderCell, TeacherRenderCell } from '@/components/RenderCell';
 
 export const teacherColumns = [
     {
@@ -52,6 +52,49 @@ export const studentColumns = [
     {
         field: 'address',
         headerName: 'Address'
+    },
+    {
+        field: 'actions',
+        headerName: 'Actions',
+        renderCell: (row) => ActionRenderCell(row)
+    }
+];
+
+export const parentColumns = [
+    {
+        field: 'info',
+        headerName: 'Information',
+        renderCell: (row) => InfoRenderCell(row)
+    },
+    {
+        field: 'studentName',
+        headerName: 'Student Name',
+        renderCell: (row) => StudentRenderCell(row)
+    },
+    {
+        field: 'phone',
+        headerName: 'Phone'
+    },
+    {
+        field: 'address',
+        headerName: 'Address'
+    },
+    {
+        field: 'actions',
+        headerName: 'Actions',
+        renderCell: (row) => ActionRenderCell(row)
+    }
+];
+
+export const subjectColumns = [
+    {
+        field: 'name',
+        headerName: 'Subject Name'
+    },
+    {
+        field: 'teachers',
+        headerName: 'Teachers',
+        renderCell: (row) => TeacherRenderCell(row)
     },
     {
         field: 'actions',
