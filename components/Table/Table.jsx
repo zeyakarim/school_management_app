@@ -1,5 +1,5 @@
 'use client'
-import React, { useCallback, useMemo, useState } from "react";
+import React, { useState } from "react";
 import {
     Table, 
     TableHeader, 
@@ -8,23 +8,13 @@ import {
     TableRow, 
     TableCell, 
     Spinner, 
-    getKeyValue,
-    Input,
-    User,
-    Chip,
-    Tooltip
+    Input
 } from "@nextui-org/react";
-import useSWR from "swr";
 import Image from "next/image";
 import PaginationComponent from "./Pagination";
-import { EditIcon } from "./EditIcon";
-import { DeleteIcon } from "./DeleteIcon";
-import { ViewIcon } from "./ViewIcon";
-
-const fetcher = (...args) => fetch(...args).then((res) => res.json());
 
 const TableComponent = (props) => {
-    const { title, columns, users } = props;
+    const { title, columns, data } = props;
     const [page, setPage] = useState(1);
     const pages = 250;
     const [filterValue, setFilterValue] = useState("");
@@ -47,75 +37,12 @@ const TableComponent = (props) => {
         setPage(1)
     },[])
 
-    // const {data, isLoading} = useSWR(`https://swapi.py4e.com/api/people?page=${page}`, fetcher, {
-    //     keepPreviousData: true,
-    // });
-
-    // const rowsPerPage = 10;
-
-    // const pages = useMemo(() => {
-    //     return data?.count ? Math.ceil(data.count / rowsPerPage) : 0;
-    // }, [data?.count, rowsPerPage]);
-
-    // const loadingState = isLoading || data?.results.length === 0 ? "loading" : "idle";
-
-    const statusColorMap = {
-        active: "success",
-        paused: "danger",
-        vacation: "warning",
+    const renderCell = (row, columnKey) => {
+        const column = columns?.find((column) => column?.field === columnKey);
+        return (
+            column?.renderCell ? column?.renderCell(row) : row[columnKey]
+        )
     };
-    
-    const renderCell = React.useCallback((user, columnKey) => {
-        const cellValue = user[columnKey];
-    
-        switch (columnKey) {
-            case "name":
-                return (
-                <User
-                    avatarProps={{radius: "lg", src: user.avatar}}
-                    description={user.email}
-                    name={cellValue}
-                >
-                    {user.email}
-                </User>
-                );
-            case "role":
-                return (
-                    <div className="flex flex-col">
-                        <p className="text-bold text-sm capitalize">{cellValue}</p>
-                        <p className="text-bold text-sm capitalize text-default-400">{user.team}</p>
-                    </div>
-                );
-            case "status":
-                return (
-                <Chip className="capitalize" color={statusColorMap[user.status]} size="sm" variant="flat">
-                    {cellValue}
-                </Chip>
-                );
-            case "actions":
-                return (
-                    <div className="relative flex items-center gap-2 justify-center">
-                        <Tooltip content="Details">
-                            <span className="text-lg text-default-400 cursor-pointer active:opacity-50">
-                                <ViewIcon />
-                            </span>
-                        </Tooltip>
-                        <Tooltip content="Edit user">
-                            <span className="text-lg text-default-400 cursor-pointer active:opacity-50">
-                                <EditIcon />
-                            </span>
-                        </Tooltip>
-                        <Tooltip color="danger" content="Delete user">
-                            <span className="text-lg text-danger cursor-pointer active:opacity-50">
-                                <DeleteIcon />
-                            </span>
-                        </Tooltip>
-                    </div>
-                );
-          default:
-            return cellValue;
-        }
-    }, []);
 
     return (
         <div className="w-full">
@@ -146,18 +73,17 @@ const TableComponent = (props) => {
                     <TableHeader columns={columns}>
                         {(column) => (
                         <TableColumn  
-                            key={column.uid}
-                            align={column.uid === "actions" ? "center" : "start"}
+                            key={column.field}
+                            align={column.field === "actions" ? "center" : "start"}
                             allowsSorting={column.sortable}
                         >
-                            {column.name}
+                            {column.headerName}
                         </TableColumn>
                         )}
                     </TableHeader>
 
                     <TableBody
-                        // items={data?.results ?? []}
-                        items={users}
+                        items={data ?? []}
                         // items={sortedItems}
                         // loadingContent={<Spinner />}
                         // loadingState={loadingState}
