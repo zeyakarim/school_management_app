@@ -124,3 +124,24 @@ export const classesColumns = [
         renderCell: (row) => ActionRenderCell(row)
     }
 ];
+
+export const lessonColumns = [
+    {
+        field: 'name',
+        headerName: 'Subject Name'
+    },
+    {
+        field: 'class',
+        headerName: 'Class'
+    },
+    {
+        field: 'teacher',
+        headerName: 'Teacher',
+        renderCell: (row) => <Chip color="warning" variant='flat'>{row?.teacher}</Chip>
+    },
+    {
+        field: 'actions',
+        headerName: 'Actions',
+        renderCell: (row) => ActionRenderCell(row)
+    }
+];
