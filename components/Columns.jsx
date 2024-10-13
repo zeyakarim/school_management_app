@@ -165,6 +165,10 @@ export const examColumns = [
         headerName: 'Date'
     },
     {
+        field: 'timing',
+        headerName: 'Timing'
+    },
+    {
         field: 'actions',
         headerName: 'Actions',
         renderCell: (row) => ActionRenderCell(row)
@@ -195,3 +199,86 @@ export const assignmentColumns = [
         renderCell: (row) => ActionRenderCell(row)
     }
 ];
+
+export const resultColumns = [
+    {
+        field: 'sno',
+        headerName: 'S.No'
+    },
+    {
+        field: 'studentName',
+        headerName: 'Student',
+        renderCell: (row) => (
+            <Chip color="warning" variant='flat'>{row?.studentName}</Chip>
+        )
+    },
+    {
+        field: 'grade',
+        headerName: 'Grade'
+    },
+    {
+        field: 'percentage',
+        headerName: 'Percentage'
+    },
+    {
+        field: 'marks',
+        headerName: 'Mark'
+    },
+    {
+        field: 'class',
+        headerName: 'Class'
+    },
+];
+
+export const attendanceColumns = [
+    {
+        field: 'sno',
+        headerName: 'S.No'
+    },
+    {
+        field: 'studentName',
+        headerName: 'Student Name',
+        renderCell: (row) => (
+            <Chip color="warning" variant='flat'>{row?.studentName}</Chip>
+        )
+    },
+    {
+        field: 'daysAbsent',
+        headerName: 'Days Absent'
+    },
+    {
+        field: 'daysPresent',
+        headerName: 'Days Present'
+    },
+    {
+        field: 'monthName',
+        headerName: 'Month'
+    },
+    {
+        field: 'class',
+        headerName: 'Class'
+    }
+];
+
+export const eventColumns = [
+    {
+        field: 'title',
+        headerName: 'Title'
+    },
+    {
+        field: 'class',
+        headerName: 'Class'
+    },
+    {
+        field: 'date',
+        headerName: 'Date'
+    },
+    {
+        field: 'startTime',
+        headerName: 'Start Time'
+    },
+    {
+        field: 'endTime',
+        headerName: 'End Time'
+    }
+]
