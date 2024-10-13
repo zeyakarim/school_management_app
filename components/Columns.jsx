@@ -281,4 +281,19 @@ export const eventColumns = [
         field: 'endTime',
         headerName: 'End Time'
     }
+];
+
+export const announcementColumns = [
+    {
+        field: 'title',
+        headerName: 'Title'
+    },
+    {
+        field: 'class',
+        headerName: 'Class'
+    },
+    {
+        field: 'date',
+        headerName: 'Date'
+    }
 ]
