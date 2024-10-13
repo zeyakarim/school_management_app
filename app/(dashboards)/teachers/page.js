@@ -9,6 +9,7 @@ const Teachers = () => {
         columns={teacherColumns}
         data={teachers}
         title='All Teachers'
+        dialogTitle='Create A New Teacher'
       />
     </div>
   )
