@@ -9,6 +9,8 @@ const Students = () => {
                 columns={studentColumns}
                 data={students}
                 title='All Students'
+                table="student"
+                type="create"
             />
         </div>
     )

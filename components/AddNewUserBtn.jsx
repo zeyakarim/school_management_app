@@ -1,8 +1,8 @@
 import {Button, useDisclosure} from "@nextui-org/react";
 import Dialog from "./Dialog";
 
-const AddNewUserBtn = ({ dialogTitle }) => {
-    const {isOpen, onOpen, onOpenChange} = useDisclosure();
+const AddNewUserBtn = ({ dialogTitle, table, type }) => {
+    const {isOpen, onOpen, onOpenChange } = useDisclosure();
 
     return (
        <div>
@@ -17,6 +17,8 @@ const AddNewUserBtn = ({ dialogTitle }) => {
                 isOpen={isOpen}
                 onOpenChange={onOpenChange}
                 dialogTitle={dialogTitle}
+                table={table}
+                type={type}
             />
        </div>
     )

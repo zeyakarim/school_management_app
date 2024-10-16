@@ -10,6 +10,8 @@ const Teachers = () => {
         data={teachers}
         title='All Teachers'
         dialogTitle='Create A New Teacher'
+        table="teacher"
+        type="create"
       />
     </div>
   )

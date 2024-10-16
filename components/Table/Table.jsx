@@ -15,7 +15,7 @@ import PaginationComponent from "./Pagination";
 import AddNewUserBtn from "../AddNewUserBtn";
 
 const TableComponent = (props) => {
-    const { title, columns, data, dialogTitle } = props;
+    const { title, columns, data, dialogTitle, table, type } = props;
     const [page, setPage] = useState(1);
     const pages = 250;
     const [filterValue, setFilterValue] = useState("");
@@ -62,7 +62,7 @@ const TableComponent = (props) => {
                             onValueChange={onSearchChange}
                             variant="bordered"
                         />
-                        <AddNewUserBtn dialogTitle={dialogTitle} />
+                        <AddNewUserBtn dialogTitle={dialogTitle} table={table} type={type} />
                     </div>
 
                 </div>
@@ -102,7 +102,6 @@ const TableComponent = (props) => {
                     </TableBody>
                 </Table>
             </div>
-
             <PaginationComponent page={page} pages={pages} setPage={setPage} />
         </div>
     );
