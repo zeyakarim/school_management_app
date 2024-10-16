@@ -39,6 +39,10 @@ export const studentColumns = [
         renderCell: (row) => InfoRenderCell(row)
     },
     {
+        field: 'parent',
+        headerName: 'Parent'
+    },
+    {
         field: 'studentId',
         headerName: 'Student ID'
     },

@@ -8,14 +8,17 @@ import {
     TableRow, 
     TableCell, 
     Spinner, 
-    Input
+    Input,
+    Button,
+    useDisclosure
 } from "@nextui-org/react";
 import Image from "next/image";
 import PaginationComponent from "./Pagination";
-import AddNewUserBtn from "../AddNewUserBtn";
+import Dialog from "../Dialog";
 
 const TableComponent = (props) => {
     const { title, columns, data, dialogTitle, table, type } = props;
+    const {isOpen, onOpen, onOpenChange } = useDisclosure();
     const [page, setPage] = useState(1);
     const pages = 250;
     const [filterValue, setFilterValue] = useState("");
@@ -62,7 +65,13 @@ const TableComponent = (props) => {
                             onValueChange={onSearchChange}
                             variant="bordered"
                         />
-                        <AddNewUserBtn dialogTitle={dialogTitle} table={table} type={type} />
+                        
+                        <Button
+                            radius="full" className="bg-gradient-to-tr from-pink-500 to-yellow-500 text-white shadow-lg"
+                            onClick={onOpen}
+                        >
+                            ADD
+                        </Button>
                     </div>
 
                 </div>
@@ -103,6 +112,14 @@ const TableComponent = (props) => {
                 </Table>
             </div>
             <PaginationComponent page={page} pages={pages} setPage={setPage} />
+
+            <Dialog
+                isOpen={isOpen}
+                onOpenChange={onOpenChange}
+                dialogTitle={dialogTitle}
+                table={table}
+                type={type}
+            />
         </div>
     );
 }

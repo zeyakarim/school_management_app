@@ -121,6 +121,17 @@ const StudentForm = () => {
                         ))}
                     </Select>
 
+                    <Input
+                        isRequired
+                        type="text"
+                        label="Parent"
+                        endContent={
+                            <UserIcon className="text-xs text-default-400 pointer-events-none flex-shrink-0" />
+                        }
+                        variant="bordered"
+                        className="w-[32%]"
+                    />
+
                     <div className="flex items-center gap-2 w-full md:w-[32%]">
                         <label className="text-xs text-gray-500 flex items-center gap-2 cursor-pointer" htmlFor="img">
                             <Image src="/upload.png" alt='' width={24} height={24} />

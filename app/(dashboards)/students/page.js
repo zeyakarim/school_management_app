@@ -11,6 +11,7 @@ const Students = () => {
                 title='All Students'
                 table="student"
                 type="create"
+                dialogTitle='Create A New Student'
             />
         </div>
     )
