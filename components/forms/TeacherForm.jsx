@@ -16,13 +16,14 @@ const TeacherForm = () => {
     return (
         <div>
             <form action="" method="post">
-                <p className="text-xs text-gray-500 py-2 pl-2">Authentication Information</p>
+                <p className="text-xs text-gray-500 py-2 pl-[5px]">Authentication Information</p>
                 <div className="flex gap-2 flex-wrap">
                     <Input
                         isRequired
                         autoFocus
                         type="text"
                         label="Username"
+                        labelPlacement="outside"
                         variant="bordered"
                         className="w-[32%]"
                         endContent={
@@ -38,6 +39,7 @@ const TeacherForm = () => {
                         variant="bordered"
                         type='email'
                         className="w-[32%]"
+                        labelPlacement="outside"
                     />
                     <Input
                         isRequired
@@ -54,9 +56,10 @@ const TeacherForm = () => {
                         type={isVisible ? "text" : "password"}
                         variant="bordered"
                         className="w-[32%]"
+                        labelPlacement="outside"
                     />
                 </div>
-                <p className="text-xs text-gray-500 py-2 pl-2">Personal Information</p>
+                <p className="text-xs text-gray-500 py-4 pl-[5px]">Personal Information</p>
 
                 <div className="flex gap-2 flex-wrap justify-between">
                     <Input
@@ -68,6 +71,7 @@ const TeacherForm = () => {
                         }
                         variant="bordered"
                         className="w-[32%]"
+                        labelPlacement="outside"
                     />
                     <Input
                         label="Last Name"
@@ -77,6 +81,7 @@ const TeacherForm = () => {
                         variant="bordered"
                         type='text'
                         className="w-[32%]"
+                        labelPlacement="outside"
                     />
                     <Input
                         isRequired
@@ -87,6 +92,7 @@ const TeacherForm = () => {
                         type='number'
                         variant="bordered"
                         className="w-[32%]"
+                        labelPlacement="outside"
                     />
                     <Input
                         label="Address"
@@ -96,6 +102,7 @@ const TeacherForm = () => {
                         }
                         variant="bordered"
                         className="w-[32%]"
+                        labelPlacement="outside"
                     />
                     <Input
                         label="Blood Type"
@@ -105,14 +112,16 @@ const TeacherForm = () => {
                             <Bloodtype style={{fontSize:'20px'}} className="text-default-400 pointer-events-none flex-shrink-0"  />
                         }
                         className="w-[32%]"
+                        labelPlacement="outside"
                     />
 
-                    <DatePicker label="Birth date" className="w-[32%]"  variant="bordered" />
+                    <DatePicker label="Birth date" className="w-[32%]"  variant="bordered" labelPlacement="outside" />
 
                     <Select
                         label="Gender"
                         className="w-[32%]"
                         variant="bordered"
+                        labelPlacement="outside" 
                     >
                         {genders.map((gender) => (
                             <SelectItem key={gender.key}>

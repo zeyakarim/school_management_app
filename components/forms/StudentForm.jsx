@@ -68,6 +68,7 @@ const StudentForm = () => {
                         }
                         variant="bordered"
                         className="w-[32%]"
+                        labelPlacement="outside"
                     />
                     <Input
                         label="Last Name"
@@ -77,6 +78,7 @@ const StudentForm = () => {
                         variant="bordered"
                         type='text'
                         className="w-[32%]"
+                        labelPlacement="outside"
                     />
                     <Input
                         isRequired
@@ -87,6 +89,7 @@ const StudentForm = () => {
                         type='number'
                         variant="bordered"
                         className="w-[32%]"
+                        labelPlacement="outside"
                     />
                     <Input
                         label="Address"
@@ -96,6 +99,7 @@ const StudentForm = () => {
                         }
                         variant="bordered"
                         className="w-[32%]"
+                        labelPlacement="outside"
                     />
                     <Input
                         label="Blood Type"
@@ -105,14 +109,16 @@ const StudentForm = () => {
                             <Bloodtype style={{fontSize:'20px'}} className="text-default-400 pointer-events-none flex-shrink-0"  />
                         }
                         className="w-[32%]"
+                        labelPlacement="outside"
                     />
 
-                    <DatePicker label="Birth date" className="w-[32%]"  variant="bordered" />
+                    <DatePicker label="Birth date" className="w-[32%]"  variant="bordered" labelPlacement="outside" />
 
                     <Select
                         label="Gender"
                         className="w-[32%]"
                         variant="bordered"
+                        labelPlacement="outside"
                     >
                         {genders.map((gender) => (
                             <SelectItem key={gender.key}>
@@ -130,6 +136,7 @@ const StudentForm = () => {
                         }
                         variant="bordered"
                         className="w-[32%]"
+                        labelPlacement="outside"
                     />
 
                     <div className="flex items-center gap-2 w-full md:w-[32%]">
