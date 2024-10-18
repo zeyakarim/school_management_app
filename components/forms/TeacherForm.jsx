@@ -9,6 +9,17 @@ const genders = [
     { "label": "FEMALE", "key": "female" }
 ]
 
+const subjects = [
+    { "label": "MATH", "key": "math"},
+    { "label": "SCIENCE", "key": "science" },
+    { "label": "HISTORY", "key": "history"},
+    { "label": "ENGLISH", "key": "english"},
+    { "label": "HINDI", "key": "hindi" },
+    { "label": "URDU", "key": "urdu"},
+    { "label": "SOCIAL SCIENCE", "key": "socialScience" },
+    { "label": "MORAL SCIENCE", "key": "moralScience" }
+]
+
 const TeacherForm = () => {
     const [isVisible, setIsVisible] = useState(false);
     const toggleVisibility = () => setIsVisible(!isVisible);
@@ -126,6 +137,20 @@ const TeacherForm = () => {
                         {genders.map((gender) => (
                             <SelectItem key={gender.key}>
                                 {gender.label}
+                            </SelectItem>
+                        ))}
+                    </Select>
+
+                    <Select
+                        selectionMode="multiple"
+                        label="Subject"
+                        className="w-[32%]"
+                        variant="bordered"
+                        labelPlacement="outside" 
+                    >
+                        {subjects.map((subject) => (
+                            <SelectItem key={subject.key}>
+                                {subject.label}
                             </SelectItem>
                         ))}
                     </Select>

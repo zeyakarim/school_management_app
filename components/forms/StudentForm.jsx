@@ -28,6 +28,7 @@ const StudentForm = () => {
                         endContent={
                             <UserIcon className="text-2xl text-default-400 pointer-events-none flex-shrink-0" />
                         }
+                        labelPlacement='outside'
                     />
                     <Input
                         isRequired
@@ -38,6 +39,7 @@ const StudentForm = () => {
                         variant="bordered"
                         type='email'
                         className="w-[32%]"
+                        labelPlacement='outside'
                     />
                     <Input
                         isRequired
@@ -54,6 +56,7 @@ const StudentForm = () => {
                         type={isVisible ? "text" : "password"}
                         variant="bordered"
                         className="w-[32%]"
+                        labelPlacement='outside'
                     />
                 </div>
                 <p className="text-xs text-gray-500 py-2 pl-2">Personal Information</p>
