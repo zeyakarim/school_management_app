@@ -8,17 +8,25 @@ const TeacherForm = dynamic(() => import("./forms/TeacherForm"), {
 
 const StudentForm = dynamic(() => import("./forms/StudentForm"), {
     loading: () => <h1>Loading...</h1>,
+});
+
+const ParentForm = dynamic(() => import("./forms/ParentForm"), {
+    loading: () => <h1>Loading...</h1>,
+});
+
+const SubjectForm = dynamic(() => import("./forms/SubjectForm"), {
+    loading: () => <h1>Loading...</h1>,
 })
 
 const forms = {
-    // subject: (setOpen, type, data, relatedData) => (
-    //   <SubjectForm
-    //     type={type}
-    //     data={data}
-    //     setOpen={setOpen}
-    //     relatedData={relatedData}
-    //   />
-    // ),
+    subject: (setOpen, type, data, relatedData) => (
+        <SubjectForm
+            type={type}
+            data={data}
+            // setOpen={setOpen}
+            relatedData={relatedData}
+        />
+    ),
     // class: (setOpen, type, data, relatedData) => (
     //   <ClassForm
     //     type={type}
@@ -27,21 +35,29 @@ const forms = {
     //     relatedData={relatedData}
     //   />
     // ),
+    parent: (type, data, relatedData) => (
+        <ParentForm
+            type={type}
+            data={data}
+            // setOpen={setOpen}
+            relatedData={relatedData}
+        />
+    ),
     teacher: (type, data, relatedData) => (
-      <TeacherForm
-        type={type}
-        data={data}
-        // setOpen={setOpen}
-        relatedData={relatedData}
-      />
+        <TeacherForm
+            type={type}
+            data={data}
+            // setOpen={setOpen}
+            relatedData={relatedData}
+        />
     ),
     student: (type, data, relatedData) => (
-      <StudentForm
-        type={type}
-        data={data}
-        // setOpen={setOpen}
-        relatedData={relatedData}
-      />
+        <StudentForm
+            type={type}
+            data={data}
+            // setOpen={setOpen}
+            relatedData={relatedData}
+        />
     ),
     // exam: (setOpen, type, data, relatedData) => (
     //   <ExamForm

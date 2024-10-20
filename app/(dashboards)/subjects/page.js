@@ -9,6 +9,9 @@ const Subjects = () => {
                 columns={subjectColumns} 
                 title={'All Subjects'}
                 data={subjects}
+                dialogTitle='Create A New Subject'
+                table="subject"
+                type="create"
             />
         </div>
     )

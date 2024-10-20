@@ -14,7 +14,7 @@ const Navbar = () => {
                 width={26}
                 height={26} 
             />
-            <p className='font-semibold hidden md:block'>Alfalah School</p>
+            <p className='font-semibold md:block hidden'>Alfalah School</p>
         </div>
         
         <div className="mt-4 text-sm relative overflow-hidden h-[85vh] hover:overflow-y-scroll scrollbar">

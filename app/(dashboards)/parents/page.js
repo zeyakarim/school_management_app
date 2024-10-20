@@ -9,6 +9,9 @@ const Parents = () => {
                 columns={parentColumns}
                 data={parents}
                 title='All Parents'
+                dialogTitle='Create A New Parent'
+                table="parent"
+                type="create"
             />
         </div>
     )
