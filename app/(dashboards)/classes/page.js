@@ -9,6 +9,9 @@ const Classes = () => {
                 title={'All Classes'}
                 columns={classesColumns}
                 data={classes}
+                dialogTitle='Create A New Class'
+                table="class"
+                type="create"
             />
         </div>
     )

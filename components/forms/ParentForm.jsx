@@ -101,6 +101,7 @@ const ParentForm = () => {
                         labelPlacement="outside"
                     />
                     <Input
+                        isRequired
                         label="Address"
                         type="text"
                         endContent={
@@ -112,6 +113,7 @@ const ParentForm = () => {
                     />
                    
                     <Select
+                        isRequired
                         selectionMode="multiple"
                         label="Students"
                         className="w-[66%]"

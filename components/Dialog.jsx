@@ -16,10 +16,14 @@ const ParentForm = dynamic(() => import("./forms/ParentForm"), {
 
 const SubjectForm = dynamic(() => import("./forms/SubjectForm"), {
     loading: () => <h1>Loading...</h1>,
+});
+
+const ClassForm = dynamic(() => import("./forms/ClassForm"), {
+    loading: () => <h1>Loading...</h1>,
 })
 
 const forms = {
-    subject: (setOpen, type, data, relatedData) => (
+    subject: (type, data, relatedData) => (
         <SubjectForm
             type={type}
             data={data}
@@ -27,14 +31,14 @@ const forms = {
             relatedData={relatedData}
         />
     ),
-    // class: (setOpen, type, data, relatedData) => (
-    //   <ClassForm
-    //     type={type}
-    //     data={data}
-    //     setOpen={setOpen}
-    //     relatedData={relatedData}
-    //   />
-    // ),
+    class: (type, data, relatedData) => (
+        <ClassForm
+            type={type}
+            data={data}
+            // setOpen={setOpen}
+            relatedData={relatedData}
+        />
+    ),
     parent: (type, data, relatedData) => (
         <ParentForm
             type={type}

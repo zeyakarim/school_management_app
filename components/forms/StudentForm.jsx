@@ -95,6 +95,7 @@ const StudentForm = () => {
                         labelPlacement="outside"
                     />
                     <Input
+                        isRequired
                         label="Address"
                         type="text"
                         endContent={
@@ -118,6 +119,7 @@ const StudentForm = () => {
                     <DatePicker label="Birth date" className="w-[32%]"  variant="bordered" labelPlacement="outside" />
 
                     <Select
+                        isRequired
                         label="Gender"
                         className="w-[32%]"
                         variant="bordered"

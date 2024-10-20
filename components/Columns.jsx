@@ -111,7 +111,7 @@ export const subjectColumns = [
 export const classesColumns = [
     {
         field: 'name',
-        headerName: 'Subject Name'
+        headerName: 'Class Name'
     },
     {
         field: 'capacity',
