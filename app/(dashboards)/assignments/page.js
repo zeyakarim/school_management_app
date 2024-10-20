@@ -9,6 +9,9 @@ const Assignments = () => {
                 title={'All Assignments'}
                 columns={assignmentColumns}
                 data={assignments}
+                dialogTitle='Create A New Assignment'
+                table="assignment"
+                type="create"
             />
         </div>
     )

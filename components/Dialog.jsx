@@ -26,6 +26,10 @@ const ExamForm = dynamic(() => import("./forms/ExamForm"), {
     loading: () => <h1>Loading...</h1>,
 });
 
+const AssignmentForm = dynamic(() => import("./forms/AssignmentForm"), {
+    loading: () => <h1>Loading...</h1>,
+});
+
 const forms = {
     subject: (type, data, relatedData) => (
         <SubjectForm
@@ -74,7 +78,14 @@ const forms = {
             // setOpen={setOpen}
             relatedData={relatedData}
         />
-      // TODO OTHER LIST ITEMS
+    ),
+    assignment: (type, data, relatedData) => (
+        <AssignmentForm
+            type={type}
+            data={data}
+            // setOpen={setOpen}
+            relatedData={relatedData}
+        />
     ),
 };
   

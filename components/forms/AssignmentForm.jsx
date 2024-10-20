@@ -1,7 +1,5 @@
-import { AccessTime } from '@mui/icons-material';
-import { DatePicker, Input, Select, SelectItem, TimeInput } from "@nextui-org/react";
+import { DatePicker, Input, Select, SelectItem } from "@nextui-org/react";
 import Image from 'next/image';
-import {Time} from "@internationalized/date";
 
 const teachers = [
     { "label": "JOHN", "key": "john"},
@@ -14,7 +12,7 @@ const teachers = [
     { "label": "NICK", "key": "nick" }
 ]
 
-const ExamForm = () => {
+const AssignmentForm = () => {
 
     return (
         <div>
@@ -28,7 +26,18 @@ const ExamForm = () => {
                             <Image src="/subject.png" alt="" width={16} height={16} />
                         }
                         variant="bordered"
-                        className="w-[32%] mt-1"
+                        className="w-[48%]"
+                        labelPlacement="outside"
+                    />
+                    <Input
+                        isRequired
+                        type="text"
+                        label="Assignment Name"
+                        endContent={
+                            <Image src="/assignment.png" alt="" width={16} height={16} />
+                        }
+                        variant="bordered"
+                        className="w-[48%]"
                         labelPlacement="outside"
                     />
                     <Input
@@ -39,13 +48,13 @@ const ExamForm = () => {
                         }
                         variant="bordered"
                         type='text'
-                        className="w-[32%] mt-1"
+                        className="w-[48%]"
                         labelPlacement="outside"
                     />
                     <Select
                         isRequired
                         label="Teacher"
-                        className="w-[32%] mt-1"
+                        className="w-[48%]"
                         variant="bordered"
                         labelPlacement="outside"
                         endContent={
@@ -59,35 +68,11 @@ const ExamForm = () => {
                         ))}
                     </Select>
 
-                    <DatePicker label="Date" className="w-[32%] mt-1"  variant="bordered" labelPlacement="outside" isRequired />
-
-                    <TimeInput
-                        isRequired
-                        label="Start Time" 
-                        labelPlacement="outside" 
-                        defaultValue={new Time(9, 0)} 
-                        variant="bordered"
-                        className="w-[32%] mt-1"
-                        startContent={(
-                            <AccessTime className="text-xl text-default-400 pointer-events-none flex-shrink-0" />
-                        )}
-                    />
-
-                    <TimeInput
-                        isRequired
-                        label="End Time" 
-                        labelPlacement="outside" 
-                        defaultValue={new Time(12)} 
-                        variant="bordered"
-                        className="w-[32%] mt-1"
-                        startContent={(
-                            <AccessTime className="text-xl text-default-400 pointer-events-none flex-shrink-0" />
-                        )}
-                    />
+                    <DatePicker label="Date" className="w-[48%]"  variant="bordered" labelPlacement="outside" isRequired />
                 </div>
             </form>
         </div>
     )
 }
 
-export default ExamForm;
+export default AssignmentForm;

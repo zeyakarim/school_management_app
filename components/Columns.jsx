@@ -185,6 +185,10 @@ export const assignmentColumns = [
         headerName: 'Subject Name'
     },
     {
+        field: 'assignmentName',
+        headerName: 'Assignment Name'
+    },
+    {
         field: 'class',
         headerName: 'Class'
     },
