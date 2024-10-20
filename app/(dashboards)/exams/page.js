@@ -9,6 +9,9 @@ const Exams = () => {
                 title={'All Exams'}
                 columns={examColumns}
                 data={exams}
+                dialogTitle='Create A New Exam'
+                table="exam"
+                type="create"
             />
         </div>
     )

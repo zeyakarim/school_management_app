@@ -20,7 +20,11 @@ const SubjectForm = dynamic(() => import("./forms/SubjectForm"), {
 
 const ClassForm = dynamic(() => import("./forms/ClassForm"), {
     loading: () => <h1>Loading...</h1>,
-})
+});
+
+const ExamForm = dynamic(() => import("./forms/ExamForm"), {
+    loading: () => <h1>Loading...</h1>,
+});
 
 const forms = {
     subject: (type, data, relatedData) => (
@@ -63,15 +67,15 @@ const forms = {
             relatedData={relatedData}
         />
     ),
-    // exam: (setOpen, type, data, relatedData) => (
-    //   <ExamForm
-    //     type={type}
-    //     data={data}
-    //     setOpen={setOpen}
-    //     relatedData={relatedData}
-    //   />
-    //   // TODO OTHER LIST ITEMS
-    // ),
+    exam: (type, data, relatedData) => (
+        <ExamForm
+            type={type}
+            data={data}
+            // setOpen={setOpen}
+            relatedData={relatedData}
+        />
+      // TODO OTHER LIST ITEMS
+    ),
 };
   
   
@@ -91,7 +95,7 @@ const Dialog = ({ isOpen, onOpenChange, dialogTitle, table, type }) => {
                     {/* <TeacherForm /> */}
                     {forms[table](type, {}, [])}
                 </ModalBody>
-                <ModalFooter className="mt-2">
+                <ModalFooter className="mt-4">
                     <Button onPress={onClose} radius="full" className="bg-gradient-to-tr from-[#C6884C] to-yellow-500 text-white shadow-lg">
                         Close
                     </Button>
