@@ -9,6 +9,9 @@ const Results = () => {
                 title={'All Results'}
                 columns={resultColumns}
                 data={results}
+                dialogTitle='Create Student Result'
+                table="result"
+                type="create"
             />
         </div>
     )

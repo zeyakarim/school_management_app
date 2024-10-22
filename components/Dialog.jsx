@@ -1,5 +1,6 @@
 import { Modal, ModalContent, ModalHeader, ModalBody, ModalFooter, Button } from "@nextui-org/react";
 import dynamic from "next/dynamic";
+import ResultForm from "./forms/ResultForm";
 
 
 const TeacherForm = dynamic(() => import("./forms/TeacherForm"), {
@@ -87,6 +88,14 @@ const forms = {
             relatedData={relatedData}
         />
     ),
+    result: (type, data, relatedData) => (
+        <ResultForm 
+            type={type}
+            data={data}
+            // setOpen={setOpen}
+            relatedData={relatedData}
+        />
+    )
 };
   
   
