@@ -1,0 +1,245 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Admin {
+  id            Int       @id @default(autoincrement())
+  created_at    DateTime  @default(now())
+  updated_at    DateTime  @updatedAt
+  deleted_at    DateTime?
+  username      String    @unique
+  password      String
+}
+
+model Teacher {
+  id            Int       @id @default(autoincrement())
+  username      String    @unique
+  first_name    String
+  last_name     String?
+  email         String?   @unique
+  phone         String?   @unique
+  password      String
+  address       String?
+  blood_type    String?
+  birth_date    DateTime?
+  gender        Gender
+  img           String?
+  created_at    DateTime  @default(now())
+  updated_at    DateTime  @updatedAt
+  deleted_at    DateTime?
+  subjects      Subject[]
+  assignments   Assignment[]
+  classes       Class[]
+  lessons       Lesson[]
+}
+
+model Subject {
+  id            Int       @id @default(autoincrement())
+  name          String    @unique
+  teacher_id    Int
+  teacher       Teacher   @relation(fields: [teacher_id], references: [id])
+  assignments   Assignment[]
+  lessons       Lesson[]
+  created_at    DateTime  @default(now())
+  updated_at    DateTime  @updatedAt
+  deleted_at    DateTime?
+}
+
+model Student {
+  id            Int       @id @default(autoincrement())
+  username      String    @unique
+  first_name    String
+  last_name     String?
+  email         String?   @unique
+  phone         String?   @unique
+  password      String
+  address       String
+  blood_type    String?
+  birth_date    DateTime?
+  gender        Gender
+  parent_id     Int
+  parent        Parent    @relation(fields: [parent_id], references: [id])
+  class_id      Int
+  class         Class     @relation(fields: [class_id], references: [id])
+  grade_id      Int
+  grade         Grade     @relation(fields: [grade_id], references: [id])
+  attendances   Attendance[]
+  results       Result[]
+  created_at    DateTime  @default(now())
+  updated_at    DateTime  @updatedAt
+  deleted_at    DateTime?
+}
+
+model Parent {
+  id            Int       @id @default(autoincrement())
+  username      String    @unique
+  first_name    String
+  last_name     String?
+  email         String?   @unique
+  phone         String    @unique
+  password      String
+  address       String
+  students      Student[]
+  created_at    DateTime  @default(now())
+  updated_at    DateTime  @updatedAt
+  deleted_at    DateTime?
+}
+
+model Class {
+  id              Int       @id  @default(autoincrement())
+  name            String    @unique
+  capacity        Int
+  supervisor_id   Int
+  supervisor      Teacher   @relation(fields: [supervisor_id], references: [id])
+  students        Student[]
+  grade_id        Int
+  grade           Grade     @relation(fields: [grade_id], references: [id])
+  events          Event[]
+  annoucements    Annoucement[]
+  attendances     Attendance[]
+  lessons         Lesson[]
+  exams           Exam[]
+  created_at      DateTime  @default(now())
+  updated_at      DateTime  @updatedAt
+  deleted_at      DateTime?
+}
+
+model Lesson {
+  id              Int       @id  @default(autoincrement())
+  subject_id      Int
+  start_time      DateTime
+  end_time        DateTime
+  day             Day
+  subject         Subject   @relation(fields: [subject_id], references: [id])
+  class_id        Int
+  class           Class     @relation(fields: [class_id], references: [id])
+  teacher_id      Int
+  teacher         Teacher   @relation(fields: [teacher_id], references: [id])
+  created_at      DateTime  @default(now())
+  updated_at      DateTime  @updatedAt
+  deleted_at      DateTime?
+  exams           Exam[]
+  assignments     Assignment[]
+  attendances     Attendance[]
+}
+
+model Exam {
+  id              Int       @id  @default(autoincrement())
+  title           String
+  class_id        Int
+  class           Class     @relation(fields: [class_id], references: [id])
+  date            DateTime
+  start_time      DateTime
+  end_time        DateTime
+  created_at      DateTime  @default(now())
+  updated_at      DateTime  @updatedAt
+  deleted_at      DateTime?
+  results         Result[]
+  lesson_id       Int
+  lesson          Lesson   @relation(fields: [lesson_id], references: [id])
+}
+
+model Assignment {
+  id              Int       @id  @default(autoincrement())
+  title           String
+  submit_date     DateTime
+  due_date        DateTime
+  subject_id      Int
+  subject         Subject   @relation(fields: [subject_id], references: [id])
+  lesson_id       Int
+  lesson          Lesson    @relation(fields: [lesson_id], references: [id])
+  teacher_id      Int
+  teacher         Teacher   @relation(fields: [teacher_id], references: [id])
+  created_at      DateTime  @default(now())
+  updated_at      DateTime  @updatedAt
+  deleted_at      DateTime?
+  results         Result[]
+}
+
+model Result {
+  id              Int         @id  @default(autoincrement())
+  percentage      Decimal
+  marks           Int
+  total           Int
+  student_id      Int
+  student         Student     @relation(fields: [student_id], references: [id])
+  exam_id         Int
+  exam            Exam        @relation(fields: [exam_id], references: [id])
+  grade_id        Int
+  grade           Grade       @relation(fields: [grade_id], references: [id])
+  assignment_id   Int
+  assignment      Assignment  @relation(fields: [assignment_id], references: [id])
+  created_at      DateTime    @default(now())
+  updated_at      DateTime    @updatedAt
+  deleted_at      DateTime?
+}
+
+model Attendance {
+  id              Int         @id @default(autoincrement())
+  present         Boolean
+  date            DateTime
+  student_id      Int
+  student         Student     @relation(fields: [student_id], references: [id])
+  class_id        Int
+  class           Class       @relation(fields: [class_id], references: [id])
+  lesson_id       Int
+  lesson          Lesson      @relation(fields: [lesson_id], references: [id])
+  created_at      DateTime    @default(now())
+  updated_at      DateTime    @updatedAt
+  deleted_at      DateTime?
+}
+
+model Event {
+  id              Int           @id @default(autoincrement())
+  title           String
+  description     String
+  date            DateTime
+  start_time      DateTime
+  end_time        DateTime
+  class_id        Int
+  class           Class         @relation(fields: [class_id], references: [id])
+  created_at      DateTime      @default(now())
+  updated_at      DateTime      @updatedAt
+  deleted_at      DateTime?
+}
+
+model Annoucement {
+  id              Int           @id @default(autoincrement())
+  title           String
+  description     String
+  date            DateTime
+  class_id        Int
+  class           Class         @relation(fields: [class_id], references: [id])
+  created_at      DateTime      @default(now())
+  updated_at      DateTime      @updatedAt
+  deleted_at      DateTime?
+}
+
+model Grade {
+  id              Int         @id @default(autoincrement())
+  level           Int         @unique
+  created_at      DateTime    @default(now())
+  updated_at      DateTime    @updatedAt
+  deleted_at      DateTime?
+  results         Result[]
+  students        Student[]
+  classess        Class[]
+}
+
+enum Day {
+  MONDAY
+  TUESDAY
+  WEDNESDAY
+  THURSDAY
+  FRIDAY
+}
+
+enum Gender {
+  MALE
+  FEMALE
+}

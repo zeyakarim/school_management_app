@@ -1,7 +1,7 @@
 import { Pagination } from "@nextui-org/react";
 
 const PaginationComponent = (props) => {
-    const { page, pages, setPage } = props;
+    const { page, pages, setPage, fetchData } = props;
     return (
         <div className="flex items-center justify-center mt-4">
             <Pagination
@@ -12,7 +12,10 @@ const PaginationComponent = (props) => {
                 color="primary"
                 page={page}
                 total={pages}
-                onChange={(page) => setPage(page)}
+                onChange={(page) => {
+                    setPage(page)
+                    fetchData(page)
+                }}
             />
         </div>
     )
