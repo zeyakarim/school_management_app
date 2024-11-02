@@ -61,6 +61,7 @@ model Student {
   address       String
   blood_type    String?
   birth_date    DateTime?
+  img           String?
   gender        Gender
   parent_id     Int
   parent        Parent    @relation(fields: [parent_id], references: [id])

@@ -16,14 +16,17 @@ export async function POST(req) {
     const formData = await req.formData();
     try {
         const data = {};
-        formData.forEach((value, key) => { data[key] = value });
-        console.log(data,'data')
-        // const students = await prisma.student.findMany();
-        const teacher = await prisma.teacher.create({
+        formData.forEach((value, key) => {
+            if (key === 'parent_id' || key === 'class_id' || key === 'grade_id') {
+                data[key] = parseInt(value);
+            } else {
+                data[key] = value ;
+            }
+        });
+        const student = await prisma.student.create({
             data: data
         });
-        console.log(teacher,'teacher')
-        return NextResponse.json({data: {student: 'students', status: 200}});
+        return NextResponse.json({data: {student: student, status: 200}});
     } catch (error) {
         console.log("Error:",error)
         return NextResponse.json({"msg": "something went wrong"},  {status:'400'})
