@@ -14,11 +14,34 @@ export async function POST(req) {
     }
 }
 
+const simplifiedExams = (exams) => {
+    return exams?.map((exam) => {
+        const simplifiedExam = {
+            ...exam,
+            class: exam?.class?.name,
+            subject: exam?.subject?.name
+        }
+        return simplifiedExam
+    })
+}
 
 export async function GET(req) {
     try {
-        const exams = await prisma.exam.findMany();
-        return NextResponse.json({data: {exams}, status: 200});
+        const exams = await prisma.exam.findMany({
+            include: {
+                class: {
+                    select: {
+                        name: true
+                    }
+                },
+                subject: {
+                    select: {
+                        name: true
+                    }
+                }
+            }
+        });
+        return NextResponse.json({data: {exams: simplifiedExams(exams), maxPage: 1, page: 1, status: 200}});
     } catch (error) {
         console.log("Error:",error)
         return NextResponse.json({"msg": "something went wrong"},  {status:'400'})

@@ -45,6 +45,7 @@ model Subject {
   teacher       Teacher   @relation(fields: [teacher_id], references: [id])
   assignments   Assignment[]
   lessons       Lesson[]
+  exams         Exam[]
   created_at    DateTime  @default(now())
   updated_at    DateTime  @updatedAt
   deleted_at    DateTime?
@@ -112,7 +113,7 @@ model Class {
 
 model Lesson {
   id              Int       @id  @default(autoincrement())
-  name            String    @default("Unnamed Lesson")
+  name            String    
   subject_id      Int
   start_time      DateTime
   end_time        DateTime
@@ -142,8 +143,10 @@ model Exam {
   updated_at      DateTime  @updatedAt
   deleted_at      DateTime?
   results         Result[]
+  subject_id      Int       
+  subject         Subject   @relation(fields: [subject_id], references: [id])
   lesson_id       Int
-  lesson          Lesson   @relation(fields: [lesson_id], references: [id])
+  lesson          Lesson    @relation(fields: [lesson_id], references: [id])
 }
 
 model Assignment {
