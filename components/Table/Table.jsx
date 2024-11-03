@@ -129,7 +129,9 @@ const Table = (props) => {
                         created_at: moment(row?.created_at).format('MMM DD, YYYY h:mm:ss A'),
                         updated_at: moment(row?.updated_at).format('MMM DD, YYYY h:mm:ss A'),
                         date: moment(row?.date).format('MMM DD, YYYY h:mm:ss A'),
-                        birth_date: moment(row?.birth_date).format('MMM DD, YYYY h:mm:ss A')
+                        birth_date: moment(row?.birth_date).format('MMM DD, YYYY h:mm:ss A'),
+                        start_time: moment(row?.start_time).format('MMM DD, YYYY h:mm:ss A'),
+                        end_time: moment(row?.end_time).format('MMM DD, YYYY h:mm:ss A'),
                     }
                     
                 }

@@ -14,11 +14,42 @@ export async function POST(req) {
     }
 }
 
+const simplifiedLessons = (lessons) => {
+    return lessons?.map((lesson) => {
+        const lastName = lesson?.teacher?.last_name ? lesson?.teacher?.last_name : '';
+        const simplifiedLesson = {
+            ...lesson,
+            teacher: lesson?.teacher?.first_name + ' ' + lastName,
+            class: lesson?.class?.name,
+            subject: lesson?.subject?.name
+        }
+        return simplifiedLesson
+    })
+}
 
 export async function GET(req) {
     try {
-        const lessons = await prisma.lesson.findMany();
-        return NextResponse.json({data: {lessons}, status: 200});
+        const lessons = await prisma.lesson.findMany({
+            include: {
+                class: {
+                    select: {
+                        name: true
+                    }
+                },
+                teacher: {
+                    select: {
+                        first_name: true,
+                        last_name: true
+                    },
+                },
+                subject: {
+                    select: {
+                        name: true
+                    }
+                }
+            }
+        });
+        return NextResponse.json({data: {lessons: simplifiedLessons(lessons), maxPage: 1, page: 1, status: 200}});
     } catch (error) {
         console.log("Error:",error)
         return NextResponse.json({"msg": "something went wrong"},  {status:'400'})

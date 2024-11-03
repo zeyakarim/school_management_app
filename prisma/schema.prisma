@@ -112,6 +112,7 @@ model Class {
 
 model Lesson {
   id              Int       @id  @default(autoincrement())
+  name            String    @default("Unnamed Lesson")
   subject_id      Int
   start_time      DateTime
   end_time        DateTime
