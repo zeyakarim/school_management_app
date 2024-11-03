@@ -1,14 +1,37 @@
-import { subjectColumns } from "@/components/Columns";
-import TableComponent from "@/components/Table/Table";
-import { subjects } from "@/lib/data";
+import Table from "@/components/Table/Table";
+
+const columns = [
+    {
+        field: 'name',
+        headerName: 'Name',
+        headerClassName: 'super-app-theme--header',
+        flex: 1,
+    },
+    {
+        field: 'teacher',
+        headerName: 'Teacher',
+        headerClassName: 'super-app-theme--header',
+        flex: 1,
+    },
+    {
+        field: 'created_at',
+        headerName: 'Created At',
+        headerClassName: 'super-app-theme--header',
+        flex: 1.7
+    },
+];
 
 const Subjects = () => {
     return (
         <div className='w-[98%] mx-auto'>
-            <TableComponent 
-                columns={subjectColumns} 
+            <Table
+                columns={columns}
+                rowId={'id'}
+                endPoint={'/subjects'}
+                dataPosition={'subjects'}
+                checkBoxSelection={false}
+                version='version-1'
                 title={'All Subjects'}
-                data={subjects}
                 dialogTitle='Create A New Subject'
                 table="subject"
                 type="create"

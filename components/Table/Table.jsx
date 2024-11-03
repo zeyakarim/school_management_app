@@ -187,7 +187,7 @@ const Table = (props) => {
                             slots={{ toolbar: CustomToolbar }}
                             filterMode="server"
                             sortingMode="server"
-                            paginationMode="server"
+                            // paginationMode="server"
                             pageSizeOptions={[10, 25, 35, 50, 100]}
                             disableRowSelectionOnClick
                             checkboxSelection={checkBoxSelection}

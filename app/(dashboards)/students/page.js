@@ -6,7 +6,6 @@ const columnVisibilityModel = {
     birth_date: false
 }
 
-
 const columns = [
     {
         field: 'username',

@@ -5,7 +5,7 @@ const { NextResponse } = require("next/server");
 export async function GET(req) {
     try {
         const parents = await prisma.parent.findMany();
-        return NextResponse.json({data: {parents}, status: 200});
+        return NextResponse.json({data: {parents, status: 200, maxPage: 1, page: 1}});
     } catch (error) {
         console.log("Error:",error)
         return NextResponse.json({"msg": "something went wrong"},  {status:'400'})

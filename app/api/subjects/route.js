@@ -2,10 +2,30 @@ import prisma from "@/config/database";
 
 const { NextResponse } = require("next/server");
 
+const simplifiedSubjects = (subjects) => {
+    return subjects?.map((subject) => {
+        const lastName = subject?.teacher?.last_name ? subject?.teacher?.last_name : '';
+        const simplifiedSubject = {
+            ...subject,
+            teacher: subject?.teacher?.first_name + ' ' + lastName
+        }
+        return simplifiedSubject
+    })
+}
+
 export async function GET(req) {
     try {
-        const subjects = await prisma.subject.findMany();
-        return NextResponse.json({data: {subjects}, status: 200});
+        const subjects = await prisma.subject.findMany({
+            include: {
+                teacher: {
+                    select: {
+                        first_name: true,
+                        last_name: true
+                    }
+                }
+            }
+        });
+        return NextResponse.json({data: {subjects: simplifiedSubjects(subjects), status: 200, maxPage: 1, page: 1}});
     } catch (error) {
         console.log("Error:",error)
         return NextResponse.json({"msg": "something went wrong"},  {status:'400'})
