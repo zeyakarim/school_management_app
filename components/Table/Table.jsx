@@ -1,7 +1,7 @@
 'use client'
 import React, { useEffect, useState } from "react";
 import {
-    Table, 
+    // Table, 
     TableHeader, 
     TableColumn, 
     TableBody, 
@@ -16,6 +16,7 @@ import {
 import Image from "next/image";
 import PaginationComponent from "./Pagination";
 import Dialog from "../Dialog";
+import moment from 'moment';
 import useSWR from "swr";
 
 import { 
@@ -49,12 +50,19 @@ const CustomToolbar = () => {
 
 const fetcher = (...args) => fetch(...args).then((res) => res.json());
 
-const TableComponent = (props) => {
-    const { title, columns, data, dialogTitle, table, type, checkBoxSelection, navigateOnRowClickEndpoint, version, columnVisibilityModelTable } = props;
+const Table = (props) => {
+    const { 
+        title, columns, dialogTitle, table, type, checkBoxSelection, navigateOnRowClickEndpoint, 
+        version, columnVisibilityModel, endPoint, dataPosition, rowId
+    } = props;
     const {isOpen, onOpen, onOpenChange } = useDisclosure();
     const [page, setPage] = useState(1);
     const [filterValue, setFilterValue] = useState("");
     const [limit, setLimit] = useState(1);
+    const [data, setData] = useState([]);
+    const [rowsData,setRowsData] = useState([]);
+    const [columnData, setColumnsData] = useState([]);
+    const [columnVisibilityModelTable,setColumnVisibilityModel] = useState(columnVisibilityModel ||  {});
 
     const defaultVersion = 'version-1'
     const versionMap = {
@@ -72,20 +80,66 @@ const TableComponent = (props) => {
     const [sort, setSort] = useState(initialSortState)
 
     const fetchData = async (page) => {
-        console.log(page,'page')
         try {
-          const apiResponse = await fetch(`http://localhost:3000/api/students?page=${page}`);
-          const result = await apiResponse.json();
-          console.log(result?.data,'result?.data')
-          return result?.data;
+            const apiResponse = await fetch(`${process.env.NEXT_PUBLIC_WEBSITE_URL}${endPoint}?page=${page}`);
+            const result = await apiResponse.json();
+            setData(result?.data)
+            return result?.data;
         } catch (error) {
-          throw new Error(error)
+            throw new Error(error)
         }
     }
 
     useEffect(() => {
         fetchData(1);
     }, [])
+
+    useEffect(() => {
+        if (data?.[dataPosition]?.length >= 0) {
+            let finalColumns = columns?.length > 0
+                ? columns
+                : Object.keys(data[dataPosition]?.[0]).map((field) => {
+                    return {
+                        field: `${field}`,
+                        headerName: `${field}`,
+                        flex: 1,
+                        headerClassName: 'super-app-theme--header',
+                        headerAlign: 'center',
+                        align: 'center',
+                        editable: false,
+                        sortable: false,
+                        filterable: false,
+                    }
+                });
+
+            if (!finalColumns[0]?.checkBoxColumn && checkBoxSelection) {
+
+                finalColumns.unshift({
+                    flex: 0.5,
+                    ...GRID_CHECKBOX_SELECTION_COL_DEF,
+                    headerClassName: 'super-app-theme--header',
+                    checkBoxColumn: true,
+                })
+            }
+
+            const formattedData = data?.[dataPosition]?.map((row) => {
+                if (row?.created_at) {
+                    return {
+                        ...row,
+                        created_at: moment(row?.created_at).format('MMM DD, YYYY h:mm:ss A'),
+                        updated_at: moment(row?.updated_at).format('MMM DD, YYYY h:mm:ss A'),
+                        date: moment(row?.date).format('MMM DD, YYYY h:mm:ss A'),
+                        birth_date: moment(row?.birth_date).format('MMM DD, YYYY h:mm:ss A')
+                    }
+                    
+                }
+            })
+
+            setRowsData(formattedData)
+            setColumnsData(finalColumns)
+        }
+
+    }, [data])
 
     return (
         <div className="w-full">
@@ -114,78 +168,85 @@ const TableComponent = (props) => {
                     </div>
 
                 </div> */}
-                <Box 
-                    className="shadow"
-                    component={Paper}
-                    sx={{
-                        '& .super-app-theme--header': {
-                            backgroundColor: '#243750',
-                            color: '#ffffff',
-                            cursor: "default"
-                        },
-                    }}
-                >
-                    <DataGrid
-                        rows={[]}
-                        columns={columns}
-                        slots={{ toolbar: CustomToolbar }}
-                        filterMode="server"
-                        sortingMode="server"
-                        paginationMode="server"
-                        pageSizeOptions={[10, 25, 35, 50, 100]}
-                        disableRowSelectionOnClick
-                        checkboxSelection={checkBoxSelection}
-                        autoHeight
-                        getRowHeight={() => "auto"}
+                {rowsData && (
+                    <Box 
+                        className="shadow"
+                        component={Paper}
                         sx={{
-                            "&.MuiDataGrid-root .MuiDataGrid-cell:focus-within": {
-                                outline: "none !important",
-                            },
-                            "& .MuiPopper-root-MuiDataGrid-panel": {
-                                border: "2px solid green !important",
-                            },
-                            "& .MuiTablePagination-displayedRows": { display: 'none' },
-                            "& .MuiTablePagination-actions": { display: 'none' },
-                            ".PrivateSwitchBase-input": {
-                                height: "23px",
-                                margin: "10px 13px",
-                                // width: "20px"
-                            },
-                            cursor: "pointer",
-                            '& .MuiDataGrid-cell': {
-                                py: '10px',
-                            },
-                            '& .MuiDataGrid-sortIcon': {
-                                opacity: 1,
-                                color: "#fff",
+                            '& .super-app-theme--header': {
+                                backgroundColor: '#243750',
+                                color: '#ffffff',
+                                cursor: "default"
                             },
                         }}
-                        onRowClick={(params) => {
-                            // const permissible = CheckRoleBasedPermission(auth?.user, services?.[service], permission?.read);
-                            if (navigateOnRowClickEndpoint) {
-                                const url = `${navigateOnRowClickEndpoint}/${params?.id || params?.[rowId]}`;
-                                window.open(url, '_blank');
+                    >
+                        <DataGrid
+                            rows={rowsData}
+                            getRowId={(row) => row[rowId]}
+                            columns={columnData}
+                            slots={{ toolbar: CustomToolbar }}
+                            filterMode="server"
+                            sortingMode="server"
+                            paginationMode="server"
+                            pageSizeOptions={[10, 25, 35, 50, 100]}
+                            disableRowSelectionOnClick
+                            checkboxSelection={checkBoxSelection}
+                            onColumnVisibilityModelChange={newModel => setColumnVisibilityModel(newModel)}
+                            autoHeight
+                            getRowHeight={() => "auto"}
+                            sx={{
+                                "&.MuiDataGrid-root .MuiDataGrid-cell:focus-within": {
+                                    outline: "none !important",
+                                },
+                                "& .MuiPopper-root-MuiDataGrid-panel": {
+                                    border: "2px solid green !important",
+                                },
+                                "& .MuiTablePagination-displayedRows": { display: 'none' },
+                                "& .MuiTablePagination-actions": { display: 'none' },
+                                ".PrivateSwitchBase-input": {
+                                    height: "23px",
+                                    margin: "10px 13px",
+                                    // width: "20px"
+                                },
+                                cursor: "pointer",
+                                '& .MuiDataGrid-cell': {
+                                    py: '10px',
+                                },
+                                '& .MuiDataGrid-sortIcon': {
+                                    opacity: 1,
+                                    color: "#fff",
+                                },
+                            }}
+                            onRowClick={(params) => {
+                                // const permissible = CheckRoleBasedPermission(auth?.user, services?.[service], permission?.read);
+                                if (navigateOnRowClickEndpoint) {
+                                    const url = `${navigateOnRowClickEndpoint}/${params?.id || params?.[rowId]}`;
+                                    window.open(url, '_blank');
+                                }
+                            }}
+                            initialState={{
+                                columns: { columnVisibilityModel: columnVisibilityModelTable },
+                                pagination: {
+                                    paginationModel: { pageSize: 10, page: 0 },
+                                },
+                            }}
+                            onSortModelChange={(sort) => setSort(sort[0])}
+                            onPaginationModelChange={({ pageSize }) => {
+                                if (pageSize >= 10) {
+                                    setLimit(pageSize)
+                                } else {
+                                    setLimit(10)
+                                }
                             }
-                        }}
-                        initialState={{
-                            columns: { columnVisibilityModel: columnVisibilityModelTable || {} },
-                            pagination: {
-                                paginationModel: { pageSize: 10, page: 0 },
-                            },
-                        }}
-                        onSortModelChange={(sort) => setSort(sort[0])}
-                        onPaginationModelChange={({ pageSize }) => {
-                            if (pageSize >= 10) {
-                                setLimit(pageSize)
-                            } else {
-                                setLimit(10)
                             }
-                        }
-                        }
-                    />
-                </Box>
+                        />
+                    </Box>
+                )}
             </div>
-            <PaginationComponent page={page} pages={250} setPage={setPage} fetchData={fetchData} />
+
+            {data?.[dataPosition]?.length > 0 && (
+                <PaginationComponent page={page} pages={data?.maxPage} setPage={setPage} fetchData={fetchData} />
+            )}
 
             <Dialog
                 isOpen={isOpen}
@@ -198,4 +259,4 @@ const TableComponent = (props) => {
     );
 }
 
-export default TableComponent;
+export default Table;

@@ -1,57 +1,97 @@
-import { studentColumns } from "@/components/Columns";
-import TableComponent from "@/components/Table/Table";
-import { students } from "@/lib/data";
+import Table from "@/components/Table/Table";
 
-// async function fetchStudents() {
-//     try {
-//       const apiResponse = await fetch('http://localhost:3000/api/students');
-//       const result = await apiResponse.json();
-//       return result?.data;
-//     } catch (error) {
-//       throw new Error(error)
-//     }
-// }
+const columnVisibilityModel = {
+    username: false,
+    blood_type: false,
+    birth_date: false
+}
+
+
 const columns = [
-    // { 
-    //     field: 'id', 
-    //     headerName: 'ID', 
-    //     width: 90 
-    // },
     {
-        field: 'firstName',
+        field: 'username',
+        headerName: 'Username',
+        headerClassName: 'super-app-theme--header',
+        flex: 1,
+    },
+    {
+        field: 'first_name',
         headerName: 'First name',
         headerClassName: 'super-app-theme--header',
         flex: 1,
     },
     {
-        field: 'lastName',
-        headerName: 'Last name',
+        field: 'last_name',
+        headerName: 'Last Name',
         headerClassName: 'super-app-theme--header',
         flex: 1,
     },
     {
-        field: 'age',
-        headerName: 'Age',
+        field: 'email',
+        headerName: 'Email',
+        headerClassName: 'super-app-theme--header',
+        flex: 1.4
+    },
+    {
+        field: 'phone',
+        headerName: 'Phone',
         headerClassName: 'super-app-theme--header',
         flex: 1,
     },
     {
-        field: 'fullName',
-        headerName: 'Full name',
+        field: 'address',
+        headerName: 'Address',
+        headerClassName: 'super-app-theme--header',
+        flex: 1,
+    },
+    {
+        field: 'blood_type',
+        headerName: 'Blood Type',
+        headerClassName: 'super-app-theme--header',
+        flex: 0.8,
+    },
+    {
+        field: 'birth_date',
+        headerName: 'D.O.B',
+        headerClassName: 'super-app-theme--header',
+        flex: 1.7
+    },
+    {
+        field: 'gender',
+        headerName: 'Gender',
+        headerClassName: 'super-app-theme--header',
+        flex: 0.8
+    },
+    {
+        field: 'class',
+        headerName: 'Class',
         headerClassName: 'super-app-theme--header',
         flex: 1
     },
-  ];
+    {
+        field: 'parent',
+        headerName: 'Parent',
+        headerClassName: 'super-app-theme--header',
+        flex: 1
+    },
+    {
+        field: 'created_at',
+        headerName: 'Created At',
+        headerClassName: 'super-app-theme--header',
+        flex: 1.7
+    },
+];
 
 const Students = async () => {
-    // const studentsData = await fetchStudents();
-    // console.log(studentsData, 'students')
     return (
         <div className='w-[98%] mx-auto'>
-            <TableComponent 
+            <Table
                 columns={columns}
-                data={students}
+                rowId={'id'}
+                endPoint={'/students'}
+                dataPosition={'students'}
                 checkBoxSelection={false}
+                columnVisibilityModel={columnVisibilityModel}
                 version='version-1'
                 title='All Students'
                 table="student"

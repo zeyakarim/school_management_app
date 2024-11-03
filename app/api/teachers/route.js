@@ -20,7 +20,7 @@ export async function POST(req) {
 export async function GET(req) {
     try {
         const teachers = await prisma.teacher.findMany();
-        return NextResponse.json({data: {teachers}, status: 200});
+        return NextResponse.json({data: {teachers, status: 200, maxPage: 1, page: 1 }});
     } catch (error) {
         console.log("Error:",error)
         return NextResponse.json({"msg": "something went wrong"},  {status:'400'})
