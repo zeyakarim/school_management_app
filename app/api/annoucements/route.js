@@ -14,11 +14,28 @@ export async function POST(req) {
     }
 }
 
+const simplifiedAnnoucements = (annoucements) => {
+    return annoucements?.map((annoucement) => {
+        const simplifiedAnnoucement = {
+            ...annoucement,
+            class: annoucement?.class?.name
+        }
+        return simplifiedAnnoucement
+    })
+}
 
 export async function GET(req) {
     try {
-        const annoucements = await prisma.annoucement.findMany();
-        return NextResponse.json({data: {annoucements}, status: 200});
+        const annoucements = await prisma.annoucement.findMany({
+            include: {
+                class: {
+                    select: {
+                        name: true
+                    }
+                }
+            }
+        });
+        return NextResponse.json({data: {annoucements: simplifiedAnnoucements(annoucements), status: 200, maxPage: 1, page: 1 }});
     } catch (error) {
         console.log("Error:",error)
         return NextResponse.json({"msg": "something went wrong"},  {status:'400'})

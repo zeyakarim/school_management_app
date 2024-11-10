@@ -56,7 +56,7 @@ const Events = () => {
                 dataPosition={'events'}
                 checkBoxSelection={false}
                 version='version-1'
-                dialogTitle='Create A New Events'
+                dialogTitle='Create A New Event'
                 table="event"
                 type="create"
             />
