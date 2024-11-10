@@ -1,4 +1,4 @@
-import TableComponent from "@/components/Table/Table";
+import Table from "@/components/Table/Table";
 
 const columns = [
     {
@@ -42,7 +42,7 @@ const columns = [
 const Attendance = () => {
     return (
         <div className='w-[98%] mx-auto'>
-            <TableComponent 
+            <Table 
                 title={'All Attendance'}
                 columns={columns}
                 rowId={'id'}
