@@ -27,6 +27,7 @@ import {
     GridToolbarDensitySelector 
 } from '@mui/x-data-grid';
 import { Box, Paper } from "@mui/material";
+import PaginationControlled from "./newPagination";
 
 const CustomToolbar = () => {
     return (
@@ -143,9 +144,14 @@ const Table = (props) => {
 
     }, [data])
 
+    const dateFormat = (row, field) => {
+        return moment(row?.[field]).format('MMM DD, YYYY h:mm:ss A')
+    }
+
+    const dateField = ['created_at', 'updated_at', 'date', 'birth_date', 'start_time', 'end_time']
     return (
         <div className="w-full">
-            <div className=" bg-white shadow-small rounded-large">
+            {/* <div className=" bg-white shadow-small rounded-large"> */}
                 {/* <div className="flex justify-between items-center px-4 pt-4">
                     <h6 className="pl-2 font-semibold">{title}</h6>
                     <div className="flex gap-2 w-full sm:w-[24%] justify-end">
@@ -170,7 +176,7 @@ const Table = (props) => {
                     </div>
 
                 </div> */}
-                {rowsData && (
+                {/* {rowsData && (
                     <Box 
                         className="shadow"
                         component={Paper}
@@ -212,11 +218,22 @@ const Table = (props) => {
                                 },
                                 cursor: "pointer",
                                 '& .MuiDataGrid-cell': {
-                                    py: '10px',
+                                    py: '12px',
                                 },
                                 '& .MuiDataGrid-sortIcon': {
                                     opacity: 1,
                                     color: "#fff",
+                                },
+                                "& .MuiDataGrid-columnHeader": {
+                                    backgroundColor: "#F1F4F9 !important", // Set your desired header background color
+                                    color: "#fff",              // Optional: set text color
+                                },
+                                "& .MuiDataGrid-columnHeaderTitle": {
+                                    color: 'black !important',
+                                    fontWeight:'600'
+                                },
+                               "& .MuiDataGrid-columnHeaders": {
+                                    borderTop: "1px solid #ddd !important", // Set your desired header background color             // Optional: set text color
                                 },
                             }}
                             onRowClick={(params) => {
@@ -243,12 +260,50 @@ const Table = (props) => {
                             }
                         />
                     </Box>
-                )}
-            </div>
+                )} */}
+            {/* </div> */}
+            <div className="shadow overflow-hidden rounded-md">
+                <table className="styled-table" style={{ width:'100%' }}>
+                    <thead>
+                        <tr className="bg-[#EBEDFB] text-[#6B8088]">
+                            {columns?.map((column, index) => (
+                                <th key={index} className="p-[15px] text-[14px] text-start" style={{ fontFamily: "Roboto, Helvetica, Arial, sans-serif"}}>{column?.headerName}</th>
+                            ))}
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {data?.[dataPosition]?.map((row) => (
+                            <tr key={row?.[rowId]} style={{ borderBottom: "1px solid #ddd" }}>
+                                {columns?.map((column, index) => (
+                                    <td key={index} className="p-[15px] text-[14px] bg-white text-start" style={{ fontFamily: "Roboto, Helvetica, Arial, sans-serif"}}>
+                                        {column?.renderCell ? columnData(row, column?.renderCell) : dateField.includes(column?.field) ? dateFormat(row, column?.field) : row[column?.field]}
+                                    </td>
+                                ))}
+                            </tr>
+                        ))}
+                    </tbody>
+                </table>
 
-            {data?.[dataPosition]?.length > 0 && (
+                {/* Pagination Controls */}
+                {/* <div className="p-4 flex justify-between">
+                    <p className="text-[13px] text-[#c7c4c4] flex items-center font-[500]">Showing 
+                        <span className="text-[#ff6200]">&nbsp;1-{data?.[dataPosition]?.length}</span>&nbsp;from<span className="text-[#ff6200]">&nbsp;{data?.totalRows}</span>&nbsp;Data
+                    </p>
+                    <PaginationControlled data={data} fetchData={fetchData} />
+                </div> */}
+
+                {/* Pagination Controls */}
+                <div className="p-4 flex justify-between">
+                    <p className="text-[13px] text-[#c7c4c4] flex items-center font-[500]">Showing 
+                        <span className="text-[#4F45B5]">&nbsp;1-{data?.[dataPosition]?.length}</span>&nbsp;from<span className="text-[#4F45B5]">&nbsp;{data?.totalRows}</span>&nbsp;Data
+                    </p>
+                    <PaginationControlled data={data} fetchData={fetchData} />
+                </div>
+	        </div>
+
+            {/* {data?.[dataPosition]?.length > 0 && (
                 <PaginationComponent page={page} pages={data?.maxPage} setPage={setPage} fetchData={fetchData} />
-            )}
+            )} */}
 
             <Dialog
                 isOpen={isOpen}

@@ -9,7 +9,7 @@ const Navbar = () => {
     <div className='sticky top-0' style={{ boxShadow: "0px 0px 5px 0px rgb(0 0 0 / 0.02), 0px 0px 1px 0px rgb(0 0 0 / 0.3)"}}>
         <div className='flex items-center gap-2 px-5 pt-5 justify-center md:justify-start'>
             <Image 
-                src='/logo.png'
+                src='/file.png'
                 alt='schoolLogo'
                 width={26}
                 height={26} 

@@ -73,6 +73,7 @@ const Teachers = () => {
         endPoint={'/teachers'}
         dataPosition={'teachers'}
         checkBoxSelection={false}
+        navigateOnRowClickEndpoint={`/teachers`}
         version='version-1'
         title='All Teachers'
         dialogTitle='Create A New Teacher'
