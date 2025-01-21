@@ -13,7 +13,7 @@ export default function PaginationControlled({ data, fetchData }) {
     return (
         <Stack spacing={2}>
             <Pagination 
-                count={10} 
+                count={data?.maxPage} 
                 page={page} 
                 onChange={handleChange}
                 slots={{

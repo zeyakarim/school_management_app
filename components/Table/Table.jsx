@@ -1,55 +1,11 @@
 'use client'
 import React, { useEffect, useState } from "react";
 import {
-    // Table, 
-    TableHeader, 
-    TableColumn, 
-    TableBody, 
-    TableRow, 
-    TableCell, 
-    Spinner, 
-    Input,
-    Button,
     useDisclosure,
-    getKeyValue
 } from "@nextui-org/react";
-import Image from "next/image";
-import PaginationComponent from "./Pagination";
 import Dialog from "../Dialog";
 import moment from 'moment';
-import useSWR from "swr";
-
-import { 
-    DataGrid, 
-    GridToolbarColumnsButton, 
-    GridToolbarContainer, 
-    GridToolbarFilterButton,
-    GridToolbarDensitySelector 
-} from '@mui/x-data-grid';
-import { Box, Paper } from "@mui/material";
 import PaginationControlled from "./newPagination";
-
-const CustomToolbar = () => {
-    return (
-      <GridToolbarContainer style={{ paddingBottom: '4px' }}>
-        <GridToolbarColumnsButton />
-        <GridToolbarFilterButton />
-        <GridToolbarDensitySelector />
-        {/* <div
-          className={Classes.SearchBox}
-          style={{ border: 'none', marginLeft: 'auto',display:'flex' }}
-        > */}
-          {/* <L3sAutoComplete l3s={l3s} setL3={setL3} l3={l3} setPageNo={setPageNo} />
-          <BrandAutoComplete brands={brands} setBrand={setBrand} brand={brand} setPageNo={setPageNo} />
-          <AutoComplete franchises={franchises} setFranchise={setFranchise} franchise={franchise} setPageNo={setPageNo} /> */}
-          {/* <SearchInput searchFor={searchFor} handleSearch={handleSearch} width={200}/> */}
-        {/* </div> */}
-      </GridToolbarContainer>
-    );
-  }
-  
-
-const fetcher = (...args) => fetch(...args).then((res) => res.json());
 
 const Table = (props) => {
     const { 
@@ -82,7 +38,7 @@ const Table = (props) => {
 
     const fetchData = async (page) => {
         try {
-            const apiResponse = await fetch(`${process.env.NEXT_PUBLIC_WEBSITE_URL}${endPoint}?page=${page}`);
+            const apiResponse = await fetch(`${process.env.NEXT_PUBLIC_WEBSITE_URL}${endPoint}?page=${page}&limit=${10}`);
             const result = await apiResponse.json();
             setData(result?.data)
             return result?.data;
@@ -94,55 +50,6 @@ const Table = (props) => {
     useEffect(() => {
         fetchData(1);
     }, [])
-
-    useEffect(() => {
-        if (data?.[dataPosition]?.length >= 0) {
-            let finalColumns = columns?.length > 0
-                ? columns
-                : Object.keys(data[dataPosition]?.[0]).map((field) => {
-                    return {
-                        field: `${field}`,
-                        headerName: `${field}`,
-                        flex: 1,
-                        headerClassName: 'super-app-theme--header',
-                        headerAlign: 'center',
-                        align: 'center',
-                        editable: false,
-                        sortable: false,
-                        filterable: false,
-                    }
-                });
-
-            if (!finalColumns[0]?.checkBoxColumn && checkBoxSelection) {
-
-                finalColumns.unshift({
-                    flex: 0.5,
-                    ...GRID_CHECKBOX_SELECTION_COL_DEF,
-                    headerClassName: 'super-app-theme--header',
-                    checkBoxColumn: true,
-                })
-            }
-
-            const formattedData = data?.[dataPosition]?.map((row) => {
-                if (row?.created_at) {
-                    return {
-                        ...row,
-                        created_at: moment(row?.created_at).format('MMM DD, YYYY h:mm:ss A'),
-                        updated_at: moment(row?.updated_at).format('MMM DD, YYYY h:mm:ss A'),
-                        date: moment(row?.date).format('MMM DD, YYYY h:mm:ss A'),
-                        birth_date: moment(row?.birth_date).format('MMM DD, YYYY h:mm:ss A'),
-                        start_time: moment(row?.start_time).format('MMM DD, YYYY h:mm:ss A'),
-                        end_time: moment(row?.end_time).format('MMM DD, YYYY h:mm:ss A'),
-                    }
-                    
-                }
-            })
-
-            setRowsData(formattedData)
-            setColumnsData(finalColumns)
-        }
-
-    }, [data])
 
     const dateFormat = (row, field) => {
         return moment(row?.[field]).format('MMM DD, YYYY h:mm:ss A')
