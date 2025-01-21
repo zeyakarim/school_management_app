@@ -1,8 +1,6 @@
 'use client'
 import React, { useEffect, useState } from "react";
-import {
-    useDisclosure,
-} from "@nextui-org/react";
+import { useDisclosure } from "@nextui-org/react";
 import Dialog from "../Dialog";
 import moment from 'moment';
 import PaginationControlled from "./newPagination";

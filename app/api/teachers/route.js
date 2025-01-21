@@ -1,5 +1,7 @@
 import { NextResponse } from "next/server";
 import prisma from "@/config/database";
+import { fetchTeachers } from "./services";
+import { success } from "@/utils/responseHandler";
 
 export async function POST(req) {
     const formData = await req.formData();
@@ -18,11 +20,14 @@ export async function POST(req) {
 
 
 export async function GET(req) {
-    try {
-        const teachers = await prisma.teacher.findMany();
-        return NextResponse.json({data: {teachers, status: 200, maxPage: 1, page: 1 }});
-    } catch (error) {
-        console.log("Error:",error)
-        return NextResponse.json({"msg": "something went wrong"},  {status:'400'})
-    }
+    const { searchParams } = req.nextUrl;
+    // Convert all query parameters into an object
+    const queryParams = Object.fromEntries(searchParams?.entries());
+
+    let { page = 1, limit, searchFor = '' } = queryParams;
+    limit = limit ? parseInt(limit) :10
+    const skipRecord = (page - 1) * limit;
+
+    const fetchedTeachers = await fetchTeachers(searchFor, page, limit, skipRecord); 
+    return NextResponse.json(success(fetchedTeachers, "Teachers Fetched!"));
 }
