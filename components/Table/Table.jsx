@@ -151,121 +151,10 @@ const Table = (props) => {
     const dateField = ['created_at', 'updated_at', 'date', 'birth_date', 'start_time', 'end_time']
     return (
         <div className="w-full">
-            {/* <div className=" bg-white shadow-small rounded-large"> */}
-                {/* <div className="flex justify-between items-center px-4 pt-4">
-                    <h6 className="pl-2 font-semibold">{title}</h6>
-                    <div className="flex gap-2 w-full sm:w-[24%] justify-end">
-                        <Input
-                            isClearable
-                            // className="w-full sm:max-w-[44%]"
-                            className="w-2/3"
-                            placeholder="Search by name..."
-                            startContent={<Image src='/search.png' alt="" width={14} height={14} />}
-                            value={filterValue}
-                            onClear={() => onClear()}
-                            onValueChange={onSearchChange}
-                            variant="bordered"
-                        />
-                        
-                        <Button
-                            radius="full" className="bg-gradient-to-tr from-pink-500 to-yellow-500 text-white shadow-lg"
-                            onClick={onOpen}
-                        >
-                            ADD
-                        </Button>
-                    </div>
-
-                </div> */}
-                {/* {rowsData && (
-                    <Box 
-                        className="shadow"
-                        component={Paper}
-                        sx={{
-                            '& .super-app-theme--header': {
-                                backgroundColor: '#243750',
-                                color: '#ffffff',
-                                cursor: "default"
-                            },
-                        }}
-                    >
-                        <DataGrid
-                            rows={rowsData}
-                            getRowId={(row) => row[rowId]}
-                            columns={columnData}
-                            slots={{ toolbar: CustomToolbar }}
-                            filterMode="server"
-                            sortingMode="server"
-                            // paginationMode="server"
-                            pageSizeOptions={[10, 25, 35, 50, 100]}
-                            disableRowSelectionOnClick
-                            checkboxSelection={checkBoxSelection}
-                            onColumnVisibilityModelChange={newModel => setColumnVisibilityModel(newModel)}
-                            autoHeight
-                            getRowHeight={() => "auto"}
-                            sx={{
-                                "&.MuiDataGrid-root .MuiDataGrid-cell:focus-within": {
-                                    outline: "none !important",
-                                },
-                                "& .MuiPopper-root-MuiDataGrid-panel": {
-                                    border: "2px solid green !important",
-                                },
-                                "& .MuiTablePagination-displayedRows": { display: 'none' },
-                                "& .MuiTablePagination-actions": { display: 'none' },
-                                ".PrivateSwitchBase-input": {
-                                    height: "23px",
-                                    margin: "10px 13px",
-                                    // width: "20px"
-                                },
-                                cursor: "pointer",
-                                '& .MuiDataGrid-cell': {
-                                    py: '12px',
-                                },
-                                '& .MuiDataGrid-sortIcon': {
-                                    opacity: 1,
-                                    color: "#fff",
-                                },
-                                "& .MuiDataGrid-columnHeader": {
-                                    backgroundColor: "#F1F4F9 !important", // Set your desired header background color
-                                    color: "#fff",              // Optional: set text color
-                                },
-                                "& .MuiDataGrid-columnHeaderTitle": {
-                                    color: 'black !important',
-                                    fontWeight:'600'
-                                },
-                               "& .MuiDataGrid-columnHeaders": {
-                                    borderTop: "1px solid #ddd !important", // Set your desired header background color             // Optional: set text color
-                                },
-                            }}
-                            onRowClick={(params) => {
-                                // const permissible = CheckRoleBasedPermission(auth?.user, services?.[service], permission?.read);
-                                if (navigateOnRowClickEndpoint) {
-                                    const url = `${navigateOnRowClickEndpoint}/${params?.id || params?.[rowId]}`;
-                                    window.open(url, '_blank');
-                                }
-                            }}
-                            initialState={{
-                                columns: { columnVisibilityModel: columnVisibilityModelTable },
-                                pagination: {
-                                    paginationModel: { pageSize: 10, page: 0 },
-                                },
-                            }}
-                            onSortModelChange={(sort) => setSort(sort[0])}
-                            onPaginationModelChange={({ pageSize }) => {
-                                if (pageSize >= 10) {
-                                    setLimit(pageSize)
-                                } else {
-                                    setLimit(10)
-                                }
-                            }
-                            }
-                        />
-                    </Box>
-                )} */}
-            {/* </div> */}
-            <div className="shadow overflow-hidden rounded-md">
+            <div className="shadow overflow-hidden rounded-md bg-[#fff] pt-[15px]">
                 <table className="styled-table" style={{ width:'100%' }}>
                     <thead>
-                        <tr className="bg-[#EBEDFB] text-[#6B8088]">
+                        <tr className="bg-[#C3EBFA] text-[#000000c4]">
                             {columns?.map((column, index) => (
                                 <th key={index} className="p-[15px] text-[14px] text-start" style={{ fontFamily: "Roboto, Helvetica, Arial, sans-serif"}}>{column?.headerName}</th>
                             ))}
@@ -273,7 +162,17 @@ const Table = (props) => {
                     </thead>
                     <tbody>
                         {data?.[dataPosition]?.map((row) => (
-                            <tr key={row?.[rowId]} style={{ borderBottom: "1px solid #ddd" }}>
+                            <tr 
+                                key={row?.[rowId]} 
+                                style={{ borderBottom: "1px solid #ddd", cursor:'pointer' }} 
+                                onClick={() => {
+                                // const permissible = CheckRoleBasedPermission(auth?.user, services?.[service], permission?.read);
+                                    if (navigateOnRowClickEndpoint) {
+                                        const url = `${navigateOnRowClickEndpoint}/${row?.id || row?.[rowId]}`;
+                                        window.open(url, '_blank');
+                                    }
+                                }}
+                            >
                                 {columns?.map((column, index) => (
                                     <td key={index} className="p-[15px] text-[14px] bg-white text-start" style={{ fontFamily: "Roboto, Helvetica, Arial, sans-serif"}}>
                                         {column?.renderCell ? columnData(row, column?.renderCell) : dateField.includes(column?.field) ? dateFormat(row, column?.field) : row[column?.field]}
@@ -285,25 +184,13 @@ const Table = (props) => {
                 </table>
 
                 {/* Pagination Controls */}
-                {/* <div className="p-4 flex justify-between">
+                <div className="p-4 flex justify-between bg-white">
                     <p className="text-[13px] text-[#c7c4c4] flex items-center font-[500]">Showing 
-                        <span className="text-[#ff6200]">&nbsp;1-{data?.[dataPosition]?.length}</span>&nbsp;from<span className="text-[#ff6200]">&nbsp;{data?.totalRows}</span>&nbsp;Data
-                    </p>
-                    <PaginationControlled data={data} fetchData={fetchData} />
-                </div> */}
-
-                {/* Pagination Controls */}
-                <div className="p-4 flex justify-between">
-                    <p className="text-[13px] text-[#c7c4c4] flex items-center font-[500]">Showing 
-                        <span className="text-[#4F45B5]">&nbsp;1-{data?.[dataPosition]?.length}</span>&nbsp;from<span className="text-[#4F45B5]">&nbsp;{data?.totalRows}</span>&nbsp;Data
+                        <span className="text-[#6B8088]">&nbsp;1-{data?.[dataPosition]?.length}</span>&nbsp;from<span className="text-[#6B8088]">&nbsp;{data?.totalRows}</span>&nbsp;Data
                     </p>
                     <PaginationControlled data={data} fetchData={fetchData} />
                 </div>
 	        </div>
-
-            {/* {data?.[dataPosition]?.length > 0 && (
-                <PaginationComponent page={page} pages={data?.maxPage} setPage={setPage} fetchData={fetchData} />
-            )} */}
 
             <Dialog
                 isOpen={isOpen}

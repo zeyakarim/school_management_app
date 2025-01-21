@@ -5,33 +5,33 @@ import { ResponsiveContainer, BarChart, CartesianGrid, XAxis, YAxis, Tooltip, Le
 const data = [
     {
         "name": "Mon",
-        "present": 60,
-        "absent": 40
+        "Present": 60,
+        "Absent": 40
     },
     {
         "name": "Tue",
-        "present": 30,
-        "absent": 70
+        "Present": 30,
+        "Absent": 70
     },
     {
         "name": "Wed",
-        "present": 50,
-        "absent": 50
+        "Present": 50,
+        "Absent": 50
     },
     {
         "name": "Thr",
-        "present": 20,
-        "absent": 80
+        "Present": 20,
+        "Absent": 80
     },
     {
         "name": "Fri",
-        "present": 98,
-        "absent": 2
+        "Present": 98,
+        "Absent": 2
     },
     {
         "name": "Sat",
-        "present": 90,
-        "absent": 10
+        "Present": 90,
+        "Absent": 10
     }
 ]
   
@@ -57,13 +57,13 @@ const BarChartData = () => {
                     wrapperStyle={{ paddingTop: "20px", paddingBottom: "40px" }}
                 />
                 <Bar
-                    dataKey="present"
+                    dataKey="Present"
                     fill="#FAE27C"
                     legendType="circle"
                     radius={[10, 10, 0, 0]}
                 />
                 <Bar
-                    dataKey="absent"
+                    dataKey="Absent"
                     fill="#C3EBFA"
                     legendType="circle"
                     radius={[10, 10, 0, 0]}

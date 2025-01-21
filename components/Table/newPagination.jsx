@@ -22,26 +22,36 @@ export default function PaginationControlled({ data, fetchData }) {
                 }}
                 sx={{ 
                     "& .Mui-selected": {
-                        border: "2px solid #4F45B5 !important", 
-                        color: "#4F45B5 !important",
+                        border: "2px solid #34bff3 !important", 
+                        color: "#34bff3 !important",
                         backgroundColor: 'transparent !important' 
                     },
                     "& .Mui-selected:hover": {
                         backgroundColor: 'transparent !important'
                     },
                     "& .MuiPaginationItem-root": {
-                        // color: 'gray',
                         height: '36px',
                         minWidth: '36px'
                     },
                     "& .MuiPaginationItem-page": {
-                        border: "1px solid #ddd",  // Add border to only numbered buttons
+                        border: "1px solid #ddd",
                         borderRadius: "13px",
                         fontWeight:'600',
-                        color:'gray'      // Optional: rounded corners for numbers
+                        color:'gray'    
                     },
                     "& .MuiPaginationItem-page:hover": {
+                        cursor: "pointer",
                         backgroundColor: 'transparent !important'
+                    },
+                    "& .MuiPaginationItem-disabled": {
+                        color: "#bbb",
+                        borderColor: "#ddd",
+                    },
+                    "& .MuiPaginationItem-previous, & .MuiPaginationItem-next": {
+                        color: "#34bff3 !important",
+                    },
+                    "& .MuiPaginationItem-previous:hover, & .MuiPaginationItem-next:hover": {
+                        backgroundColor: "rgba(52, 191, 243, 0.1)",
                     }
                 }}
             />

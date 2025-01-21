@@ -10,7 +10,7 @@ const TeacherDetails = ({params}) => {
             detailsItems={teacherDetailsItems} 
             shortcutItems={teacherShortcutItems}
             endPoint={'/teachers'}
-            dataPosition={'teachers'}
+            dataPosition={'teacherDetails'}
             id={id}
         />
     )
