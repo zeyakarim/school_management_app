@@ -1,5 +1,7 @@
 import { NextResponse } from "next/server";
 import prisma from "@/config/database";
+import { fetchAssignments } from "./services";
+import { success } from "@/utils/responseHandler";
 
 export async function POST(req) {
     const data = await req.json();
@@ -14,44 +16,15 @@ export async function POST(req) {
     }
 }
 
-const simplifiedAssignments = (assignments) => {
-    return assignments?.map((assignment) => {
-        const lastName = assignment?.teacher?.last_name ? assignment?.teacher?.last_name : '';
-        const simplifiedAssignment = {
-            ...assignment,
-            teacher: assignment?.teacher?.first_name + ' ' + lastName,
-            subject: assignment?.subject?.name,
-            lesson: assignment?.lesson?.name
-        }
-        return simplifiedAssignment
-    })
-}
-
 export async function GET(req) {
-    try {
-        const assignments = await prisma.assignment.findMany({
-            include: {
-                teacher: {
-                    select: {
-                        first_name: true,
-                        last_name: true
-                    }
-                },
-                subject: {
-                    select: {
-                        name: true
-                    }
-                },
-                lesson: {
-                    select: {
-                        name: true
-                    }
-                }
-            }
-        });
-        return NextResponse.json({data: {assignments: simplifiedAssignments(assignments), status: 200, maxPage: 1, page: 1}});
-    } catch (error) {
-        console.log("Error:",error)
-        return NextResponse.json({"msg": "something went wrong"},  {status:'400'})
-    }
+    const { searchParams } = req.nextUrl;
+    // Convert all query parameters into an object
+    const queryParams = Object.fromEntries(searchParams?.entries());
+
+    let { page = 1, limit, searchFor = '' } = queryParams;
+    limit = limit ? parseInt(limit) :10
+    const skipRecord = (page - 1) * limit;
+
+    const fetchedAssignments = await fetchAssignments(searchFor, page, limit, skipRecord); 
+    return NextResponse.json(success(fetchedAssignments, "Assignments Fetched!"));
 }
