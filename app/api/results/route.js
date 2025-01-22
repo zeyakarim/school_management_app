@@ -1,5 +1,7 @@
 import { NextResponse } from "next/server";
 import prisma, { assignment } from "@/config/database";
+import { fetchResults } from "./services";
+import { success } from "@/utils/responseHandler";
 
 export async function POST(req) {
     const data = await req.json();
@@ -14,50 +16,15 @@ export async function POST(req) {
     }
 }
 
-const simplifiedResults = (results) => {
-    return results?.map((result) => {
-        const lastName = result?.student?.last_name ? result?.student?.last_name : '';
-        const simplifiedResult = {
-            ...result,
-            student: result?.student?.first_name + ' ' + lastName,
-            exam: result?.exam?.title,
-            grade: result?.grade?.level,
-            assignment: result?.assignment?.title
-        }
-        return simplifiedResult
-    })
-}
-
 export async function GET(req) {
-    try {
-        const results = await prisma.result.findMany({
-            include: {
-                student: {
-                    select: {
-                        first_name: true,
-                        last_name: true
-                    }
-                },
-                exam: {
-                    select: {
-                        title: true,
-                    }
-                },
-                grade: {
-                    select: {
-                        level: true
-                    }
-                },
-                assignment: {
-                    select: {
-                        title: true
-                    }
-                }
-            }
-        });
-        return NextResponse.json({data: {results: simplifiedResults(results), status: 200, maxPage: 1, page: 1}});
-    } catch (error) {
-        console.log("Error:",error)
-        return NextResponse.json({"msg": "something went wrong"},  {status:'400'})
-    }
+    const { searchParams } = req.nextUrl;
+    // Convert all query parameters into an object
+    const queryParams = Object.fromEntries(searchParams?.entries());
+
+    let { page = 1, limit, searchFor = '' } = queryParams;
+    limit = limit ? parseInt(limit) :10
+    const skipRecord = (page - 1) * limit;
+
+    const fetchedResults = await fetchResults(searchFor, page, limit, skipRecord);
+    return NextResponse.json(success(fetchedResults, "Results Fetched Successfully!"));
 }
