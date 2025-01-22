@@ -1,5 +1,7 @@
 import { NextResponse } from "next/server";
 import prisma from "@/config/database";
+import { fetchAnnoucements } from "./services";
+import { success } from "@/utils/responseHandler";
 
 export async function POST(req) {
     const data = await req.json();
@@ -14,30 +16,14 @@ export async function POST(req) {
     }
 }
 
-const simplifiedAnnoucements = (annoucements) => {
-    return annoucements?.map((annoucement) => {
-        const simplifiedAnnoucement = {
-            ...annoucement,
-            class: annoucement?.class?.name
-        }
-        return simplifiedAnnoucement
-    })
-}
-
 export async function GET(req) {
-    try {
-        const annoucements = await prisma.annoucement.findMany({
-            include: {
-                class: {
-                    select: {
-                        name: true
-                    }
-                }
-            }
-        });
-        return NextResponse.json({data: {annoucements: simplifiedAnnoucements(annoucements), status: 200, maxPage: 1, page: 1 }});
-    } catch (error) {
-        console.log("Error:",error)
-        return NextResponse.json({"msg": "something went wrong"},  {status:'400'})
-    }
+    const { searchParams } = req.nextUrl;
+    // Convert all query parameters into an object
+    const queryParams = Object.fromEntries(searchParams?.entries());
+
+    let { page = 1, limit, searchFor = '' } = queryParams;
+    limit = limit ? parseInt(limit) :10
+    const skipRecord = (page - 1) * limit;
+    const fetchedAnnoucements = await fetchAnnoucements(searchFor, page, limit, skipRecord); 
+    return NextResponse.json(success(fetchedAnnoucements, "Annoucements Fetched!"));
 }
