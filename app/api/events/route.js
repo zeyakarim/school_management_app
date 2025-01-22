@@ -1,5 +1,7 @@
 import { NextResponse } from "next/server";
 import prisma from "@/config/database";
+import { success } from "@/utils/responseHandler";
+import { fetchEvents } from "./services";
 
 export async function POST(req) {
     const data = await req.json();
@@ -14,30 +16,15 @@ export async function POST(req) {
     }
 }
 
-const simplifiedEvents = (events) => {
-    return events?.map((event) => {
-        const simplifiedEvent = {
-            ...event,
-            class: event?.class?.name
-        }
-        return simplifiedEvent
-    })
-}
-
 export async function GET(req) {
-    try {
-        const events = await prisma.event.findMany({
-            include: {
-                class: {
-                    select: {
-                        name: true
-                    }
-                }
-            }
-        });
-        return NextResponse.json({data: {events: simplifiedEvents(events), status: 200, maxPage: 1, page: 1 }});
-    } catch (error) {
-        console.log("Error:",error)
-        return NextResponse.json({"msg": "something went wrong"},  {status:'400'})
-    }
+    const { searchParams } = req.nextUrl;
+    // Convert all query parameters into an object
+    const queryParams = Object.fromEntries(searchParams?.entries());
+
+    let { page = 1, limit, searchFor = '' } = queryParams;
+    limit = limit ? parseInt(limit) :10
+    const skipRecord = (page - 1) * limit;
+
+    const fetchedEvents = await fetchEvents(searchFor, page, limit, skipRecord); 
+    return NextResponse.json(success(fetchedEvents, "Events Fetched Successfully!"));
 }

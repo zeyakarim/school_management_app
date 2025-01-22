@@ -113,7 +113,7 @@ const Table = (props) => {
                 {/* Pagination Controls */}
                 <div className="p-4 flex justify-between bg-white">
                     <p className="text-[13px] text-[#c7c4c4] flex items-center font-[500]">Showing 
-                        <span className="text-[#6B8088]">&nbsp;1-{data?.[dataPosition]?.length}</span>&nbsp;from<span className="text-[#6B8088]">&nbsp;{data?.totalRows}</span>&nbsp;Data
+                        <span className="text-[#34bff3]">&nbsp;1-{data?.[dataPosition]?.length}</span>&nbsp;from<span className="text-[#34bff3]">&nbsp;{data?.totalRows}</span>&nbsp;Data
                     </p>
                     <PaginationControlled data={data} fetchData={fetchData} />
                 </div>
