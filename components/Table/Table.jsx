@@ -53,7 +53,29 @@ const Table = (props) => {
         return moment(row?.[field]).format('MMM DD, YYYY h:mm:ss A')
     }
 
-    const dateField = ['created_at', 'updated_at', 'date', 'birth_date', 'start_time', 'end_time']
+    const dateField = ['created_at', 'updated_at', 'date', 'birth_date', 'start_time', 'end_time'];
+
+    const getCellValue = (row, column) => {
+        const fieldValue = row[column?.field];
+    
+        switch (true) {
+            case column?.renderCell !== undefined:
+                return columnData(row, column?.renderCell);
+    
+            case dateField.includes(column?.field):
+                return dateFormat(row, column?.field);
+    
+            case typeof fieldValue === "boolean":
+                return fieldValue ? "Yes" : "No";
+    
+            case fieldValue === null || fieldValue === undefined:
+                return "N/A";
+    
+            default:
+                return fieldValue;
+        }
+    };
+    
     return (
         <div className="w-full">
             <div className="shadow overflow-hidden rounded-md bg-[#fff] pt-[15px]">
@@ -80,7 +102,7 @@ const Table = (props) => {
                             >
                                 {columns?.map((column, index) => (
                                     <td key={index} className="p-[15px] text-[14px] bg-white text-start" style={{ fontFamily: "Roboto, Helvetica, Arial, sans-serif"}}>
-                                        {column?.renderCell ? columnData(row, column?.renderCell) : dateField.includes(column?.field) ? dateFormat(row, column?.field) : row[column?.field]}
+                                        {getCellValue(row, column)}
                                     </td>
                                 ))}
                             </tr>
