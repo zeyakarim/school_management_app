@@ -19,20 +19,20 @@ const Navbar = () => {
             {/* Navbar Header */}
             <div className="flex items-center gap-2 px-5 pt-5 justify-center md:justify-start">
                 <Image src="/file.png" alt="schoolLogo" width={26} height={26} />
-                <p className="font-semibold hidden md:block">Alfalah School</p>
+                <p className="font-semibold hidden md:block">Codeials Public School</p>
             </div>
 
             {/* Navbar Links */}
             <div className="mt-4 text-sm relative overflow-y-auto scrollbar">
                 {menuItems.map((i) => (
                     <div className="flex flex-col gap-2 lg:px-3" key={i.title}>
-                        <span className="hidden lg:block text-gray-400 font-light my-4">{i.title}</span>
+                        <span className="hidden lg:block text-gray-500 font-[500] my-4">{i.title}</span>
                         {i?.items.map((item) => (
                             <Link
                                 href={item.href}
                                 key={item.label}
-                                className={`flex items-center justify-center lg:justify-start gap-4 text-gray-500 py-2 md:px-2 rounded-md hover:bg-[#EDF9FD] ${
-                                    isActive(item?.href) ? "bg-[#C3EBFA] text-black font-semibold" : ""
+                                className={`flex items-center justify-center lg:justify-start gap-4  py-2 md:px-2 rounded-md hover:bg-[#EDF9FD] ${
+                                    isActive(item?.href) ? "bg-[#C3EBFA] text-black font-semibold" : "text-gray-500"
                                 }`}
                             >
                                 {item.icon && <span>{item.icon}</span>}
