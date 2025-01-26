@@ -49,7 +49,7 @@ const Events = () => {
     return (
         <div className='w-[98%] mx-auto'>
             <Table 
-                title={'All Events'}
+                title={'Events'}
                 columns={columns}
                 rowId={'id'}
                 endPoint={'/events'}

@@ -28,6 +28,7 @@ const AssignmentForm = () => {
                         variant="bordered"
                         className="w-[48%]"
                         labelPlacement="outside"
+                        autoComplete="off"
                     />
                     <Input
                         isRequired
@@ -39,6 +40,7 @@ const AssignmentForm = () => {
                         variant="bordered"
                         className="w-[48%]"
                         labelPlacement="outside"
+                        autoComplete="off"
                     />
                     <Input
                         isRequired
@@ -50,6 +52,7 @@ const AssignmentForm = () => {
                         type='text'
                         className="w-[48%]"
                         labelPlacement="outside"
+                        autoComplete="off"
                     />
                     <Select
                         isRequired
@@ -59,7 +62,7 @@ const AssignmentForm = () => {
                         labelPlacement="outside"
                         endContent={
                             <Image src="/teacher.png" alt="" width={16} height={16} />
-                        } 
+                        }
                     >
                         {teachers.map((teacher) => (
                             <SelectItem key={teacher.key}>

@@ -75,7 +75,7 @@ const Teachers = () => {
         checkBoxSelection={false}
         navigateOnRowClickEndpoint={`/teachers`}
         version='version-1'
-        title='All Teachers'
+        title='Teachers'
         dialogTitle='Create A New Teacher'
         table="teacher"
         type="create"

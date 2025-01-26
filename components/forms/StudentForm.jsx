@@ -29,6 +29,7 @@ const StudentForm = () => {
                             <UserIcon className="text-2xl text-default-400 pointer-events-none flex-shrink-0" />
                         }
                         labelPlacement='outside'
+                        autoComplete="off"
                     />
                     <Input
                         isRequired
@@ -40,6 +41,7 @@ const StudentForm = () => {
                         type='email'
                         className="w-[32%]"
                         labelPlacement='outside'
+                        autoComplete="off"
                     />
                     <Input
                         isRequired
@@ -57,6 +59,7 @@ const StudentForm = () => {
                         variant="bordered"
                         className="w-[32%]"
                         labelPlacement='outside'
+                        autoComplete="off"
                     />
                 </div>
                 <p className="text-xs text-gray-500 py-2 pl-2">Personal Information</p>
@@ -72,6 +75,7 @@ const StudentForm = () => {
                         variant="bordered"
                         className="w-[32%]"
                         labelPlacement="outside"
+                        autoComplete="off"
                     />
                     <Input
                         label="Last Name"
@@ -82,6 +86,7 @@ const StudentForm = () => {
                         type='text'
                         className="w-[32%]"
                         labelPlacement="outside"
+                        autoComplete="off"
                     />
                     <Input
                         isRequired
@@ -93,6 +98,7 @@ const StudentForm = () => {
                         variant="bordered"
                         className="w-[32%]"
                         labelPlacement="outside"
+                        autoComplete="off"
                     />
                     <Input
                         isRequired
@@ -104,6 +110,7 @@ const StudentForm = () => {
                         variant="bordered"
                         className="w-[32%]"
                         labelPlacement="outside"
+                        autoComplete="off"
                     />
                     <Input
                         label="Blood Type"
@@ -114,6 +121,7 @@ const StudentForm = () => {
                         }
                         className="w-[32%]"
                         labelPlacement="outside"
+                        autoComplete="off"
                     />
 
                     <DatePicker label="Birth date" className="w-[32%]"  variant="bordered" labelPlacement="outside" />
@@ -142,6 +150,7 @@ const StudentForm = () => {
                         variant="bordered"
                         className="w-[32%]"
                         labelPlacement="outside"
+                        autoComplete="off"
                     />
 
                     <div className="flex items-center gap-2 w-full md:w-[32%]">

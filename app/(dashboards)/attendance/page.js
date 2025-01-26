@@ -43,7 +43,7 @@ const Attendance = () => {
     return (
         <div className='w-[98%] mx-auto'>
             <Table 
-                title={'All Attendance'}
+                title={'Attendance'}
                 columns={columns}
                 rowId={'id'}
                 endPoint={'/attendances'}

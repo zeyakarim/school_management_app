@@ -56,7 +56,7 @@ const Lessons = () => {
     return (
         <div className='w-[98%] mx-auto'>
             <Table 
-                title={'All Lessons'}
+                title={'Lessons'}
                 columns={columns}
                 rowId={'id'}
                 endPoint={'/lessons'}

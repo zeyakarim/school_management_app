@@ -92,7 +92,7 @@ const Students = async () => {
                 checkBoxSelection={false}
                 columnVisibilityModel={columnVisibilityModel}
                 version='version-1'
-                title='All Students'
+                title='Students'
                 table="student"
                 type="create"
                 dialogTitle='Create A New Student'

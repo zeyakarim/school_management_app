@@ -35,6 +35,7 @@ const ParentForm = () => {
                             <UserIcon className="text-2xl text-default-400 pointer-events-none flex-shrink-0" />
                         }
                         labelPlacement='outside'
+                        autoComplete="off"
                     />
                     <Input
                         isRequired
@@ -46,6 +47,7 @@ const ParentForm = () => {
                         type='email'
                         className="w-[32%]"
                         labelPlacement='outside'
+                        autoComplete="off"
                     />
                     <Input
                         isRequired
@@ -63,6 +65,7 @@ const ParentForm = () => {
                         variant="bordered"
                         className="w-[32%]"
                         labelPlacement='outside'
+                        autoComplete="off"
                     />
                 </div>
                 <p className="text-xs text-gray-500 py-2 pl-2">Personal Information</p>
@@ -78,6 +81,7 @@ const ParentForm = () => {
                         variant="bordered"
                         className="w-[32%]"
                         labelPlacement="outside"
+                        autoComplete="off"
                     />
                     <Input
                         label="Last Name"
@@ -88,6 +92,7 @@ const ParentForm = () => {
                         type='text'
                         className="w-[32%]"
                         labelPlacement="outside"
+                        autoComplete="off"
                     />
                     <Input
                         isRequired
@@ -99,6 +104,7 @@ const ParentForm = () => {
                         variant="bordered"
                         className="w-[32%]"
                         labelPlacement="outside"
+                        autoComplete="off"
                     />
                     <Input
                         isRequired
@@ -110,6 +116,7 @@ const ParentForm = () => {
                         variant="bordered"
                         className="w-[32%]"
                         labelPlacement="outside"
+                        autoComplete="off"
                     />
                    
                     <Select

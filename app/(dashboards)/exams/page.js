@@ -49,7 +49,7 @@ const Exams = () => {
     return (
         <div className='w-[98%] mx-auto'>
             <Table
-                title={'All Exams'}
+                title={'Exams'}
                 columns={columns}
                 rowId={'id'}
                 endPoint={'/exams'}

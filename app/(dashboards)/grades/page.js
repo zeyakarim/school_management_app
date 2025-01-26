@@ -19,7 +19,7 @@ const Exams = () => {
     return (
         <div className='w-[98%] mx-auto'>
             <Table
-                title={'All Grades'}
+                title={'Grades'}
                 columns={columns}
                 rowId={'id'}
                 endPoint={'/grades'}

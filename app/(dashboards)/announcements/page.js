@@ -37,7 +37,7 @@ const Announcements = () => {
     return (
         <div className='w-[98%] mx-auto'>
             <Table 
-                title={'All Announcements'}
+                title={'Announcements'}
                 columns={columns}
                 rowId={'id'}
                 endPoint={'/annoucements'}

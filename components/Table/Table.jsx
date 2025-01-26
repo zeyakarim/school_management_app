@@ -4,6 +4,7 @@ import { useDisclosure } from "@nextui-org/react";
 import Dialog from "../Dialog";
 import moment from 'moment';
 import PaginationControlled from "./newPagination";
+import { Button } from "@mui/material";
 
 const Table = (props) => {
     const { 
@@ -78,6 +79,14 @@ const Table = (props) => {
     
     return (
         <div className="w-full">
+            <div className="flex justify-between mb-3">
+                <h2 className="font-semibold ml-1">{title}</h2>
+                <Button 
+                    variant="contained" 
+                    className="font-semibold capitalize"
+                    onClick={onOpen}
+                >{dialogTitle}</Button>
+            </div>
             <div className="shadow overflow-hidden rounded-md bg-[#fff] pt-[15px]">
                 <table className="styled-table" style={{ width:'100%' }}>
                     <thead>

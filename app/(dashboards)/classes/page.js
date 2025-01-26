@@ -31,7 +31,7 @@ const Classes = () => {
     return (
         <div className='w-[98%] mx-auto'>
             <Table
-                title={'All Classes'}
+                title={'Classes'}
                 columns={columns}
                 rowId={'id'}
                 endPoint={'/classes'}

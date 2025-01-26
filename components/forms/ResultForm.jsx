@@ -98,6 +98,7 @@ const ResultForm = () => {
                         variant="bordered"
                         className="w-[48%]"
                         labelPlacement="outside"
+                        autoComplete="off"
                     />
                 
                     <Input
@@ -110,6 +111,7 @@ const ResultForm = () => {
                         variant="bordered"
                         className="w-[48%]"
                         labelPlacement="outside"
+                        autoComplete="off"
                     />
                     <Input
                         isRequired
@@ -121,6 +123,7 @@ const ResultForm = () => {
                         variant="bordered"
                         className="w-[48%]"
                         labelPlacement="outside"
+                        autoComplete="off"
                     />
 
                     <Input
@@ -133,6 +136,7 @@ const ResultForm = () => {
                         variant="bordered"
                         className="w-[48%]"
                         labelPlacement="outside"
+                        autoComplete="off"
                     />
                 </div>
             </form>

@@ -40,6 +40,7 @@ const TeacherForm = () => {
                         endContent={
                             <UserIcon className="text-2xl text-default-400 pointer-events-none flex-shrink-0" />
                         }
+                        autoComplete="off"
                     />
                     <Input
                         isRequired
@@ -51,6 +52,7 @@ const TeacherForm = () => {
                         type='email'
                         className="w-[32%]"
                         labelPlacement="outside"
+                        autoComplete="off"
                     />
                     <Input
                         isRequired
@@ -68,6 +70,7 @@ const TeacherForm = () => {
                         variant="bordered"
                         className="w-[32%]"
                         labelPlacement="outside"
+                        autoComplete="off"
                     />
                 </div>
                 <p className="text-xs text-gray-500 py-4 pl-[5px]">Personal Information</p>
@@ -83,6 +86,7 @@ const TeacherForm = () => {
                         variant="bordered"
                         className="w-[32%]"
                         labelPlacement="outside"
+                        autoComplete="off"
                     />
                     <Input
                         label="Last Name"
@@ -93,6 +97,7 @@ const TeacherForm = () => {
                         type='text'
                         className="w-[32%]"
                         labelPlacement="outside"
+                        autoComplete="off"
                     />
                     <Input
                         isRequired
@@ -104,6 +109,7 @@ const TeacherForm = () => {
                         variant="bordered"
                         className="w-[32%]"
                         labelPlacement="outside"
+                        autoComplete="off"
                     />
                     <Input
                         label="Address"
@@ -114,6 +120,7 @@ const TeacherForm = () => {
                         variant="bordered"
                         className="w-[32%]"
                         labelPlacement="outside"
+                        autoComplete="off"
                     />
                     <Input
                         label="Blood Type"
@@ -124,6 +131,7 @@ const TeacherForm = () => {
                         }
                         className="w-[32%]"
                         labelPlacement="outside"
+                        autoComplete="off"
                     />
 
                     <DatePicker label="Birth date" className="w-[32%]"  variant="bordered" labelPlacement="outside" />

@@ -55,7 +55,7 @@ const Parents = () => {
                 dataPosition={'parents'}
                 checkBoxSelection={false}
                 version='version-1'
-                title='All Parents'
+                title='Parents'
                 dialogTitle='Create A New Parent'
                 table="parent"
                 type="create"

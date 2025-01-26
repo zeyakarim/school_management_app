@@ -30,6 +30,7 @@ const ExamForm = () => {
                         variant="bordered"
                         className="w-[32%] mt-1"
                         labelPlacement="outside"
+                        autoComplete="off"
                     />
                     <Input
                         isRequired
@@ -41,6 +42,7 @@ const ExamForm = () => {
                         type='text'
                         className="w-[32%] mt-1"
                         labelPlacement="outside"
+                        autoComplete="off"
                     />
                     <Select
                         isRequired

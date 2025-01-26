@@ -28,6 +28,7 @@ const SubjectForm = () => {
                         variant="bordered"
                         className="w-[32%]"
                         labelPlacement="outside"
+                        autoComplete="off"
                     />
 
                     <Select

@@ -32,6 +32,7 @@ const ClassForm = () => {
                         variant="bordered"
                         className="w-[32%]"
                         labelPlacement="outside"
+                        autoComplete="off"
                     />
 
                     <Input
@@ -44,6 +45,7 @@ const ClassForm = () => {
                         variant="bordered"
                         className="w-[32%]"
                         labelPlacement="outside"
+                        autoComplete="off"
                     />
 
                     <Select

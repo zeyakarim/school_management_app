@@ -31,7 +31,7 @@ const Subjects = () => {
                 dataPosition={'subjects'}
                 checkBoxSelection={false}
                 version='version-1'
-                title={'All Subjects'}
+                title={'Subjects'}
                 dialogTitle='Create A New Subject'
                 table="subject"
                 type="create"
