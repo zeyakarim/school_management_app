@@ -3,7 +3,7 @@ import React from 'react'
 
 const Header = () => {
     return (
-        <div className="flex items-center justify-end gap-6 p-4 w-full">
+        <div className="flex items-center justify-end gap-6 p-4 w-full shadow-md bg-white">
             <div className='pt-3'>
                 <Image src='/message.png' alt='messages' width={18} height={18} />
             </div>
