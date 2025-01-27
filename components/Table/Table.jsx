@@ -4,7 +4,8 @@ import { useDisclosure } from "@nextui-org/react";
 import Dialog from "../Dialog";
 import moment from 'moment';
 import PaginationControlled from "./newPagination";
-import { Button } from "@mui/material";
+import { Button, InputAdornment, TextField } from "@mui/material";
+import { Search } from "@mui/icons-material";
 
 const Table = (props) => {
     const { 
@@ -12,6 +13,7 @@ const Table = (props) => {
         version, columnVisibilityModel, endPoint, dataPosition, rowId
     } = props;
     const {isOpen, onOpen, onOpenChange } = useDisclosure();
+    const [searchFor, setSearchFor] = useState('');
     const [page, setPage] = useState(1);
     const [filterValue, setFilterValue] = useState("");
     const [limit, setLimit] = useState(1);
@@ -36,8 +38,13 @@ const Table = (props) => {
     const [sort, setSort] = useState(initialSortState)
 
     const fetchData = async (page) => {
+        const params = new URLSearchParams({
+            searchFor,
+            page,
+            limit: 10,
+        });
         try {
-            const apiResponse = await fetch(`${process.env.NEXT_PUBLIC_WEBSITE_URL}${endPoint}?page=${page}&limit=${10}`);
+            const apiResponse = await fetch(`${process.env.NEXT_PUBLIC_WEBSITE_URL}${endPoint}?${params.toString()}`);
             const result = await apiResponse.json();
             setData(result?.data)
             return result?.data;
@@ -48,7 +55,7 @@ const Table = (props) => {
 
     useEffect(() => {
         fetchData(1);
-    }, [])
+    }, [searchFor])
 
     const dateFormat = (row, field) => {
         return moment(row?.[field]).format('MMM DD, YYYY h:mm:ss A')
@@ -78,21 +85,45 @@ const Table = (props) => {
     };
     
     return (
-        <div className="w-full">
-            <div className="flex justify-between mb-3">
-                <h2 className="font-semibold ml-1">{title}</h2>
+        <div className="w-full mt-3">
+            <div className="flex justify-end mb-3">
                 <Button 
                     variant="contained" 
                     className="font-semibold capitalize"
                     onClick={onOpen}
                 >{dialogTitle}</Button>
             </div>
+        
             <div className="shadow overflow-hidden rounded-md bg-[#fff] pt-[15px]">
-                <table className="styled-table" style={{ width:'100%' }}>
+                <div className="flex justify-between mb-3 mx-4">
+                    <h2 className="font-semibold">{title}</h2>
+                    <div style={{width:'250px'}}>
+                        <TextField 
+                            id='last'
+                            name='last'
+                            label='Search'
+                            autoComplete='off'
+                            size='small'
+                            placeholder='Search Record...'
+                            value={searchFor}
+                            onChange={(event) => setSearchFor(event?.target?.value)}
+                            sx={{ width: '100%'}}
+                            InputProps={{
+                                endAdornment: (
+                                    <InputAdornment position="end">
+                                        <Search />
+                                    </InputAdornment>
+                                ),
+                            }}
+                        />
+                    </div>
+                    
+                </div>
+                <table className="styled-table mx-auto" style={{ width:'98%' }}>
                     <thead>
-                        <tr className="bg-[#C3EBFA] text-[#000000c4]">
+                        <tr className="header-row bg-[#C3EBFA] text-[#000000c4]">
                             {columns?.map((column, index) => (
-                                <th key={index} className="p-[15px] text-[14px] text-start" style={{ fontFamily: "Roboto, Helvetica, Arial, sans-serif"}}>{column?.headerName}</th>
+                                <th key={index} className="px-[15px] py-[10px] text-[14px] text-start" style={{ fontFamily: "Roboto, Helvetica, Arial, sans-serif"}}>{column?.headerName}</th>
                             ))}
                         </tr>
                     </thead>

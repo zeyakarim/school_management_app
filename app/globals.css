@@ -140,3 +140,13 @@
   border-radius: 0px 0px 14px 14px !important;
   box-shadow: none !important;
 }
+
+.header-row th:first-child {
+  border-top-left-radius: 5px;
+  border-bottom-left-radius: 5px;
+}
+
+.header-row th:last-child {
+  border-top-right-radius: 5px;
+  border-bottom-right-radius: 5px;
+}

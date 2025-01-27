@@ -56,9 +56,9 @@ const Navbar = () => {
                     style={{
                         color: 'black', // Black text color
                         textShadow: `
-                            1px 1px 2px rgba(255, 255, 255, 0.3),  /* Light outer glow */
-                            2px 2px 4px rgba(0, 0, 0, 0.5),       /* Dark soft shadow */
-                            0px 6px 12px rgba(0, 0, 0, 0.2);
+                            1px 1px 2px rgba(255, 255, 255, 0.3),
+                            2px 2px 4px rgba(0, 0, 0, 0.5),
+                            0px 6px 12px rgba(0, 0, 0, 0.2)
                         `
                     }}
                 >
