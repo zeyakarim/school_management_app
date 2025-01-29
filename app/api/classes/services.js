@@ -13,8 +13,25 @@ const simplifiedClasses = (classes) => {
 
 const fetchClasses = async (searchFor, page, limit, skipRecord) => {
     try {
+        const searchConditions = searchFor ? 
+            {
+                OR: [
+                    { name: { contains: searchFor, mode: 'insensitive' } },
+                    {
+                        supervisor: {
+                            OR: [
+                                { first_name: { contains: searchFor, mode: 'insensitive' } },
+                                { last_name: { contains: searchFor, mode: 'insensitive' } },
+                            ],
+                        },
+                    },
+                ],
+            }
+        : {};
+
         const [data, totalRows] = await prisma.$transaction([
             prisma.class.findMany({
+                where: searchConditions,
                 include: {
                     supervisor: {
                         select: {
@@ -27,7 +44,9 @@ const fetchClasses = async (searchFor, page, limit, skipRecord) => {
                 take: limit,         // Number of records to fetch
                 orderBy: { created_at: 'desc' }, // Optional: Order results
             }),
-            prisma.class.count()
+            prisma.class.count({
+                where: searchConditions
+            })
         ]);
         const maxPage = Math.ceil(totalRows / limit);
         return { 

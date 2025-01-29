@@ -12,8 +12,25 @@ const simplifiedAnnoucements = (annoucements) => {
 
 const fetchAnnoucements = async (searchFor, page, limit, skipRecord) => {
     try {
+        const searchConditions = searchFor ? 
+            {
+                OR: [
+                    { title: { contains: searchFor, mode: 'insensitive' } },
+                    { description: { contains: searchFor, mode: 'insensitive' } },
+                    {
+                        class: {
+                            OR: [
+                                { name: { contains: searchFor, mode: 'insensitive' } },
+                            ],
+                        },
+                    },
+                ],
+            }
+        : {}; 
+
         const [data, totalRows] = await prisma.$transaction([
             prisma.annoucement.findMany({
+                where: searchConditions,
                 include: {
                     class: {
                         select: {
@@ -25,7 +42,9 @@ const fetchAnnoucements = async (searchFor, page, limit, skipRecord) => {
                 take: limit,         // Number of records to fetch
                 orderBy: { created_at: 'desc' }, // Optional: Order results
             }),
-            prisma.annoucement.count()
+            prisma.annoucement.count({
+                where: searchConditions
+            })
         ]);
 
         const maxPage = Math.ceil(totalRows / limit);

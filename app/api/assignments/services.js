@@ -15,8 +15,39 @@ const simplifiedAssignments = (assignments) => {
 
 const fetchAssignments = async (searchFor, page, limit, skipRecord) => {
     try {
+        const searchConditions = searchFor ? 
+            {
+                OR: [
+                    { title: { contains: searchFor, mode: 'insensitive' } },
+                    {
+                        teacher: {
+                            OR: [
+                                { first_name: { contains: searchFor, mode: 'insensitive' } }, // Search in teacher's first name
+                                { last_name: { contains: searchFor, mode: 'insensitive' } },  // Search in teacher's last name
+                            ],
+                        },
+                    },
+                    {
+                        subject: {
+                            OR: [
+                                { name: { contains: searchFor, mode: 'insensitive' } },
+                            ],
+                        },
+                    },
+                    {
+                        lesson: {
+                            OR: [
+                                { name: { contains: searchFor, mode: 'insensitive' } },
+                            ],
+                        },
+                    },
+                ],
+            }
+        : {}; 
+
         const [data, totalRows] = await prisma.$transaction([
             prisma.assignment.findMany({
+                where: searchConditions,
                 include: {
                     teacher: {
                         select: {
@@ -39,7 +70,9 @@ const fetchAssignments = async (searchFor, page, limit, skipRecord) => {
                 take: limit,         // Number of records to fetch
                 orderBy: { created_at: 'desc' }, // Optional: Order results
             }),
-            prisma.assignment.count()
+            prisma.assignment.count({
+                where: searchConditions
+            })
         ]);
 
         const maxPage = Math.ceil(totalRows / limit);

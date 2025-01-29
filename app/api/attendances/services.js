@@ -15,8 +15,38 @@ const simplifiedAttendances = (attendances) => {
 
 const fetchAttendances = async (searchFor, page, limit, skipRecord) => {
     try {
+        const searchConditions = searchFor ? 
+            {
+                OR: [
+                    // { name: { contains: searchFor, mode: 'insensitive' } },
+                    {
+                        student: {
+                            OR: [
+                                { first_name: { contains: searchFor, mode: 'insensitive' } }, // Search in teacher's first name
+                                { last_name: { contains: searchFor, mode: 'insensitive' } },  // Search in teacher's last name
+                            ],
+                        },
+                    },
+                    {
+                        class: {
+                            OR: [
+                                { name: { contains: searchFor, mode: 'insensitive' } },
+                            ],
+                        },
+                    },
+                    {
+                        lesson: {
+                            OR: [
+                                { name: { contains: searchFor, mode: 'insensitive' } },
+                            ],
+                        },
+                    },
+                ],
+            }
+        : {}; 
         const [data, totalRows] = await prisma.$transaction([
             prisma.attendance.findMany({
+                where: searchConditions,
                 include: {
                     student: {
                         select: {
@@ -39,7 +69,9 @@ const fetchAttendances = async (searchFor, page, limit, skipRecord) => {
                 take: limit,         // Number of records to fetch
                 orderBy: { created_at: 'desc' }, // Optional: Order results
             }),
-            prisma.attendance.count()
+            prisma.attendance.count({
+                where: searchConditions
+            })
         ]);
 
         const maxPage = Math.ceil(totalRows / limit);

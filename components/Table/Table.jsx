@@ -61,7 +61,7 @@ const Table = (props) => {
         return moment(row?.[field]).format('MMM DD, YYYY h:mm:ss A')
     }
 
-    const dateField = ['created_at', 'updated_at', 'date', 'birth_date', 'start_time', 'end_time'];
+    const dateField = ['created_at', 'updated_at', 'date', 'birth_date', 'start_time', 'end_time', 'submit_date', 'due_date'];
 
     const getCellValue = (row, column) => {
         const fieldValue = row[column?.field];
