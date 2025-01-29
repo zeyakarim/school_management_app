@@ -13,8 +13,31 @@ const simplifiedExams = (exams) => {
 
 const fetchExams = async (searchFor, page, limit, skipRecord) => {
     try {
+        const searchConditions = searchFor ? 
+            {
+                OR: [
+                    { title: { contains: searchFor, mode: 'insensitive' } },
+                    {
+                        class: {
+                            OR: [
+                                { name: { contains: searchFor, mode: 'insensitive' } },
+                            ],
+                        },
+                    },
+                    {
+                        subject: {
+                            OR: [
+                                { name: { contains: searchFor, mode: 'insensitive' } },
+                            ],
+                        },
+                    },
+                ],
+            }
+        : {}; 
+
         const [data, totalRows] = await prisma.$transaction([
             prisma.exam.findMany({
+                where: searchConditions,
                 include: {
                     class: {
                         select: {
@@ -31,7 +54,9 @@ const fetchExams = async (searchFor, page, limit, skipRecord) => {
                 take: limit,         // Number of records to fetch
                 orderBy: { created_at: 'desc' }, // Optional: Order results
             }),
-            prisma.exam.count()
+            prisma.exam.count({
+                where: searchConditions
+            })
         ]);
 
         const maxPage = Math.ceil(totalRows / limit);
