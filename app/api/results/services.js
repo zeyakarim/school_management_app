@@ -16,8 +16,53 @@ const simplifiedResults = (results) => {
 
 const fetchResults = async (searchFor, page, limit, skipRecord) => {
     try {
+        const searchConditions = searchFor && searchFor?.trim() !== "" 
+        ? isNaN(searchFor)
+            ? { 
+                OR: [
+                    {
+                        student: {
+                            OR: [
+                                { first_name: { contains: searchFor, mode: 'insensitive' } }, 
+                                { last_name: { contains: searchFor, mode: 'insensitive' } }
+                            ],
+                        },
+                    },
+                    {
+                        exam: {
+                            OR: [
+                                { title: { contains: searchFor, mode: 'insensitive' } }
+                            ],
+                        },
+                    },
+                    {
+                        assignment: {
+                            OR: [
+                                { title: { contains: searchFor, mode: 'insensitive' } }
+                            ],
+                        },
+                    }
+                ]
+            }
+            : { // If searchFor is a number, search by ID fields
+                OR: [
+                        { 
+                            // marks: parseInt(searchFor),
+                            total: parseInt(searchFor),
+                            // grade: {
+                            //     OR: [
+                            //         { level: parseInt(searchFor) }
+                            //     ],
+                            // },
+                        },
+                    ]
+                }
+        : {}; 
+        console.log(searchConditions,'sarch')
+
         const [data, totalRows] = await prisma.$transaction([
             prisma.result.findMany({
+                where: searchConditions,
                 include: {
                     student: {
                         select: {
@@ -45,7 +90,9 @@ const fetchResults = async (searchFor, page, limit, skipRecord) => {
                 take: limit,         // Number of records to fetch
                 orderBy: { created_at: 'desc' }, // Optional: Order results
             }),
-            prisma.result.count()
+            prisma.result.count({
+                where: searchConditions
+            })
         ]);
 
         const maxPage = Math.ceil(totalRows / limit);
