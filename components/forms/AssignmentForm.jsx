@@ -1,5 +1,7 @@
-import { DatePicker, Input, Select, SelectItem } from "@nextui-org/react";
 import Image from 'next/image';
+import InputField from "../formsFields/InputField";
+import SelectField from "../formsFields/SelectField";
+import DatePickerField from "../formsFields/DatePickerField";
 
 const teachers = [
     { "label": "JOHN", "key": "john"},
@@ -18,60 +20,40 @@ const AssignmentForm = () => {
         <div>
             <form action="" method="post">
                 <div className="flex gap-3 flex-wrap justify-between">
-                    <Input
-                        isRequired
+                    <InputField
                         type="text"
                         label="Subject Name"
-                        endContent={
-                            <Image src="/subject.png" alt="" width={16} height={16} />
-                        }
-                        variant="bordered"
                         className="w-[48%]"
-                        labelPlacement="outside"
-                        autoComplete="off"
+                        isRequired={true}
+                        icon={ <Image src="/subject.png" alt="" width={16} height={16} /> }
                     />
-                    <Input
-                        isRequired
+                    <InputField
                         type="text"
                         label="Assignment Name"
-                        endContent={
-                            <Image src="/assignment.png" alt="" width={16} height={16} />
-                        }
-                        variant="bordered"
                         className="w-[48%]"
-                        labelPlacement="outside"
-                        autoComplete="off"
+                        isRequired={true}
+                        icon={ <Image src="/assignment.png" alt="" width={16} height={16} /> }
                     />
-                    <Input
-                        isRequired
+                    <InputField
+                        type="number"
                         label="Class Name"
-                        endContent={
-                            <Image src="/class.png" alt="" width={18} height={18} />
-                        }
-                        variant="bordered"
-                        type='text'
                         className="w-[48%]"
-                        labelPlacement="outside"
-                        autoComplete="off"
+                        isRequired={true}
+                        icon={ <Image src="/class.png" alt="" width={18} height={18} /> }
                     />
-                    <Select
-                        isRequired
+                    <SelectField
+                        isRequired={true}
+                        selectionMode="single"
                         label="Teacher"
                         className="w-[48%]"
-                        variant="bordered"
-                        labelPlacement="outside"
-                        endContent={
-                            <Image src="/teacher.png" alt="" width={16} height={16} />
-                        }
-                    >
-                        {teachers.map((teacher) => (
-                            <SelectItem key={teacher.key}>
-                                {teacher.label}
-                            </SelectItem>
-                        ))}
-                    </Select>
-
-                    <DatePicker label="Date" className="w-[48%]"  variant="bordered" labelPlacement="outside" isRequired />
+                        datas={teachers}
+                        icon={ <Image src="/teacher.png" alt="" width={16} height={16} /> }
+                    />
+                    <DatePickerField
+                        isRequired={true}
+                        label='Date'
+                        className="w-[48%]"
+                    />
                 </div>
             </form>
         </div>

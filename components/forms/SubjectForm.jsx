@@ -1,5 +1,6 @@
-import { Input, Select, SelectItem } from "@nextui-org/react";
 import Image from 'next/image';
+import InputField from "../formsFields/InputField";
+import SelectField from "../formsFields/SelectField";
 
 const teachers = [
     { "label": "JOHN", "key": "john"},
@@ -18,35 +19,21 @@ const SubjectForm = () => {
         <div>
             <form action="" method="post">
                 <div className="flex gap-2 flex-wrap justify-between">
-                    <Input
-                        isRequired
-                        type="subject"
+                    <InputField
+                        type="text"
                         label="Subject"
-                        endContent={
-                            <Image src="/subject.png" alt="" width={16} height={16} />
-                        }
-                        variant="bordered"
                         className="w-[32%]"
-                        labelPlacement="outside"
-                        autoComplete="off"
+                        isRequired={true}
+                        icon={ <Image src="/subject.png" alt="" width={16} height={16} /> }
                     />
-
-                    <Select
+                    <SelectField
+                        isRequired={true}
                         selectionMode="multiple"
                         label="Teacher"
                         className="w-[66%]"
-                        variant="bordered"
-                        labelPlacement="outside"
-                        endContent={
-                            <Image src="/teacher.png" alt="" width={16} height={16} />
-                        } 
-                    >
-                        {teachers.map((teacher) => (
-                            <SelectItem key={teacher.key}>
-                                {teacher.label}
-                            </SelectItem>
-                        ))}
-                    </Select>
+                        datas={teachers}
+                        icon={ <Image src="/teacher.png" alt="" width={16} height={16} /> }
+                    />
                 </div>
             </form>
         </div>
