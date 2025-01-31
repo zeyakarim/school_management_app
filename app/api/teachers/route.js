@@ -18,7 +18,6 @@ export async function POST(req) {
     }
 }
 
-
 export async function GET(req) {
     const { searchParams } = req.nextUrl;
     // Convert all query parameters into an object

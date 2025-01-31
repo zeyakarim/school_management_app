@@ -1,3 +1,5 @@
+const prisma = require("@/config/database");
+
 const AppError = (message, statusCode, status) =>{
     const error = new Error(message);
   
