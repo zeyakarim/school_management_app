@@ -1,4 +1,4 @@
-import { DeleteIcon, EditIcon, ViewIcon } from "@/lib/icons";
+import { BorderColor, Delete, Visibility } from "@mui/icons-material";
 const { User, Chip, Tooltip } = require("@nextui-org/react");
 
 export const InfoRenderCell = (row) => {
@@ -38,17 +38,17 @@ export const ActionRenderCell = (row) => {
         <div className="relative flex items-center gap-2 justify-center" id={row?.id}>
             <Tooltip content="Details">
                 <span className="text-lg text-default-400 cursor-pointer active:opacity-50">
-                    <ViewIcon />
+                    <Visibility />
                 </span>
             </Tooltip>
             <Tooltip content="Edit user">
                 <span className="text-lg text-default-400 cursor-pointer active:opacity-50">
-                    <EditIcon />
+                    <BorderColor />
                 </span>
             </Tooltip>
             <Tooltip color="danger" content="Delete user">
                 <span className="text-lg text-danger cursor-pointer active:opacity-50">
-                    <DeleteIcon />
+                    <Delete />
                 </span>
             </Tooltip>
         </div>

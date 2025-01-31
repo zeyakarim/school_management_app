@@ -1,42 +1,35 @@
-import Image from 'next/image';
 import InputField from "../formsFields/InputField";
 import SelectField from "../formsFields/SelectField";
-
-const teachers = [
-    { "label": "JOHN", "key": "john"},
-    { "label": "ARHAM", "key": "arham" },
-    { "label": "RAYAN", "key": "rayan"},
-    { "label": "POLLARD", "key": "pollard"},
-    { "label": "ROBERT", "key": "robert" },
-    { "label": "LARA", "key": "lara"},
-    { "label": "MICHEAL", "key": "micheal" },
-    { "label": "NICK", "key": "nick" }
-]
+import { AutoStories, School } from '@mui/icons-material';
+import useFetchData from '@/utils/useFetchData';
+import { useCallback } from 'react';
 
 const SubjectForm = () => {
+    const formatTeacherLabel = useCallback(
+        (item) => (item?.last_name ? `${item?.first_name} ${item?.last_name}` : item?.first_name), []
+    );
+    const { data: teachers, loading: teachersLoading } = useFetchData("teachers", formatTeacherLabel);
 
     return (
-        <div>
-            <form action="" method="post">
-                <div className="flex gap-2 flex-wrap justify-between">
-                    <InputField
-                        type="text"
-                        label="Subject"
-                        className="w-[32%]"
-                        isRequired={true}
-                        icon={ <Image src="/subject.png" alt="" width={16} height={16} /> }
-                    />
-                    <SelectField
-                        isRequired={true}
-                        selectionMode="multiple"
-                        label="Teacher"
-                        className="w-[66%]"
-                        datas={teachers}
-                        icon={ <Image src="/teacher.png" alt="" width={16} height={16} /> }
-                    />
-                </div>
-            </form>
-        </div>
+        <form action="" method="post">
+            <div className="flex gap-2 flex-wrap justify-between">
+                <InputField
+                    type="text"
+                    label="Subject"
+                    className="w-[32%]"
+                    isRequired={true}
+                    icon={ <AutoStories style={{fontSize:'20px'}} className="text-default-400 pointer-events-none flex-shrink-0" /> }
+                />
+                <SelectField
+                    isRequired={true}
+                    selectionMode="multiple"
+                    label="Teacher"
+                    className="w-[66%]"
+                    datas={teachers}
+                    icon={ <School style={{fontSize:'20px'}} className="text-default-400 pointer-events-none flex-shrink-0" /> }
+                />
+            </div>
+        </form>
     )
 }
 
