@@ -1,6 +1,5 @@
-import { Phone, Home, Bloodtype, Person, VisibilityOff, Visibility, Email } from '@mui/icons-material';
+import { Phone, Home, Bloodtype, Person, VisibilityOff, Visibility, Email, CloudUpload } from '@mui/icons-material';
 import { useCallback, useState } from 'react';
-import Image from "next/image";
 import InputField from '../formsFields/InputField';
 import DatePickerField from '../formsFields/DatePickerField';
 import SelectField from '../formsFields/SelectField';
@@ -109,9 +108,9 @@ const TeacherForm = () => {
                     className="w-[32%]"
                     datas={subjects}
                 />
-                <div className="flex items-center gap-2 w-full md:w-[32%]">
+                <div className="flex items-center gap-2 w-full md:w-[32%] mt-[20px]">
                     <label className="text-xs text-gray-500 flex items-center gap-2 cursor-pointer" htmlFor="img">
-                        <Image src="/upload.png" alt='' width={24} height={24} />
+                        <CloudUpload />
                         <span>Upload a Photo</span>
                     </label>
                     <input type='file' className="hidden" id="img" />

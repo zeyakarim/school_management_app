@@ -1,6 +1,6 @@
 "use client";
-import Image from "next/image";
 import { PieChart, Pie, ResponsiveContainer } from "recharts";
+import { MoreHoriz } from '@mui/icons-material';
 
 const data = [
   { name: "Group A", value: 92, fill: "#C3EBFA" },
@@ -12,7 +12,7 @@ const Performance = () => {
         <div className="bg-white p-4 rounded-md h-80 relative shadow-small">
             <div className="flex items-center justify-between">
                 <h1 className="text-xl font-semibold">Performance</h1>
-                <Image src="/moreDark.png" alt="" width={16} height={16} />
+                <MoreHoriz className='text-gray-400' />
             </div>
             <ResponsiveContainer width="100%" height="100%">
                 <PieChart>

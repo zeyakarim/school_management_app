@@ -1,6 +1,5 @@
-import { Phone, Home, Bloodtype, Person, Email, VisibilityOff, Visibility } from '@mui/icons-material';
+import { Phone, Home, Bloodtype, Person, Email, VisibilityOff, Visibility, CloudUpload } from '@mui/icons-material';
 import { useState } from 'react';
-import Image from "next/image";
 import InputField from '../formsFields/InputField';
 import DatePickerField from '../formsFields/DatePickerField';
 import SelectField from '../formsFields/SelectField';
@@ -105,9 +104,9 @@ const StudentForm = () => {
                     isRequired={true}
                     icon={ <Person style={{fontSize:'20px'}} className="text-default-400 pointer-events-none flex-shrink-0" /> }
                 />
-                <div className="flex items-center gap-2 w-full md:w-[32%]">
+                <div className="flex items-center gap-2 w-full md:w-[32%] mt-[20px]">
                     <label className="text-xs text-gray-500 flex items-center gap-2 cursor-pointer" htmlFor="img">
-                        <Image src="/upload.png" alt='' width={24} height={24} />
+                        <CloudUpload />
                         <span>Upload a Photo</span>
                     </label>
                     <input type='file' className="hidden" id="img" />

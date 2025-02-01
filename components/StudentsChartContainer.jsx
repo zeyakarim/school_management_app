@@ -1,12 +1,13 @@
 import Image from 'next/image';
 import CountChat from './CountChat';
+import { MoreHoriz } from '@mui/icons-material';
 
 const StudentsChartContainer = () => {
   return (
     <div className='bg-white w-full h-full rounded shadow-small'>
       <div className='flex justify-between items-center p-3'>
         <p className='font-bold'>Students</p>
-        <Image src='/moreDark.png' alt='more' width={14} height={14} className='color' />
+        <MoreHoriz className='text-gray-400' />
       </div>
       <CountChat />
       <div className='flex justify-center items-center gap-8'>
