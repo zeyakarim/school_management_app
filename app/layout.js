@@ -12,7 +12,7 @@ export default function DashboardLayout({ children }) {
   return (
     <html lang="en">
       <head>
-        <link rel="icon" href="/school-building-removebg-preview.png" />
+        <link rel="icon" href="/schoolLogo.png" />
       </head>
       <body>
         <Providers>

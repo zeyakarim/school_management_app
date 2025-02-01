@@ -50,7 +50,7 @@ const Navbar = () => {
         >
             {/* Navbar Header */}
             <div className="flex items-center gap-2 pr-5 pt-5 justify-center md:justify-start" style={{ paddingLeft:5}}>
-                <Image src="/school-building-removebg-preview.png" alt="schoolLogo" width={55} height={50} />
+                <Image src="/schoolLogo.png" alt="schoolLogo" width={55} height={50} />
                 <p
                     className="font-semibold hidden md:block text-[22px] h-[40px]"
                     style={{
