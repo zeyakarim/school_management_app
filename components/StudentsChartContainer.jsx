@@ -1,4 +1,3 @@
-import Image from 'next/image';
 import CountChat from './CountChat';
 import { MoreHoriz } from '@mui/icons-material';
 
