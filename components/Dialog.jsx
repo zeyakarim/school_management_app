@@ -100,6 +100,13 @@ const forms = {
   
   
 const Dialog = ({ isOpen, onOpenChange, dialogTitle, table, type }) => {
+    const handleSubmit = (e) => {
+        e.preventDefault();
+        console.log("Form submitted"); // Replace with actual logic
+    };
+
+    const FormComponent = forms[table] ? forms[table](type, {}, []) : <p>No form available</p>;
+
     return (
         <Modal 
             isOpen={isOpen} 
@@ -108,23 +115,33 @@ const Dialog = ({ isOpen, onOpenChange, dialogTitle, table, type }) => {
             size="2xl"
         >
             <ModalContent>
-            {(onClose) => (
-                <>
-                <ModalHeader className="flex flex-col gap-1">{dialogTitle && dialogTitle}</ModalHeader>
-                <ModalBody>
-                    {/* <TeacherForm /> */}
-                    {forms[table](type, {}, [])}
-                </ModalBody>
-                <ModalFooter className="mt-4">
-                    <Button onPress={onClose} radius="full" className="bg-gradient-to-tr from-[#C6884C] to-yellow-500 text-white shadow-lg">
-                        Close
-                    </Button>
-                    <Button onPress={onClose} radius="full" className="bg-gradient-to-tr from-[#4CC67C] to-[#46DCDF] text-white shadow-lg">
-                        Create
-                    </Button>
-                </ModalFooter>
-                </>
-            )}
+                {(onClose) => (
+                    <>
+                    <ModalHeader className="flex flex-col gap-1">{dialogTitle && dialogTitle}</ModalHeader>
+                    <ModalBody>
+                        <form method="post" onSubmit={handleSubmit}>
+                            {FormComponent}
+
+                            <div className="mt-6 flex justify-end gap-2 mb-2">
+                                <Button onPress={onClose} radius="full" className="bg-gradient-to-tr from-[#C6884C] to-yellow-500 text-white shadow-lg">
+                                    Close
+                                </Button>
+                                <Button type="submit" radius="full" className="bg-gradient-to-tr from-[#4CC67C] to-[#46DCDF] text-white shadow-lg">
+                                    Create
+                                </Button>
+                            </div>
+                        </form>
+                    </ModalBody>
+                    {/* <ModalFooter className="mt-4">
+                        <Button onPress={onClose} radius="full" className="bg-gradient-to-tr from-[#C6884C] to-yellow-500 text-white shadow-lg">
+                            Close
+                        </Button>
+                        <Button onPress={onClose} radius="full" className="bg-gradient-to-tr from-[#4CC67C] to-[#46DCDF] text-white shadow-lg">
+                            Create
+                        </Button>
+                    </ModalFooter> */}
+                    </>
+                )}
             </ModalContent>
         </Modal>
     );

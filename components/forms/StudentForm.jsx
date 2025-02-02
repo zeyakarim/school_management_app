@@ -14,7 +14,7 @@ const StudentForm = () => {
     const toggleVisibility = () => setIsVisible(!isVisible);
 
     return (
-        <form action="" method="post">
+        <div>
             <p className="text-xs text-gray-500 py-2 pl-[5px]">Authentication Information</p>
             <div className="flex gap-2 flex-wrap">
                 <InputField
@@ -104,15 +104,23 @@ const StudentForm = () => {
                     isRequired={true}
                     icon={ <Person style={{fontSize:'20px'}} className="text-default-400 pointer-events-none flex-shrink-0" /> }
                 />
-                <div className="flex items-center gap-2 w-full md:w-[32%] mt-[20px]">
-                    <label className="text-xs text-gray-500 flex items-center gap-2 cursor-pointer" htmlFor="img">
+                <InputField 
+                    type='file'
+                    label='Upload a Photo'
+                    className="w-[32%]"
+                    isRequired={true}
+                    icon={ <Person style={{fontSize:'20px'}} className="text-default-400 pointer-events-none flex-shrink-0" /> }
+                />
+                {/* <div className="flex items-center gap-2 w-full md:w-[32%] mt-[20px]">
+                    {/* <label className="text-xs text-gray-500 flex items-center gap-2 cursor-pointer" htmlFor="img">
                         <CloudUpload />
                         <span>Upload a Photo</span>
                     </label>
-                    <input type='file' className="hidden" id="img" />
-                </div>
+                    <input type='file' className="hidden" id="img" required />
+
+                </div> */}
             </div>
-        </form>
+        </div>
     )
 }
 
