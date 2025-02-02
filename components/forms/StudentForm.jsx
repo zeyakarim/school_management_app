@@ -3,23 +3,34 @@ import { useState } from 'react';
 import InputField from '../formsFields/InputField';
 import DatePickerField from '../formsFields/DatePickerField';
 import SelectField from '../formsFields/SelectField';
+import { Button } from '@nextui-org/react';
 
 const genders = [
     { "label": "MALE", "key": "male"},
     { "label": "FEMALE", "key": "female" }
 ]
 
-const StudentForm = () => {
+const StudentForm = ({ type, data, relatedData, onClose }) => {
     const [isVisible, setIsVisible] = useState(false);
     const toggleVisibility = () => setIsVisible(!isVisible);
 
+    const handleSubmit = (e) => {
+        e.preventDefault();
+        console.log("Form submitted"); // Replace with actual logic
+        const file = event?.target?.file?.files[0];
+        const formData = new FormData()
+        formData.append("documentAttached", file);
+        formData.append()
+    };
+
     return (
-        <div>
+        <form method="post" onSubmit={handleSubmit}>
             <p className="text-xs text-gray-500 py-2 pl-[5px]">Authentication Information</p>
             <div className="flex gap-2 flex-wrap">
                 <InputField
                     type='text'
                     label='Username'
+                    name='username'
                     className="w-[32%]"
                     isRequired={true}
                     icon={ <Person style={{fontSize:'20px'}} className="text-default-400 pointer-events-none flex-shrink-0" /> }
@@ -27,6 +38,7 @@ const StudentForm = () => {
                 <InputField 
                     type='email'
                     label='Email'
+                    name='email'
                     className="w-[32%]"
                     isRequired={true}
                     icon={ <Email style={{fontSize:'20px'}} className="text-default-400 pointer-events-none flex-shrink-0" /> }
@@ -34,6 +46,7 @@ const StudentForm = () => {
                 <InputField 
                     type={isVisible ? "text" : "password"}
                     label='Password'
+                    name='password'
                     className="w-[32%]"
                     isRequired={true}
                     icon={ 
@@ -53,6 +66,7 @@ const StudentForm = () => {
                 <InputField 
                     type='text'
                     label='First Name'
+                    name='firstName'
                     className="w-[32%]"
                     isRequired={true}
                     icon={ <Person style={{fontSize:'20px'}} className="text-default-400 pointer-events-none flex-shrink-0" /> }
@@ -60,6 +74,7 @@ const StudentForm = () => {
                 <InputField 
                     type='text'
                     label='Last Name'
+                    name='lastName'
                     className="w-[32%]"
                     isRequired={false}
                     icon={ <Person style={{fontSize:'20px'}} className="text-default-400 pointer-events-none flex-shrink-0" /> }
@@ -67,6 +82,7 @@ const StudentForm = () => {
                 <InputField 
                     type='number'
                     label='Phone'
+                    name='phone'
                     className="w-[32%]"
                     isRequired={true}
                     icon={ <Phone style={{fontSize:'20px'}} className="text-default-400 pointer-events-none flex-shrink-0" /> }
@@ -74,6 +90,7 @@ const StudentForm = () => {
                 <InputField 
                     type='text'
                     label='Address'
+                    name='address'
                     className="w-[32%]"
                     isRequired={true}
                     icon={ <Home style={{fontSize:'20px'}} className="text-default-400 pointer-events-none flex-shrink-0" /> }
@@ -81,6 +98,7 @@ const StudentForm = () => {
                 <InputField 
                     type='text'
                     label='Blood Type'
+                    name='bloodType'
                     className="w-[32%]"
                     isRequired={false}
                     icon={ <Bloodtype style={{fontSize:'20px'}} className="text-default-400 pointer-events-none flex-shrink-0"  /> }
@@ -88,18 +106,21 @@ const StudentForm = () => {
                 <DatePickerField
                     isRequired={true}
                     label='Birth Date'
+                    name='birthDate'
                     className="w-[32%]"
                 />
                 <SelectField
                     isRequired={true}
                     selectionMode="single"
                     label='Gender'
+                    name='gender'
                     className="w-[32%]"
                     datas={genders}
                 />
                 <InputField 
                     type='text'
                     label='Parent'
+                    name='parent'
                     className="w-[32%]"
                     isRequired={true}
                     icon={ <Person style={{fontSize:'20px'}} className="text-default-400 pointer-events-none flex-shrink-0" /> }
@@ -107,6 +128,7 @@ const StudentForm = () => {
                 <InputField 
                     type='file'
                     label='Upload a Photo'
+                    name='file'
                     className="w-[32%]"
                     isRequired={true}
                     icon={ <Person style={{fontSize:'20px'}} className="text-default-400 pointer-events-none flex-shrink-0" /> }
@@ -120,7 +142,16 @@ const StudentForm = () => {
 
                 </div> */}
             </div>
-        </div>
+
+            <div className="mt-6 flex justify-end gap-2 mb-2">
+                <Button onPress={onClose} radius="full" className="bg-gradient-to-tr from-[#C6884C] to-yellow-500 text-white shadow-lg">
+                    Close
+                </Button>
+                <Button type="submit" radius="full" className="bg-gradient-to-tr from-[#4CC67C] to-[#46DCDF] text-white shadow-lg">
+                    Create
+                </Button>
+            </div>
+        </form>
     )
 }
 

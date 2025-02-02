@@ -12,7 +12,7 @@ const Table = (props) => {
         title, columns, dialogTitle, table, type, checkBoxSelection, navigateOnRowClickEndpoint, 
         version, columnVisibilityModel, endPoint, dataPosition, rowId
     } = props;
-    const {isOpen, onOpen, onOpenChange } = useDisclosure();
+    const {isOpen, onOpen, onOpenChange, onClose } = useDisclosure();
     const [searchFor, setSearchFor] = useState('');
     const [page, setPage] = useState(1);
     const [filterValue, setFilterValue] = useState("");
@@ -163,6 +163,7 @@ const Table = (props) => {
                 isOpen={isOpen}
                 onOpenChange={onOpenChange}
                 dialogTitle={dialogTitle}
+                onClose={onClose}
                 table={table}
                 type={type}
             />

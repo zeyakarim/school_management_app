@@ -32,80 +32,83 @@ const AssignmentForm = dynamic(() => import("./forms/AssignmentForm"), {
 });
 
 const forms = {
-    subject: (type, data, relatedData) => (
+    subject: (type, data, relatedData, onClose) => (
         <SubjectForm
             type={type}
             data={data}
+            onClose={onClose}
             // setOpen={setOpen}
             relatedData={relatedData}
         />
     ),
-    class: (type, data, relatedData) => (
+    class: (type, data, relatedData, onClose) => (
         <ClassForm
             type={type}
             data={data}
+            onClose={onClose}
             // setOpen={setOpen}
             relatedData={relatedData}
         />
     ),
-    parent: (type, data, relatedData) => (
+    parent: (type, data, relatedData, onClose) => (
         <ParentForm
             type={type}
             data={data}
             // setOpen={setOpen}
+            onClose={onClose}
             relatedData={relatedData}
         />
     ),
-    teacher: (type, data, relatedData) => (
+    teacher: (type, data, relatedData, onClose) => (
         <TeacherForm
             type={type}
             data={data}
             // setOpen={setOpen}
+            onClose={onClose}
             relatedData={relatedData}
         />
     ),
-    student: (type, data, relatedData) => (
+    student: (type, data, relatedData, onClose) => (
         <StudentForm
             type={type}
             data={data}
             // setOpen={setOpen}
+            onClose={onClose}
             relatedData={relatedData}
         />
     ),
-    exam: (type, data, relatedData) => (
+    exam: (type, data, relatedData, onClose) => (
         <ExamForm
             type={type}
             data={data}
             // setOpen={setOpen}
+            onClose={onClose}
             relatedData={relatedData}
         />
     ),
-    assignment: (type, data, relatedData) => (
+    assignment: (type, data, relatedData, onClose) => (
         <AssignmentForm
             type={type}
             data={data}
             // setOpen={setOpen}
+            onClose={onClose}
             relatedData={relatedData}
         />
     ),
-    result: (type, data, relatedData) => (
+    result: (type, data, relatedData, onClose) => (
         <ResultForm 
             type={type}
             data={data}
             // setOpen={setOpen}
+            onClose={onClose}
             relatedData={relatedData}
         />
     )
 };
   
   
-const Dialog = ({ isOpen, onOpenChange, dialogTitle, table, type }) => {
-    const handleSubmit = (e) => {
-        e.preventDefault();
-        console.log("Form submitted"); // Replace with actual logic
-    };
-
-    const FormComponent = forms[table] ? forms[table](type, {}, []) : <p>No form available</p>;
+const Dialog = ({ isOpen, onOpenChange, onClose, dialogTitle, table, type }) => {
+    const FormComponent = forms[table] ? forms[table](type, {}, [], onClose) : <p>No form available</p>;
 
     return (
         <Modal 
@@ -118,28 +121,7 @@ const Dialog = ({ isOpen, onOpenChange, dialogTitle, table, type }) => {
                 {(onClose) => (
                     <>
                     <ModalHeader className="flex flex-col gap-1">{dialogTitle && dialogTitle}</ModalHeader>
-                    <ModalBody>
-                        <form method="post" onSubmit={handleSubmit}>
-                            {FormComponent}
-
-                            <div className="mt-6 flex justify-end gap-2 mb-2">
-                                <Button onPress={onClose} radius="full" className="bg-gradient-to-tr from-[#C6884C] to-yellow-500 text-white shadow-lg">
-                                    Close
-                                </Button>
-                                <Button type="submit" radius="full" className="bg-gradient-to-tr from-[#4CC67C] to-[#46DCDF] text-white shadow-lg">
-                                    Create
-                                </Button>
-                            </div>
-                        </form>
-                    </ModalBody>
-                    {/* <ModalFooter className="mt-4">
-                        <Button onPress={onClose} radius="full" className="bg-gradient-to-tr from-[#C6884C] to-yellow-500 text-white shadow-lg">
-                            Close
-                        </Button>
-                        <Button onPress={onClose} radius="full" className="bg-gradient-to-tr from-[#4CC67C] to-[#46DCDF] text-white shadow-lg">
-                            Create
-                        </Button>
-                    </ModalFooter> */}
+                    <ModalBody>{FormComponent}</ModalBody>
                     </>
                 )}
             </ModalContent>
