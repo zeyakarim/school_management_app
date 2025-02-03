@@ -7,28 +7,23 @@ const s3 = new S3({
     region: process.env.AWS_S3_REGION,
 });
 
-const uploadFile = async (
-    bucket = process.env.AWS_S3_BUCKET,
-    file,
-    key,
-    mimeType = 'application/octet-stream',
-) => {
-    let fileContent = file;
-    if (file?.path) {
-        fileContent = fs.createReadStream(file?.path);
-    }
-  
+
+const uploadFile = async (bucket, fileBuffer, key, mimeType = 'application/octet-stream') => {
+    if (!fileBuffer) throw new Error("File buffer is empty");
+
     const params = {
         Bucket: bucket,
         Key: key,
-        Body: fileContent,
+        Body: fileBuffer,
         ContentType: mimeType,
     };
+
     try {
-        const uploadedObject = await s3.putObject(params);
-        return uploadedObject;
+        const uploadedObject = await s3.putObject(params)
+        return uploadedObject; // Returns the file upload result
     } catch (error) {
-        return error;
+        console.error("S3 Upload Error:", error);
+        throw new Error("Error In Uploading File to S3");
     }
 };
 
@@ -56,27 +51,45 @@ const getFile = async (bucket, key) => {
 };
 
 const putSingleDocumentS3 = async (commonPrefix, uniqueKey, file, bucketName = process.env.AWS_S3_BUCKET, mimeType) => {
-    if (file) {
-        const uploadedFile = await uploadFile(bucketName, file, `${commonPrefix}/${uniqueKey}/${file.originalname}`, mimeType);
+    if (!file) throw new Error("No file provided");
+
+    // Convert File to Buffer
+    const buffer = Buffer.from(await file.arrayBuffer());
+    const fileName = file.name;
+    const filePath = `${commonPrefix}/${uniqueKey}/${fileName}`;
+
+    const params = {
+        Bucket: bucketName,
+        Key: filePath,
+        Body: buffer,
+        ContentType: mimeType,
+    };
+
+    try {
+        const uploadedFile = await s3.putObject(params); // Use `upload()` instead of `putObject()`
         if (!uploadedFile?.ETag) {
             throw ("Error In Uploading File to S3")
         }
-  
+
         const objectsOnS3 = await listObjects(bucketName, `${commonPrefix}/${uniqueKey}`)
         // validate if file is uploaded to s3 or not
         const foundKeyOfObject = objectsOnS3?.Contents?.find((content) => {
-            if (content?.Key === `${commonPrefix}/${uniqueKey}/${file.originalname}`) {
+            if (content?.Key === `${commonPrefix}/${uniqueKey}/${file.name}`) {
                 return content?.Key
             }
         })
-        keyOfObject = foundKeyOfObject?.Key
+        let keyOfObject = foundKeyOfObject?.Key
         console.log({
             objectsOnS3,
             keyOfObject
         });
         return keyOfObject;
+    } catch (error) {
+        console.error("Error Uploading File to S3:", error);
+        throw new Error("Error In Uploading File to S3");
     }
-}
+};
+
 
 const readDocumentsFromS3 = async (
     commonPrefix,

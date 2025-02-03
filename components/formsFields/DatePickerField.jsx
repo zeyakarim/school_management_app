@@ -1,10 +1,11 @@
 import { DatePicker } from "@nextui-org/react";
 
-const DatePickerField = ({ isRequired, label, className }) => {
+const DatePickerField = ({ isRequired, label, className, name }) => {
     return (
         <DatePicker
             isRequired={isRequired}
             label={label}
+            name={name}
             className={className}
             variant="bordered"
             labelPlacement="outside"
