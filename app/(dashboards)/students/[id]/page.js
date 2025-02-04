@@ -1,5 +1,5 @@
 import DetailsPage from '@/components/DetailsPage';
-import { studentDetailsItems, studentShortcutItems } from '@/lib/data';
+import { studentShortcutItems } from '@/lib/data';
 
 const StudentDetails = ({params}) => {
     const { id } = params;
@@ -7,8 +7,7 @@ const StudentDetails = ({params}) => {
         <div>
             <DetailsPage
                 id={id} 
-                scheduleTitle={`Student Schedule`} 
-                detailsItems={studentDetailsItems} 
+                scheduleTitle={`Student Schedule`}  
                 shortcutItems={studentShortcutItems}
             />
         </div>

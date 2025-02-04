@@ -1,13 +1,12 @@
 import DetailsPage from "@/components/DetailsPage";
-import { teacherDetailsItems, teacherShortcutItems } from "@/lib/data";
+import { teacherShortcutItems } from "@/lib/data";
 
 const TeacherDetails = ({params}) => {
     const { id } = params;
 
     return (
         <DetailsPage 
-            scheduleTitle={`Teacher Schedule`} 
-            detailsItems={teacherDetailsItems} 
+            scheduleTitle={`Teacher Schedule`}  
             shortcutItems={teacherShortcutItems}
             endPoint={'/teachers'}
             dataPosition={'teacherDetails'}

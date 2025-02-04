@@ -10,7 +10,7 @@ import Backdrop from '@mui/material/Backdrop';
 import { CircularProgress } from "@mui/material";
 import moment from "moment";
 
-const DetailsPage = ({scheduleTitle, detailsItems, shortcutItems, id, endPoint, dataPosition }) => {
+const DetailsPage = ({scheduleTitle, shortcutItems, id, endPoint, dataPosition }) => {
   const [details, setDetails] = useState(null);
   const [loading, setLoading] = useState(false);
 
@@ -54,7 +54,7 @@ const DetailsPage = ({scheduleTitle, detailsItems, shortcutItems, id, endPoint, 
           
           <div className="flex-1 flex gap-2 justify-between flex-wrap">
             {/* CARD */}
-            {detailsItems?.map(({icon, number, title}) => (
+            {details?.detailsItems?.map(({icon, number, title}) => (
               <TeacherDetailSmCard key={title} icon={icon} number={number} title={title} />
             ))}
           </div>

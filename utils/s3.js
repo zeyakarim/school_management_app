@@ -90,25 +90,26 @@ const putSingleDocumentS3 = async (commonPrefix, uniqueKey, file, bucketName = p
     }
 };
 
-
 const readDocumentsFromS3 = async (
     commonPrefix,
     uniqueKey,
     bucketName = 'depo24-portal',
 ) => {
-    const objectsOnS3 = await listObjects(
-        bucketName,
-        `${commonPrefix}/${uniqueKey}`,
-    );
-    if (objectsOnS3.length === 0) {
+    // Build the S3 path conditionally
+    const prefix = uniqueKey ? `${commonPrefix}/${uniqueKey}` : commonPrefix + '/';
+
+    // List objects in the S3 bucket
+    const objectsOnS3 = await listObjects(bucketName, prefix);
+
+    if (!objectsOnS3?.Contents?.length) {
         return false;
     }
 
-    const signedUrlsForKeys = objectsOnS3?.Contents?.length > 0 && await Promise.all(
-        objectsOnS3?.Contents?.map(async (obj) => {
-            const signedUrlForKey = await getFile(bucketName, obj?.Key);
-            return signedUrlForKey;
-        }),
+    // Generate signed URLs for found files
+    const signedUrlsForKeys = await Promise.all(
+        objectsOnS3.Contents.map(async (obj) => {
+            return await getFile(bucketName, obj.Key);
+        })
     );
 
     return signedUrlsForKeys;
