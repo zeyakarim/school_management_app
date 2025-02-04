@@ -1,40 +1,14 @@
-import prisma from "@/config/database";
-import { fetchStudents } from "./services";
+import { createStudent, fetchStudents } from "./services";
 import { success } from "@/utils/responseHandler";
-import { putSingleDocumentS3 } from "@/utils/s3";
 const { NextResponse } = require("next/server");
-const bucketName = process.env.AWS_S3_BUCKET
 
 export async function POST(req) {
     try {
         const formData = await req.formData();
         const file = formData.get("file"); // Extract file
-        const mimeType = file.type;
 
-        const data = {};
-        formData.forEach((value, key) => {
-            if (key !== "file") { // Skip the file key
-                if (["parent_id", "class_id"].includes(key)) {
-                    data[key] = value.trim() === "" ? null : parseInt(value, 10); // Convert to number
-                } else {
-                    data[key] = value.trim() === "" ? null : value; // Handle empty strings
-                }
-            }
-        });
-        console.log("Parsed Data:", data);
-
-        const student = await prisma.student.create({
-            data: data,
-        });
-
-        const fileUrl = await putSingleDocumentS3("students", student.id, file, bucketName, mimeType);
-
-        const updatedStudent = await prisma.student.update({
-            where: { id: student.id },
-            data: { img: fileUrl },
-        });
-
-        return NextResponse.json({ data: { student: updatedStudent, status: 200 } });
+        const createdStudent = await createStudent(formData, file);
+        return NextResponse.json({ data: { student: createdStudent, status: 200 } });
     } catch (error) {
         console.log("Error:",error)
         return NextResponse.json({"msg": "something went wrong"},  {status:'400'})

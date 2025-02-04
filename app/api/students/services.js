@@ -1,14 +1,52 @@
 const prisma = require("@/config/database");
+const { readDocumentsFromS3, putSingleDocumentS3 } = require("@/utils/s3");
+const bucketName = process.env.AWS_S3_BUCKET;
 
-const simplifiedStudents = (students) => {
-    return students?.map((student) => {
-        const simplifiedStudent = {
-            ...student,
-            parent: student?.parent?.first_name + ' ' + student?.parent?.last_name,
-            class: student?.class?.name,
+const simplifiedStudents = async (students) => {
+    const structuredData = await Promise.all(students?.map(async (student) => {
+        let attachDocsUrl = null;
+        if (student?.img) {
+            attachDocsUrl = await readDocumentsFromS3('students', student?.id, bucketName);
         }
-        return simplifiedStudent
-    })
+        student['parent'] =  student?.parent ? `${student.parent.first_name} ${student.parent.last_name}` : null,
+        student['class'] = student?.class?.name || null,
+        student['img'] = attachDocsUrl?.[0] || null;
+        return student;
+    }));
+    return structuredData;
+};
+
+const createStudent = async (formData, file) => {
+    try {
+        const mimeType = file.type;
+        const data = {};
+        formData.forEach((value, key) => {
+            if (key !== "file") { // Skip the file key
+                if (["parent_id", "class_id"].includes(key)) {
+                    data[key] = value.trim() === "" ? null : parseInt(value, 10); // Convert to number
+                } else {
+                    data[key] = value.trim() === "" ? null : value; // Handle empty strings
+                }
+            }
+        });
+        console.log("Parsed Data:", data);
+
+        const student = await prisma.student.create({
+            data: data,
+        });
+
+        const fileUrl = await putSingleDocumentS3("students", student.id, file, bucketName, mimeType);
+
+        const updatedStudent = await prisma.student.update({
+            where: { id: student.id },
+            data: { img: fileUrl },
+        });
+
+        return updatedStudent;
+    } catch (error) {
+        console.log("Error in Creating Student: ", error)
+        throw(error)
+    }
 }
 
 const fetchStudents = async (searchFor, page, limit, skipRecord) => {
@@ -71,7 +109,7 @@ const fetchStudents = async (searchFor, page, limit, skipRecord) => {
 
         const maxPage = Math.ceil(totalRows / limit);
         return { 
-            students: simplifiedStudents(data), 
+            students: await simplifiedStudents(data), 
             maxPage: maxPage, 
             page: page, 
             totalRows:totalRows 
@@ -83,5 +121,6 @@ const fetchStudents = async (searchFor, page, limit, skipRecord) => {
 };
 
 module.exports = {
+    createStudent,
     fetchStudents
 }

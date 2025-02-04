@@ -55,7 +55,7 @@ const StudentForm = ({ type, data, relatedData, onClose }) => {
 
             if (response.ok) {
                 console.log("Student created successfully!");
-                // onClose();
+                onClose();
             } else {
                 console.error("Failed to create student.");
             }
