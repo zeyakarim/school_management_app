@@ -79,10 +79,6 @@ const putSingleDocumentS3 = async (commonPrefix, uniqueKey, file, bucketName = p
             }
         })
         let keyOfObject = foundKeyOfObject?.Key
-        console.log({
-            objectsOnS3,
-            keyOfObject
-        });
         return keyOfObject;
     } catch (error) {
         console.error("Error Uploading File to S3:", error);
