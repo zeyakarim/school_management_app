@@ -16,6 +16,7 @@ const SelectField = ({ isRequired, label, name, className, datas, selectionMode,
             {datas?.length > 0 && datas?.map((data) => (
                 <SelectItem 
                     key={data?.key}
+                    value={data?.id}
                     startContent={data?.icon ? <Avatar alt="" className="w-6 h-6" src={data?.icon} /> : null}
                 >
                     {data.label}

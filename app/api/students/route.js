@@ -13,14 +13,14 @@ export async function POST(req) {
 
         const data = {};
         formData.forEach((value, key) => {
-            if (key !== "file" && key !== "class" && key !== "parent") { // Skip the file key
-                data[key] = value.trim() === "" ? null : value; // Handle empty strings
+            if (key !== "file") { // Skip the file key
+                if (["parent_id", "class_id"].includes(key)) {
+                    data[key] = value.trim() === "" ? null : parseInt(value, 10); // Convert to number
+                } else {
+                    data[key] = value.trim() === "" ? null : value; // Handle empty strings
+                }
             }
         });
-
-        data["class_id"] = 1;
-        data["parent_id"] = 1;
-
         console.log("Parsed Data:", data);
 
         const student = await prisma.student.create({

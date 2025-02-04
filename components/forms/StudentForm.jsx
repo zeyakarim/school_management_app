@@ -16,11 +16,14 @@ const StudentForm = ({ type, data, relatedData, onClose }) => {
     const toggleVisibility = () => setIsVisible(!isVisible);
 
     const formatSubjectLabel = useCallback((item) => item?.name, []);
+    const formatParentLabel = useCallback(
+        (item) => (item?.last_name ? `${item?.first_name} ${item?.last_name}` : item?.first_name), []
+    );
     const { data: classes, loading: classesLoading } = useFetchData("classes", formatSubjectLabel);
+    const { data: parents, loading: parentsLoading } = useFetchData("parents", formatParentLabel);
 
     const handleSubmit = async (event) => {
         event.preventDefault();
-        console.log("Form submitted"); // Replace with actual logic
         const file = event?.target?.file?.files[0];
         const birthDate = event?.target?.birthDate?.value;
         const formattedBirthDate = birthDate ? new Date(birthDate).toISOString() : null;
@@ -37,8 +40,12 @@ const StudentForm = ({ type, data, relatedData, onClose }) => {
         formData.append("blood_type", event?.target?.bloodType?.value || '');
         formData.append("birth_date", formattedBirthDate);
         formData.append("gender", event?.target?.gender?.value || '');
-        formData.append("parent", event?.target?.parent?.value || '');
-        formData.append("class", event?.target?.class?.value || '');
+        const parentId = event?.target?.parent?.value ? parseInt(event?.target?.parent?.value, 10) : null;
+        const classId = event?.target?.class?.value ? parseInt(event?.target?.class?.value, 10) : null;
+
+        if (parentId !== null) formData.append("parent_id", parentId);
+        if (classId !== null) formData.append("class_id", classId);
+
 
         try {
             const response = await fetch(`${process.env.NEXT_PUBLIC_WEBSITE_URL}/students`, {
@@ -48,7 +55,7 @@ const StudentForm = ({ type, data, relatedData, onClose }) => {
 
             if (response.ok) {
                 console.log("Student created successfully!");
-                onClose();
+                // onClose();
             } else {
                 console.error("Failed to create student.");
             }
@@ -151,23 +158,16 @@ const StudentForm = ({ type, data, relatedData, onClose }) => {
                     className="w-[32%]"
                     datas={genders}
                 />
-                <InputField 
-                    type='text'
-                    label='Parent'
+                <SelectField
+                    isRequired={true}
+                    selectionMode="single"
+                    label="Parent"
                     name='parent'
                     className="w-[32%]"
-                    isRequired={true}
+                    datas={parents}
                     icon={ <Person style={{fontSize:'20px'}} className="text-default-400 pointer-events-none flex-shrink-0" /> }
                 />
-                <InputField 
-                    type='file'
-                    label='Upload a Photo'
-                    name='file'
-                    className="w-[32%]"
-                    isRequired={true}
-                    icon={ <Person style={{fontSize:'20px'}} className="text-default-400 pointer-events-none flex-shrink-0" /> }
-                />
-                 <SelectField
+                <SelectField
                     isRequired={true}
                     selectionMode="single"
                     label="Class Name"
@@ -176,14 +176,14 @@ const StudentForm = ({ type, data, relatedData, onClose }) => {
                     datas={classes}
                     icon={ <AirlineSeatReclineNormal style={{fontSize:'20px'}} className="text-default-400 pointer-events-none flex-shrink-0" /> }
                 />
-                {/* <div className="flex items-center gap-2 w-full md:w-[32%] mt-[20px]">
-                    {/* <label className="text-xs text-gray-500 flex items-center gap-2 cursor-pointer" htmlFor="img">
-                        <CloudUpload />
-                        <span>Upload a Photo</span>
-                    </label>
-                    <input type='file' className="hidden" id="img" required />
-
-                </div> */}
+                <InputField 
+                    type='file'
+                    label='Upload a Photo'
+                    name='file'
+                    className="w-[66%]"
+                    isRequired={true}
+                    icon={ <Person style={{fontSize:'20px'}} className="text-default-400 pointer-events-none flex-shrink-0" /> }
+                />
             </div>
 
             <div className="mt-6 flex justify-end gap-2 mb-2">

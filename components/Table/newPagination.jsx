@@ -5,16 +5,45 @@ import ArrowRightIcon from '@mui/icons-material/ArrowRight';
 import ArrowLeftIcon from '@mui/icons-material/ArrowLeft';
 
 export default function PaginationControlled({ data, fetchData }) {
-    const [page, setPage] = React.useState(1);
+    const [currentPage, setCurrentPage] = React.useState(1);
+    let setSearchParams;
+
+    React.useEffect(() => {
+        if (typeof window !== "undefined") {
+            try {
+                // Try using React Router hooks if inside a Router
+                const urlParams = new URLSearchParams(window.location.search);
+                const page = parseInt(urlParams.get("page")) || 1;
+                setCurrentPage(page);
+            } catch (error) {
+                console.warn("React Router is not available, using fallback.");
+            }
+        }
+    }, []);
+
     const handleChange = (event, value) => {
-        setPage(value);
+        if (!isNaN(value)) {
+            setCurrentPage(value);
+
+            if (typeof window !== "undefined") {
+                if (setSearchParams) {
+                    setSearchParams({ page: value });
+                } else {
+                    const newUrl = new URL(window.location);
+                    newUrl.searchParams.set("page", value);
+                    window.history.pushState({}, "", newUrl);
+                }
+            }
+
+            fetchData(value);
+        }
     };
 
     return (
         <Stack spacing={2}>
             <Pagination 
                 count={data?.maxPage} 
-                page={page} 
+                page={currentPage} 
                 onChange={handleChange}
                 slots={{
                     previous: ArrowLeftIcon,
