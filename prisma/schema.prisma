@@ -245,6 +245,7 @@ enum Day {
   WEDNESDAY
   THURSDAY
   FRIDAY
+  SATURDAY
 }
 
 enum Gender {

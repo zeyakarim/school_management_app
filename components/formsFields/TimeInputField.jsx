@@ -1,10 +1,11 @@
 const { TimeInput } = require("@nextui-org/react")
 
-const TimeInputField = ({ isRequired, label, defaultValue, icon, className }) => {
+const TimeInputField = ({ isRequired, label, name, defaultValue, icon, className }) => {
     return (
         <TimeInput
             isRequired={isRequired}
-            label={label} 
+            label={label}
+            name={name}
             labelPlacement="outside" 
             defaultValue={defaultValue} 
             variant="bordered"

@@ -13,6 +13,31 @@ const simplifiedLessons = (lessons) => {
     })
 }
 
+const createLesson = async (data) => {
+    try {
+        const teacher_id = parseInt(data.teacher_id, 10);
+        const subject_id = parseInt(data.subject_id, 10);
+        const class_id = parseInt(data.class_id, 10);
+
+        const createdLesson = await prisma.lesson.create({
+            data: {
+                name: data?.lesson,
+                subject_id: subject_id,
+                teacher_id: teacher_id,
+                class_id: class_id,
+                start_time: data?.start_time,
+                end_time: data?.end_time,
+                day: data?.day
+            }
+        });
+
+        return createdLesson;
+    } catch (error) {
+        console.error('Error in creating lesson : ', error)
+        throw(error)
+    }
+}
+
 const fetchLessons = async (searchFor, page, limit, skipRecord) => {
     try {
         const searchConditions = searchFor ? 
@@ -89,5 +114,6 @@ const fetchLessons = async (searchFor, page, limit, skipRecord) => {
 };
 
 module.exports = {
+    createLesson,
     fetchLessons
 }

@@ -1,4 +1,4 @@
-import { Modal, ModalContent, ModalHeader, ModalBody, ModalFooter, Button } from "@nextui-org/react";
+import { Modal, ModalContent, ModalHeader, ModalBody } from "@nextui-org/react";
 import dynamic from "next/dynamic";
 import ResultForm from "./forms/ResultForm";
 
@@ -31,9 +31,22 @@ const AssignmentForm = dynamic(() => import("./forms/AssignmentForm"), {
     loading: () => <h1>Loading...</h1>,
 });
 
+const LessonForm = dynamic(() => import("./forms/LessonForm"), {
+    loading: () => <h1>Loading...</h1>,
+})
+
 const forms = {
     subject: (type, data, relatedData, onClose) => (
         <SubjectForm
+            type={type}
+            data={data}
+            onClose={onClose}
+            // setOpen={setOpen}
+            relatedData={relatedData}
+        />
+    ),
+    lesson: (type, data, relatedData, onClose) => (
+        <LessonForm
             type={type}
             data={data}
             onClose={onClose}

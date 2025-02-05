@@ -1,4 +1,3 @@
-import prisma from "@/config/database";
 import { createParent, fetchParents } from "./services";
 import { success } from "@/utils/responseHandler";
 const { NextResponse } = require("next/server");
