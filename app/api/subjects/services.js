@@ -11,6 +11,26 @@ const simplifiedSubjects = (subjects) => {
     })
 };
 
+const createSubject = async (data) => {
+    try {
+        const class_id = parseInt(data.class_id, 10);
+        const teacher_id = parseInt(data.teacher_id, 10);
+
+        const subject = await prisma.subject.create({
+            data: {
+                name: data.subject, // Assuming 'subject' field exists
+                class_id: class_id,
+                teacher_id: teacher_id,
+            },
+        });
+
+        return subject;
+    } catch (error) {
+        console.log("Error:",error)
+        throw(error)
+    }
+}
+
 const fetchSubjects = async (searchFor, page, limit, skipRecord) => {
     try {
         const searchConditions = searchFor ? 
@@ -64,5 +84,6 @@ const fetchSubjects = async (searchFor, page, limit, skipRecord) => {
 };
 
 module.exports = {
+    createSubject,
     fetchSubjects
 }
