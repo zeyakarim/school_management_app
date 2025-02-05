@@ -48,7 +48,6 @@ const LessonForm = ({ onClose }) => {
             end_time: formattedEndTime,
             day: event.target.day.value
         }
-        console.log(data,'data')
 
         try {
             const response = await fetch(`${process.env.NEXT_PUBLIC_WEBSITE_URL}/lessons`, {
