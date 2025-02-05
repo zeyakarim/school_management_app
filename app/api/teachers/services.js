@@ -1,5 +1,5 @@
 const prisma = require("@/config/database");
-const { putSingleDocumentS3 } = require("@/utils/s3");
+const { putSingleDocumentS3, readDocumentsFromS3 } = require("@/utils/s3");
 const bucketName = process.env.AWS_S3_BUCKET;
 
 const createTeacher = async (formData, file) => {
@@ -28,6 +28,18 @@ const createTeacher = async (formData, file) => {
         console.log("Error in Creating Teacher: ", error)
         throw(error)
     }
+}
+
+const prepareTeachersData = async (teachers) => {
+    const structuredData = await Promise.all(teachers?.map(async (teacher) => {
+        let attachDocsUrl = null;
+        if (teacher?.img) {
+            attachDocsUrl = await readDocumentsFromS3('teachers', teacher?.id, bucketName);
+        }
+        teacher['img'] = attachDocsUrl?.[0] || null;
+        return teacher;
+    }));
+    return structuredData;
 }
 
 const fetchTeachers = async (searchFor, page, limit, skipRecord) => {
@@ -60,7 +72,7 @@ const fetchTeachers = async (searchFor, page, limit, skipRecord) => {
         ]);
         const maxPage = Math.ceil(totalRows / limit);
         return { 
-            teachers: data, 
+            teachers: await prepareTeachersData(data), 
             maxPage: maxPage, 
             page: page, 
             totalRows:totalRows 

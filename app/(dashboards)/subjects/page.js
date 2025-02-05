@@ -8,6 +8,12 @@ const columns = [
         flex: 1,
     },
     {
+        field: 'class',
+        headerName: 'Class',
+        headerClassName: 'super-app-theme--header',
+        flex: 1,
+    },
+    {
         field: 'teacher',
         headerName: 'Teacher',
         headerClassName: 'super-app-theme--header',

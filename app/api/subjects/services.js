@@ -5,7 +5,8 @@ const simplifiedSubjects = (subjects) => {
         const lastName = subject?.teacher?.last_name ? subject?.teacher?.last_name : '';
         const simplifiedSubject = {
             ...subject,
-            teacher: subject?.teacher?.first_name + ' ' + lastName
+            teacher: subject?.teacher?.first_name + ' ' + lastName,
+            class: subject?.class?.name
         }
         return simplifiedSubject
     })
@@ -39,11 +40,16 @@ const fetchSubjects = async (searchFor, page, limit, skipRecord) => {
                     { name: { contains: searchFor, mode: 'insensitive' } },
                     {
                         teacher: {
-                          OR: [
-                            { first_name: { contains: searchFor, mode: 'insensitive' } }, // Search in teacher's first name
-                            { last_name: { contains: searchFor, mode: 'insensitive' } },  // Search in teacher's last name
-                          ],
+                            OR: [
+                                { first_name: { contains: searchFor, mode: 'insensitive' } }, // Search in teacher's first name
+                                { last_name: { contains: searchFor, mode: 'insensitive' } },  // Search in teacher's last name
+                            ],
                         },
+                        class: {
+                            OR: [
+                                { name: { contains: searchFor, mode: 'insensitive' } }, 
+                            ]
+                        }
                     },
 
                 ],
@@ -58,6 +64,11 @@ const fetchSubjects = async (searchFor, page, limit, skipRecord) => {
                         select: {
                             first_name: true,
                             last_name: true
+                        }
+                    },
+                    class: {
+                        select: {
+                            name: true
                         }
                     }
                 },
