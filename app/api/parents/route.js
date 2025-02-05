@@ -1,5 +1,5 @@
 import prisma from "@/config/database";
-import { fetchParents } from "./services";
+import { createParent, fetchParents } from "./services";
 import { success } from "@/utils/responseHandler";
 const { NextResponse } = require("next/server");
 
@@ -19,12 +19,10 @@ export async function GET(req) {
 export async function POST(req) {
     const data = await req.json();
     try {
-        const parent = await prisma.parent.create({
-            data: data
-        });
-        return NextResponse.json({data: {parent: parent, status: 200}});
+        const createdParent = await createParent(data);
+        return NextResponse.json({data: {parent: createdParent, status: 200}});
     } catch (error) {
         console.log("Error:",error)
-        return NextResponse.json({"msg": "something went wrong"},  {status:'400'})
+        return NextResponse.json({"msg": error },  {status:'400'})
     }
 }

@@ -1,5 +1,18 @@
 const prisma = require("@/config/database");
 
+const createParent = async (data) => {
+    try {
+        const createdParent = await prisma.parent.create({
+            data: data
+        });
+
+        return createdParent;
+    } catch (error) {
+        console.error('error in creating parent : ', error)
+        throw(error)
+    }
+}
+
 const fetchParents = async (searchFor, page, limit, skipRecord) => {
     try {
         const searchConditions = searchFor
@@ -41,5 +54,6 @@ const fetchParents = async (searchFor, page, limit, skipRecord) => {
 }
 
 module.exports = {
+    createParent,
     fetchParents
 }
