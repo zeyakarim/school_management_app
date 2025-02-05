@@ -11,6 +11,26 @@ const simplifiedClasses = (classes) => {
     })
 }
 
+const createClass = async (data) => {
+    try {
+        const supervisor_id = parseInt(data.supervisor_id, 10);
+        const capacity = parseInt(data.capacity, 10)
+
+        const classCreated = await prisma.class.create({
+            data: {
+                name: data.class, // Assuming 'subject' field exists
+                capacity: capacity,
+                supervisor_id: supervisor_id,
+            },
+        });
+
+        return classCreated;
+    } catch (error) {
+        console.log("Error in creating class : ", error)
+        throw(error)
+    }
+}
+
 const fetchClasses = async (searchFor, page, limit, skipRecord) => {
     try {
         const searchConditions = searchFor ? 
@@ -62,5 +82,6 @@ const fetchClasses = async (searchFor, page, limit, skipRecord) => {
 };
 
 module.exports = {
+    createClass,
     fetchClasses
 }

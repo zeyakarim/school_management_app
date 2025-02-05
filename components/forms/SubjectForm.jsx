@@ -30,7 +30,7 @@ const SubjectForm = ({ onClose }) => {
 
             if (response.ok) {
                 console.log("Subject created successfully!");
-                // onClose();
+                onClose();
             } else {
                 console.error("Failed to create subject.");
             }

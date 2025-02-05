@@ -99,13 +99,13 @@ model Class {
   name          String        @unique
   capacity      Int
   supervisor_id Int
-  grade_id      Int
+  grade_id      Int?
   created_at    DateTime      @default(now())
   updated_at    DateTime      @updatedAt
   deleted_at    DateTime?
   annoucements  Annoucement[]
   attendances   Attendance[]
-  grade         Grade         @relation(fields: [grade_id], references: [id])
+  grade         Grade?         @relation(fields: [grade_id], references: [id])
   supervisor    Teacher       @relation(fields: [supervisor_id], references: [id])
   events        Event[]
   exams         Exam[]

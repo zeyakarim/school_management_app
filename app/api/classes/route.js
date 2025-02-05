@@ -1,6 +1,6 @@
 import prisma from "@/config/database";
 import { success } from "@/utils/responseHandler";
-import { fetchClasses } from "./services";
+import { createClass, fetchClasses } from "./services";
 const { NextResponse } = require("next/server");
 
 export async function GET(req) {
@@ -19,10 +19,8 @@ export async function GET(req) {
 export async function POST(req) {
     const data = await req.json();
     try {
-        const classCreated = await prisma.class.create({
-            data: data
-        });
-        return NextResponse.json({data: {class: classCreated, status: 200}});
+        const createdClass = await createClass(data);
+        return NextResponse.json({data: {class: createdClass, status: 200}});
     } catch (error) {
         console.log("Error:",error)
         return NextResponse.json({"msg": "something went wrong"},  {status:'400'})
