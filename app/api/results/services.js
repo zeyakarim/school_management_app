@@ -14,6 +14,36 @@ const simplifiedResults = (results) => {
     })
 }
 
+const createResult = async (data) => {
+    try {
+        const subject_id = parseInt(data.subject_id, 10);
+        const class_id = parseInt(data.class_id, 10);
+        const grade_id = parseInt(data.grade_id, 10);
+        const teacher_id = parseInt(data.teacher_id, 10);
+        const student_id = parseInt(data.student_id, 10);
+        const exam_id = parseInt(data.exam_id, 10);
+
+        const createdResult = await prisma.result.create({
+            data: {
+                marks: data?.marks,
+                total: parseInt(data?.total),
+                percentage: data?.percentage,
+                subject_id: subject_id,
+                class_id: class_id,
+                grade_id: grade_id,
+                teacher_id: teacher_id,
+                student_id: student_id,
+                exam_id: exam_id
+            }
+        });
+
+        return createdResult;
+    } catch (error) {
+        console.error('Error in creating result : ', error);
+        throw(error)
+    }
+}
+
 const fetchResults = async (searchFor, page, limit, skipRecord) => {
     try {
         const searchConditions = searchFor && searchFor?.trim() !== "" 
@@ -109,5 +139,6 @@ const fetchResults = async (searchFor, page, limit, skipRecord) => {
 };
 
 module.exports = {
+    createResult,
     fetchResults
 }

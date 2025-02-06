@@ -36,6 +36,7 @@ model Teacher {
   classes     Class[]
   lessons     Lesson[]
   subjects    Subject[]
+  results     Result[]
 }
 
 model Subject {
@@ -51,6 +52,7 @@ model Subject {
   lessons     Lesson[]
   teacher     Teacher      @relation(fields: [teacher_id], references: [id])
   class       Class        @relation(fields: [class_id], references: [id])
+  result      Result[]
 }
 
 model Student {
@@ -113,6 +115,7 @@ model Class {
   students      Student[]
   subjects      Subject[]
   assignments   Assignment[]
+  results       Result[]
 }
 
 model Lesson {
@@ -175,16 +178,22 @@ model Result {
   marks         Decimal
   total         Int
   student_id    Int
+  subject_id    Int       @default(1)
+  class_id      Int       @default(1)
+  teacher_id    Int       @default(1)
   exam_id       Int
   grade_id      Int
-  assignment_id Int
+  assignment_id Int?
   created_at    DateTime   @default(now())
   updated_at    DateTime   @updatedAt
   deleted_at    DateTime?
-  assignment    Assignment @relation(fields: [assignment_id], references: [id])
+  assignment    Assignment? @relation(fields: [assignment_id], references: [id])
   exam          Exam       @relation(fields: [exam_id], references: [id])
   grade         Grade      @relation(fields: [grade_id], references: [id])
   student       Student    @relation(fields: [student_id], references: [id])
+  subject       Subject    @relation(fields: [subject_id], references: [id])
+  teacher       Teacher    @relation(fields: [teacher_id], references: [id])
+  class         Class      @relation(fields: [class_id], references: [id])
 }
 
 model Attendance {
