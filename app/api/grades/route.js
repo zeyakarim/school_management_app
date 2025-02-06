@@ -1,6 +1,5 @@
-import prisma from "@/config/database";
-import { fetchGrades } from "./services";
-import { success } from "@/utils/responseHandler";
+import { createGrade, fetchGrades } from "./services";
+import { failure, success } from "@/utils/responseHandler";
 const { NextResponse } = require("next/server");
 
 export async function GET(req) {
@@ -19,12 +18,9 @@ export async function GET(req) {
 export async function POST(req) {
     const data = await req.json();
     try {
-        const grade = await prisma.grade.create({
-            data: data
-        });
-        return NextResponse.json({data: {grade: grade, status: 200}});
+        const createdGrade = await createGrade(data);
+        return NextResponse.json(success(createdGrade, "Grade Created Successfully!"));
     } catch (error) {
-        console.log("Error:",error)
-        return NextResponse.json({"msg": "something went wrong"},  {status:'400'})
+        return NextResponse.json(failure(error, error?.message))
     }
 }

@@ -1,5 +1,18 @@
 const prisma = require("@/config/database");
 
+const createGrade = async (data) => {
+    try {
+        const createdGrade = await prisma.grade.create({
+            data: data
+        });
+        
+        return createdGrade;
+    } catch(error) {
+        console.error('Error in creating grade : ', error)
+        throw(error)
+    }
+}
+
 const fetchGrades = async (searchFor, page, limit, skipRecord) => {
     try {
         const [data, totalRows] = await prisma.$transaction([
@@ -25,5 +38,6 @@ const fetchGrades = async (searchFor, page, limit, skipRecord) => {
 };
 
 module.exports = {
+    createGrade,
     fetchGrades
 }

@@ -8,6 +8,12 @@ const columns = [
         flex: 2,
     },
     {
+        field: 'percentage',
+        headerName: 'Percentage',
+        headerClassName: 'super-app-theme--header',
+        flex: 2,
+    },
+    {
         field: 'created_at',
         headerName: 'Created At',
         headerClassName: 'super-app-theme--header',
