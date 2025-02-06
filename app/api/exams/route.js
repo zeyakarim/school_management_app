@@ -6,7 +6,7 @@ export async function POST(req) {
     const data = await req.json();
     try {
         const createdExam = await createExam(data)
-        return NextResponse.json(success(createdExam, "Exams Created Successfully!"));
+        return NextResponse.json(success(createdExam, "Exam Created Successfully!"));
     } catch (error) {
         console.log("Error:",error)
         return NextResponse.json(failure(error, error?.message))

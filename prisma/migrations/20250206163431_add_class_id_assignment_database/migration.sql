@@ -1,0 +1,7 @@
+-- AlterTable
+ALTER TABLE "Assignment" ADD COLUMN     "class_id" INTEGER NOT NULL DEFAULT 1,
+ADD COLUMN     "given_date" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+ALTER COLUMN "due_date" DROP NOT NULL;
+
+-- AddForeignKey
+ALTER TABLE "Assignment" ADD CONSTRAINT "Assignment_class_id_fkey" FOREIGN KEY ("class_id") REFERENCES "Class"("id") ON DELETE RESTRICT ON UPDATE CASCADE;

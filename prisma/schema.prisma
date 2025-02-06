@@ -112,6 +112,7 @@ model Class {
   lessons       Lesson[]
   students      Student[]
   subjects      Subject[]
+  assignments   Assignment[]
 }
 
 model Lesson {
@@ -153,8 +154,9 @@ model Assignment {
   id          Int       @id @default(autoincrement())
   title       String
   submit_date DateTime
-  due_date    DateTime
+  given_date  DateTime  @default(now())
   subject_id  Int
+  class_id    Int       @default(1)
   lesson_id   Int
   teacher_id  Int
   created_at  DateTime  @default(now())
@@ -163,6 +165,7 @@ model Assignment {
   lesson      Lesson    @relation(fields: [lesson_id], references: [id])
   subject     Subject   @relation(fields: [subject_id], references: [id])
   teacher     Teacher   @relation(fields: [teacher_id], references: [id])
+  class       Class     @relation(fields: [class_id], references: [id])
   results     Result[]
 }
 

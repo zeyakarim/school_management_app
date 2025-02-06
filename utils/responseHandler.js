@@ -1,5 +1,3 @@
-const prisma = require("@/config/database");
-
 const AppError = (message, statusCode, status) =>{
     const error = new Error(message);
   
@@ -59,7 +57,7 @@ module.exports = {
 
     failure(error, message, statusCode = 500) {
         console.error(error)
-        const errorObj = new AppError(message, statusCode, HTTP_STATUS[statusCode])
+        const errorObj = AppError(message, statusCode, HTTP_STATUS[statusCode])
         console.log({ errorObj })
         return {
             ...response,

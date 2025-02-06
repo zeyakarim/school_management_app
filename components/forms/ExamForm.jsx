@@ -54,7 +54,7 @@ const ExamForm = ({ onClose }) => {
                     type="text"
                     label="Exam Name"
                     name='examName'
-                    className="w-[32%] mt-1"
+                    className="w-[48%]"
                     isRequired={true}
                     icon={ <FactCheck style={{fontSize:'20px'}} className="text-default-400 pointer-events-none flex-shrink-0" /> }
                 />
@@ -63,7 +63,7 @@ const ExamForm = ({ onClose }) => {
                     selectionMode="single"
                     label="Subject Name"
                     name='subject'
-                    className="w-[32%] mt-1"
+                    className="w-[48%]"
                     datas={subjects}
                     icon={ <AutoStories style={{fontSize:'20px'}} className="text-default-400 pointer-events-none flex-shrink-0" /> }
                 />
@@ -72,7 +72,7 @@ const ExamForm = ({ onClose }) => {
                     selectionMode="single"
                     label="Class Name"
                     name='class'
-                    className="w-[32%] mt-1"
+                    className="w-[48%]"
                     datas={classes}
                     icon={ <AirlineSeatReclineNormal style={{fontSize:'20px'}} className="text-default-400 pointer-events-none flex-shrink-0" /> }
                 />
@@ -80,14 +80,14 @@ const ExamForm = ({ onClose }) => {
                     isRequired={true}
                     label='Date'
                     name='date'
-                    className="w-[32%] mt-1"
+                    className="w-[48%]"
                 />
                 <TimeInputField
                     isRequired={true}
                     label="Start Time"
                     name='startTime'
                     defaultValue={new Time(9, 0)} 
-                    className="w-[32%] mt-1"
+                    className="w-[48%]"
                     icon={<AccessTime className="text-xl text-default-400 pointer-events-none flex-shrink-0" /> }
                 />
                 <TimeInputField
@@ -95,7 +95,7 @@ const ExamForm = ({ onClose }) => {
                     label="End Time"
                     name='endTime'
                     defaultValue={new Time(12)} 
-                    className="w-[32%] mt-1"
+                    className="w-[48%]"
                     icon={<AccessTime className="text-xl text-default-400 pointer-events-none flex-shrink-0" /> }
                 />
             </div>

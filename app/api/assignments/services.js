@@ -13,6 +13,31 @@ const simplifiedAssignments = (assignments) => {
     })
 }
 
+const createAssignment = async (data) => {
+    try {
+        const subject_id = parseInt(data.subject_id, 10);
+        const class_id = parseInt(data.class_id, 10);
+        const lesson_id = parseInt(data.lesson_id, 10);
+        const teacher_id = parseInt(data.teacher_id, 10);
+
+        const createdAssignment = await prisma.assignment.create({
+            data: {
+                title: data?.title,
+                subject_id: subject_id,
+                class_id: class_id,
+                lesson_id: lesson_id,
+                teacher_id: teacher_id,
+                submit_date: data?.submit_date,
+                given_date: data?.given_date
+            }
+        });
+        return createdAssignment;
+    } catch(error) {
+        console.error('Error in creating assignment : ', error);
+        throw(error)
+    }
+}
+
 const fetchAssignments = async (searchFor, page, limit, skipRecord) => {
     try {
         const searchConditions = searchFor ? 
@@ -90,5 +115,6 @@ const fetchAssignments = async (searchFor, page, limit, skipRecord) => {
 };
 
 module.exports = {
+    createAssignment,
     fetchAssignments
 }
