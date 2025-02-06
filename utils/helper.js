@@ -27,6 +27,14 @@ const fetchIcons = async (items) => {
     return detailsItems;
 }
 
+const formatTime = (time) => {
+    time = time.slice(0, 5); // "11:00"
+    const today = new Date().toISOString().split("T")[0];
+    const formattedTime = `${today}T${time}:00Z`;
+    return formattedTime;
+}
+
 module.exports = {
-    fetchIcons
+    fetchIcons,
+    formatTime
 }

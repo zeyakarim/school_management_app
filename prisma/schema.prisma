@@ -128,7 +128,6 @@ model Lesson {
   name        String
   assignments Assignment[]
   attendances Attendance[]
-  exams       Exam[]
   class       Class        @relation(fields: [class_id], references: [id])
   subject     Subject      @relation(fields: [subject_id], references: [id])
   teacher     Teacher      @relation(fields: [teacher_id], references: [id])
@@ -144,10 +143,8 @@ model Exam {
   created_at DateTime  @default(now())
   updated_at DateTime  @updatedAt
   deleted_at DateTime?
-  lesson_id  Int
   subject_id Int
   class      Class     @relation(fields: [class_id], references: [id])
-  lesson     Lesson    @relation(fields: [lesson_id], references: [id])
   subject    Subject   @relation(fields: [subject_id], references: [id])
   results    Result[]
 }

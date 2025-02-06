@@ -1,18 +1,15 @@
 import { NextResponse } from "next/server";
-import prisma from "@/config/database";
-import { fetchExams } from "./services";
-import { success } from "@/utils/responseHandler";
+import { createExam, fetchExams } from "./services";
+import { failure, success } from "@/utils/responseHandler";
 
 export async function POST(req) {
     const data = await req.json();
     try {
-        const exam = await prisma.exam.create({
-            data: data
-        });
-        return NextResponse.json({data: {exam: exam, status: 200}});
+        const createdExam = await createExam(data)
+        return NextResponse.json(success(createdExam, "Exams Created Successfully!"));
     } catch (error) {
         console.log("Error:",error)
-        return NextResponse.json({"msg": "something went wrong"},  {status:'400'})
+        return NextResponse.json(failure(error, error?.message))
     }
 }
 

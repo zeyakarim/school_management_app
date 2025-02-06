@@ -6,6 +6,7 @@ import useFetchData from '@/utils/useFetchData';
 import { useCallback } from 'react';
 import InputField from '../formsFields/InputField';
 import { Button } from '@nextui-org/react';
+import { formatTime } from '@/utils/helper';
 
 const days = [
     { "label": 'MONDAY',    "key": 'MONDAY' },
@@ -28,24 +29,14 @@ const LessonForm = ({ onClose }) => {
 
     const handleSubmit = async (event) => {
         event.preventDefault();
-
-        const startTimeValue = event.target.startTime.value.slice(0, 5); // "11:00"
-        const endTimeValue = event.target.endTime.value.slice(0, 5);     // "11:45"
-
-        const today = new Date().toISOString().split("T")[0];
-        const startTimeString = `${today}T${startTimeValue}:00Z`;
-        const endTimeString = `${today}T${endTimeValue}:00Z`;
-
-        const formattedStartTime = event.target.startTime.value ? new Date(startTimeString).toISOString() : null;
-        const formattedEndTime =  event.target.endTime.value ? new Date(endTimeString).toISOString() : null;
         
         const data = {
             lesson: event.target.lesson.value,
             subject_id: event.target.subject.value,
             class_id: event.target.class.value,
             teacher_id: event.target.teacher.value,
-            start_time: formattedStartTime,
-            end_time: formattedEndTime,
+            start_time: formatTime(event.target.startTime.value),
+            end_time: formatTime(event.target.endTime.value),
             day: event.target.day.value
         }
 
