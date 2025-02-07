@@ -37,6 +37,7 @@ model Teacher {
   lessons     Lesson[]
   subjects    Subject[]
   results     Result[]
+  attendances Attendance[]
 }
 
 model Subject {
@@ -53,6 +54,7 @@ model Subject {
   teacher     Teacher      @relation(fields: [teacher_id], references: [id])
   class       Class        @relation(fields: [class_id], references: [id])
   result      Result[]
+  attendances Attendance[]
 }
 
 model Student {
@@ -202,13 +204,17 @@ model Attendance {
   date       DateTime
   student_id Int
   class_id   Int
+  subject_id Int       @default(1)
   lesson_id  Int
+  teacher_id Int       @default(1)
   created_at DateTime  @default(now())
   updated_at DateTime  @updatedAt
   deleted_at DateTime?
   class      Class     @relation(fields: [class_id], references: [id])
   lesson     Lesson    @relation(fields: [lesson_id], references: [id])
   student    Student   @relation(fields: [student_id], references: [id])
+  teacher    Teacher   @relation(fields: [teacher_id], references: [id])
+  subject    Subject   @relation(fields: [subject_id], references: [id])
 }
 
 model Event {

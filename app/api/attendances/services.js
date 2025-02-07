@@ -13,6 +13,34 @@ const simplifiedAttendances = (attendances) => {
     })
 }
 
+const createAttendance = async (data) => {
+    try {
+        const subject_id = parseInt(data.subject_id, 10);
+        const class_id = parseInt(data.class_id, 10);
+        const lesson_id = parseInt(data.lesson_id, 10);
+        const teacher_id = parseInt(data.teacher_id, 10);
+        const student_id = parseInt(data.student_id, 10);
+        const present = data?.present === 'TRUE' ? true : false;
+
+        const createdAttendance = await prisma.attendance.create({
+            data: {
+                present: present,
+                date: data?.date,
+                student_id: student_id,
+                lesson_id: lesson_id,
+                subject_id: subject_id,
+                class_id: class_id,
+                teacher_id: teacher_id
+            }
+        });
+        
+        return createdAttendance;
+    } catch (error) {
+        console.error('Error in creating attendance : ', error);
+        throw(error)
+    }
+}
+
 const fetchAttendances = async (searchFor, page, limit, skipRecord) => {
     try {
         const searchConditions = searchFor ? 
@@ -89,5 +117,6 @@ const fetchAttendances = async (searchFor, page, limit, skipRecord) => {
 };
 
 module.exports = {
+    createAttendance,
     fetchAttendances
 }
