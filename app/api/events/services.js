@@ -10,6 +10,28 @@ const simplifiedEvents = (events) => {
     })
 }
 
+const createEvent = async (data) => {
+    try {
+        const class_id = parseInt(data.class_id, 10);
+
+        const createdEvent = await prisma.event.create({
+            data: {
+                class_id: class_id,
+                title: data?.title,
+                description: data?.description,
+                date: data?.date,
+                start_time: data?.start_time,
+                end_time: data?.end_time
+            }
+        });
+
+        return createdEvent;
+    } catch (error) {
+        console.error('Error in creating event : ', error);
+        throw(error)
+    }
+}
+
 const fetchEvents = async (searchFor, page, limit, skipRecord) => {
     try {
         const searchConditions = searchFor ? 
@@ -62,5 +84,6 @@ const fetchEvents = async (searchFor, page, limit, skipRecord) => {
 };
 
 module.exports = {
+    createEvent,
     fetchEvents
 }

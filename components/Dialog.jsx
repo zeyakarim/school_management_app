@@ -41,7 +41,11 @@ const GradeForm = dynamic(() => import("./forms/GradeForm"), {
 
 const AttendanceForm = dynamic(() => import("./forms/AttendanceForm"), {
     loading: () => <h1>Loading...</h1>,
-})
+});
+
+const EventForm = dynamic(() => import("./forms/EventForm"), {
+    loading: () => <h1>Loading...</h1>,
+});
 
 const forms = {
     subject: (type, data, relatedData, onClose) => (
@@ -55,6 +59,15 @@ const forms = {
     ),
     lesson: (type, data, relatedData, onClose) => (
         <LessonForm
+            type={type}
+            data={data}
+            onClose={onClose}
+            // setOpen={setOpen}
+            relatedData={relatedData}
+        />
+    ),
+    event: (type, data, relatedData, onClose) => (
+        <EventForm
             type={type}
             data={data}
             onClose={onClose}
