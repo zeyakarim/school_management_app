@@ -7,7 +7,8 @@ const simplifiedAssignments = (assignments) => {
             ...assignment,
             teacher: assignment?.teacher?.first_name + ' ' + lastName,
             subject: assignment?.subject?.name,
-            lesson: assignment?.lesson?.name
+            lesson: assignment?.lesson?.name,
+            class: assignment?.class?.name
         }
         return simplifiedAssignment
     })
@@ -86,6 +87,11 @@ const fetchAssignments = async (searchFor, page, limit, skipRecord) => {
                         }
                     },
                     lesson: {
+                        select: {
+                            name: true
+                        }
+                    },
+                    class: {
                         select: {
                             name: true
                         }

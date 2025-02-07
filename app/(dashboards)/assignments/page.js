@@ -26,14 +26,20 @@ const columns = [
         flex: 1,
     },
     {
+        field: 'class',
+        headerName: 'Class',
+        headerClassName: 'super-app-theme--header',
+        flex: 1,
+    },
+    {
         field: 'submit_date',
         headerName: 'Submit Date',
         headerClassName: 'super-app-theme--header',
         flex: 1.7,
     },
     {
-        field: 'due_date',
-        headerName: 'Due Date',
+        field: 'given_date',
+        headerName: 'Given Date',
         headerClassName: 'super-app-theme--header',
         flex: 1.7
     },

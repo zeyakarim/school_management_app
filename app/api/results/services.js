@@ -3,12 +3,16 @@ const prisma = require("@/config/database");
 const simplifiedResults = (results) => {
     return results?.map((result) => {
         const lastName = result?.student?.last_name ? result?.student?.last_name : '';
+        const lastTeacherName = result?.teacher?.last_name ? result?.teacher?.last_name : '';
         const simplifiedResult = {
             ...result,
             student: result?.student?.first_name + ' ' + lastName,
+            teacher: result?.teacher?.first_name + ' ' + lastTeacherName,
             exam: result?.exam?.title,
             grade: result?.grade?.level,
-            assignment: result?.assignment?.title
+            assignment: result?.assignment?.title,
+            class: result?.class?.name,
+            subject: result?.subject?.name
         }
         return simplifiedResult
     })
@@ -71,7 +75,29 @@ const fetchResults = async (searchFor, page, limit, skipRecord) => {
                                 { title: { contains: searchFor, mode: 'insensitive' } }
                             ],
                         },
-                    }
+                    },
+                    {
+                        teacher: {
+                            OR: [
+                                { first_name: { contains: searchFor, mode: 'insensitive' } }, 
+                                { last_name: { contains: searchFor, mode: 'insensitive' } }
+                            ],
+                        },
+                    },
+                    {
+                        subject: {
+                            OR: [
+                                { name: { contains: searchFor, mode: 'insensitive' } }
+                            ],
+                        },
+                    },
+                    {
+                        class: {
+                            OR: [
+                                { name: { contains: searchFor, mode: 'insensitive' } }
+                            ],
+                        },
+                    },
                 ]
             }
             : { // If searchFor is a number, search by ID fields
@@ -87,8 +113,7 @@ const fetchResults = async (searchFor, page, limit, skipRecord) => {
                         },
                     ]
                 }
-        : {}; 
-        console.log(searchConditions,'sarch')
+        : {};
 
         const [data, totalRows] = await prisma.$transaction([
             prisma.result.findMany({
@@ -113,6 +138,22 @@ const fetchResults = async (searchFor, page, limit, skipRecord) => {
                     assignment: {
                         select: {
                             title: true
+                        }
+                    },
+                    teacher: {
+                        select: {
+                            first_name: true,
+                            last_name: true
+                        }
+                    },
+                    subject: {
+                        select: {
+                            name: true,
+                        }
+                    },
+                    class: {
+                        select: {
+                            name: true,
                         }
                     }
                 },

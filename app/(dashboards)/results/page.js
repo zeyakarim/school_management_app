@@ -19,11 +19,23 @@ const columns = [
         headerClassName: 'super-app-theme--header',
         flex: 1,
     },
+    // {
+    //     field: 'assignment',
+    //     headerName: 'Assignment',
+    //     headerClassName: 'super-app-theme--header',
+    //     flex: 1,
+    // },
     {
-        field: 'assignment',
-        headerName: 'Assignment',
+        field: 'subject',
+        headerName: 'Subject',
         headerClassName: 'super-app-theme--header',
-        flex: 1.7,
+        flex: 1,
+    },
+    {
+        field: 'class',
+        headerName: 'Class',
+        headerClassName: 'super-app-theme--header',
+        flex: 1,
     },
     {
         field: 'percentage',
@@ -48,6 +60,12 @@ const columns = [
         headerName: 'Created At',
         headerClassName: 'super-app-theme--header',
         flex: 1.7
+    },
+    {
+        field: 'teacher',
+        headerName: 'Teacher',
+        headerClassName: 'super-app-theme--header',
+        flex: 1
     },
 ];
 
