@@ -1,15 +1,12 @@
-import { AccessTime, AirlineSeatReclineNormal, ClosedCaptionOff } from '@mui/icons-material';
-import { Time } from "@internationalized/date";
+import { AirlineSeatReclineNormal, ClosedCaptionOff } from '@mui/icons-material';
 import SelectField from '../formsFields/SelectField';
-import TimeInputField from '../formsFields/TimeInputField';
 import useFetchData from '@/utils/useFetchData';
 import { useCallback } from 'react';
 import InputField from '../formsFields/InputField';
 import { Button } from '@nextui-org/react';
-import { formatTime } from '@/utils/helper';
 import DatePickerField from '../formsFields/DatePickerField';
 
-const EventForm = ({ onClose }) => {
+const AnnouncementForm = ({ onClose }) => {
     const formatSubjectLabel = useCallback((item) => item?.name, []);
     const { data: classes, loading: classesLoading } = useFetchData("classes", formatSubjectLabel);
 
@@ -20,22 +17,20 @@ const EventForm = ({ onClose }) => {
             title: event.target.title.value,
             description: event.target.description.value,
             class_id: event.target.class.value,
-            start_time: formatTime(event.target.startTime.value),
-            end_time: formatTime(event.target.endTime.value),
             date: event.target.date.value ? new Date(event.target.date.value).toISOString() : null
         }
 
         try {
-            const response = await fetch(`${process.env.NEXT_PUBLIC_WEBSITE_URL}/events`, {
+            const response = await fetch(`${process.env.NEXT_PUBLIC_WEBSITE_URL}/annoucements`, {
                 method: "POST",
                 body: JSON.stringify(data),
             });
 
             if (response.ok) {
-                console.log("Event created successfully!");
+                console.log("Announcement created successfully!");
                 onClose();
             } else {
-                console.error("Failed to create event.");
+                console.error("Failed to create announcement.");
             }
         } catch (error) {
             console.error("Error submitting form:", error);
@@ -59,22 +54,6 @@ const EventForm = ({ onClose }) => {
                     label='Date'
                     name='date'
                     className="w-[48%]"
-                />
-                <TimeInputField
-                    isRequired={true}
-                    label="Start Time" 
-                    name='startTime'
-                    defaultValue={new Time(9, 0)} 
-                    className="w-[48%] mt-1"
-                    icon={<AccessTime className="text-xl text-default-400 pointer-events-none flex-shrink-0" /> }
-                />
-                <TimeInputField
-                    isRequired={true}
-                    label="End Time"
-                    name='endTime'
-                    defaultValue={new Time(12)} 
-                    className="w-[48%]"
-                    icon={<AccessTime className="text-xl text-default-400 pointer-events-none flex-shrink-0" /> }
                 />
                 <InputField
                     type="text"
@@ -107,4 +86,4 @@ const EventForm = ({ onClose }) => {
     )
 }
 
-export default EventForm;
+export default AnnouncementForm;

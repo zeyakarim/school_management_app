@@ -10,6 +10,26 @@ const simplifiedAnnoucements = (annoucements) => {
     })
 }
 
+const createAnnouncement = async (data) => {
+    try {
+        const class_id = parseInt(data.class_id, 10);
+
+        const createdAnnoucement = await prisma.annoucement.create({
+            data: {
+                class_id: class_id,
+                title: data?.title,
+                description: data?.description,
+                date: data?.date
+            }
+        });
+
+        return createdAnnoucement;
+    } catch (error) {
+        console.error('Error in creating announcement : ', error);
+        throw(error)
+    }
+}
+
 const fetchAnnoucements = async (searchFor, page, limit, skipRecord) => {
     try {
         const searchConditions = searchFor ? 
@@ -61,5 +81,6 @@ const fetchAnnoucements = async (searchFor, page, limit, skipRecord) => {
 };
 
 module.exports = {
+    createAnnouncement,
     fetchAnnoucements
 }

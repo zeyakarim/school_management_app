@@ -47,6 +47,11 @@ const EventForm = dynamic(() => import("./forms/EventForm"), {
     loading: () => <h1>Loading...</h1>,
 });
 
+const AnnouncementForm = dynamic(() => import("./forms/AnnouncementForm"), {
+    loading: () => <h1>Loading...</h1>,
+});
+
+
 const forms = {
     subject: (type, data, relatedData, onClose) => (
         <SubjectForm
@@ -68,6 +73,15 @@ const forms = {
     ),
     event: (type, data, relatedData, onClose) => (
         <EventForm
+            type={type}
+            data={data}
+            onClose={onClose}
+            // setOpen={setOpen}
+            relatedData={relatedData}
+        />
+    ),
+    annoucement: (type, data, relatedData, onClose) => (
+        <AnnouncementForm
             type={type}
             data={data}
             onClose={onClose}
