@@ -3,9 +3,11 @@ import prisma from "@/config/database";
 const simplifiedAttendances = (attendances) => {
     return attendances?.map((attendance) => {
         const lastName = attendance?.student?.last_name ? attendance?.student?.last_name : '';
+        const lastTeacherName = attendance?.teacher?.last_name ? attendance?.teacher?.last_name : '';
         const simplifiedAttendance = {
             ...attendance,
             student: attendance?.student?.first_name + ' ' + lastName,
+            teacher: attendance?.teacher?.first_name + ' ' + lastTeacherName,
             class: attendance?.class?.name,
             lesson: attendance?.lesson?.name
         }
@@ -69,6 +71,14 @@ const fetchAttendances = async (searchFor, page, limit, skipRecord) => {
                             ],
                         },
                     },
+                    {
+                        teacher: {
+                            OR: [
+                                { first_name: { contains: searchFor, mode: 'insensitive' } }, // Search in teacher's first name
+                                { last_name: { contains: searchFor, mode: 'insensitive' } },  // Search in teacher's last name
+                            ],
+                        },
+                    }
                 ],
             }
         : {}; 
@@ -77,6 +87,12 @@ const fetchAttendances = async (searchFor, page, limit, skipRecord) => {
                 where: searchConditions,
                 include: {
                     student: {
+                        select: {
+                            first_name: true,
+                            last_name: true
+                        }
+                    },
+                    teacher: {
                         select: {
                             first_name: true,
                             last_name: true

@@ -5,7 +5,7 @@ const columns = [
         field: 'student',
         headerName: 'Student Name',
         headerClassName: 'super-app-theme--header',
-        flex: 1.7,
+        flex: 1,
     },
     {
         field: 'date',
@@ -23,20 +23,20 @@ const columns = [
         field: 'class',
         headerName: 'Class',
         headerClassName: 'super-app-theme--header',
-        flex: 0.7,
+        flex: 1,
     },
     {
         field: 'present',
         headerName: 'Attendance',
         headerClassName: 'super-app-theme--header',
-        flex: 0.7,
+        flex: 1,
     },
-    // {
-    //     field: 'created_at',
-    //     headerName: 'Created At',
-    //     headerClassName: 'super-app-theme--header',
-    //     flex: 1.7
-    // },
+    {
+        field: 'teacher',
+        headerName: 'Teacher',
+        headerClassName: 'super-app-theme--header',
+        flex: 1
+    },
 ];
 
 const Attendance = () => {
