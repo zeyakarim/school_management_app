@@ -51,35 +51,42 @@ const createStudent = async (formData, file) => {
 
 const fetchStudents = async (searchFor, page, limit, skipRecord) => {
     try {
-        const searchConditions = searchFor ? 
+        const baseCondition = { deleted_at: null }; // Always exclude soft-deleted records
+
+        const searchConditions = searchFor ?
             {
-                OR: [
-                    { username: { contains: searchFor, mode: 'insensitive' } },
-                    { first_name: { contains: searchFor, mode: 'insensitive' } },
-                    { last_name: { contains: searchFor, mode: 'insensitive' } },
-                    { email: { contains: searchFor, mode: 'insensitive' } },
-                    { phone: { contains: searchFor, mode: 'insensitive' } },
-                    { address: { contains: searchFor, mode: 'insensitive' } },
-                    { blood_type: { contains: searchFor, mode: 'insensitive' } },
+                AND: [
+                    baseCondition,
                     {
-                        parent: {
-                            OR: [
-                                { username: { contains: searchFor, mode: 'insensitive' } },
-                                { first_name: { contains: searchFor, mode: 'insensitive' } }, // Search in teacher's first name
-                                { last_name: { contains: searchFor, mode: 'insensitive' } },  // Search in teacher's last name
-                            ],
-                        },
-                    },
-                    {
-                        class: {
-                            OR: [
-                                { name: { contains: searchFor, mode: 'insensitive' } },
-                            ],
-                        },
-                    },
-                ],
+                        OR: [
+                            { username: { contains: searchFor, mode: 'insensitive' } },
+                            { first_name: { contains: searchFor, mode: 'insensitive' } },
+                            { last_name: { contains: searchFor, mode: 'insensitive' } },
+                            { email: { contains: searchFor, mode: 'insensitive' } },
+                            { phone: { contains: searchFor, mode: 'insensitive' } },
+                            { address: { contains: searchFor, mode: 'insensitive' } },
+                            { blood_type: { contains: searchFor, mode: 'insensitive' } },
+                            {
+                                parent: {
+                                    OR: [
+                                        { username: { contains: searchFor, mode: 'insensitive' } },
+                                        { first_name: { contains: searchFor, mode: 'insensitive' } }, // Search in teacher's first name
+                                        { last_name: { contains: searchFor, mode: 'insensitive' } },  // Search in teacher's last name
+                                    ],
+                                },
+                            },
+                            {
+                                class: {
+                                    OR: [
+                                        { name: { contains: searchFor, mode: 'insensitive' } },
+                                    ],
+                                },
+                            },
+                        ],
+                    }
+                ]
             }
-        : {}; 
+        : baseCondition; 
 
         const [data, totalRows] = await prisma.$transaction([
             prisma.student.findMany({
@@ -120,7 +127,33 @@ const fetchStudents = async (searchFor, page, limit, skipRecord) => {
     }
 };
 
+const deleteStudent = async (studentId) => {
+    try {
+        const student = await prisma.student.findUnique({
+            where: { id: studentId },
+        });
+        
+        if (!student) {
+            throw('Student Not Exist in the Database.')
+        }
+
+        const now = new Date();
+
+        // 2. Soft delete the student
+        const deletedStudent =  await prisma.student.update({
+            where: { id: studentId },
+            data: { deleted_at: now },
+        });
+    
+        return deletedStudent;
+    } catch (error) {
+        console.error('Errro in deleting student : ', error);
+        throw(error)
+    }
+}
+
 module.exports = {
     createStudent,
-    fetchStudents
+    fetchStudents,
+    deleteStudent
 }
