@@ -15,18 +15,25 @@ const createParent = async (data) => {
 
 const fetchParents = async (searchFor, page, limit, skipRecord) => {
     try {
-        const searchConditions = searchFor
-            ? {
-                OR: [
-                    { username: { contains: searchFor, mode: 'insensitive' } },
-                    { first_name: { contains: searchFor, mode: 'insensitive' } },
-                    { last_name: { contains: searchFor, mode: 'insensitive' } },
-                    { email: { contains: searchFor, mode: 'insensitive' } },
-                    { phone: { contains: searchFor, mode: 'insensitive' } },
-                    { address: { contains: searchFor, mode: 'insensitive' } },
-                ],
-                }
-            : {};
+        const baseCondition = { deleted_at: null }; // Always exclude soft-deleted records
+        
+        const searchConditions = searchFor ?
+            {
+                AND: [
+                    baseCondition, 
+                    {
+                        OR: [
+                            { username: { contains: searchFor, mode: 'insensitive' } },
+                            { first_name: { contains: searchFor, mode: 'insensitive' } },
+                            { last_name: { contains: searchFor, mode: 'insensitive' } },
+                            { email: { contains: searchFor, mode: 'insensitive' } },
+                            { phone: { contains: searchFor, mode: 'insensitive' } },
+                            { address: { contains: searchFor, mode: 'insensitive' } },
+                        ],
+                    }
+                ]
+            }
+        : baseCondition;
 
         const [data, totalRows] = await prisma.$transaction([
             prisma.parent.findMany({
@@ -53,7 +60,34 @@ const fetchParents = async (searchFor, page, limit, skipRecord) => {
     }
 }
 
+const deleteParent = async (parentId) => {
+    try {
+        const parent = await prisma.parent.findUnique({
+            where: { id: parentId },
+        });
+        
+        if (!parent) {
+            throw('Parent Not Exist in the Database.')
+        }
+
+        const now = new Date();
+
+        // 2. Soft delete the parent
+        const deletedParent =  await prisma.parent.update({
+            where: { id: parentId },
+            data: { deleted_at: now },
+        });
+    
+        return deletedParent;
+    } catch (error) {
+        console.error('Errro in deleting parent : ', error);
+        throw(error)
+    }
+}
+
+
 module.exports = {
     createParent,
-    fetchParents
+    fetchParents,
+    deleteParent
 }
