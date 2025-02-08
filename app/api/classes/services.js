@@ -33,21 +33,28 @@ const createClass = async (data) => {
 
 const fetchClasses = async (searchFor, page, limit, skipRecord) => {
     try {
-        const searchConditions = searchFor ? 
+        const baseCondition = { deleted_at: null }; // Always exclude soft-deleted records
+
+        const searchConditions = searchFor ?
             {
-                OR: [
-                    { name: { contains: searchFor, mode: 'insensitive' } },
+                AND: [
+                    baseCondition,
                     {
-                        supervisor: {
-                            OR: [
-                                { first_name: { contains: searchFor, mode: 'insensitive' } },
-                                { last_name: { contains: searchFor, mode: 'insensitive' } },
-                            ],
-                        },
-                    },
-                ],
+                        OR: [
+                            { name: { contains: searchFor, mode: 'insensitive' } },
+                            {
+                                supervisor: {
+                                    OR: [
+                                        { first_name: { contains: searchFor, mode: 'insensitive' } },
+                                        { last_name: { contains: searchFor, mode: 'insensitive' } },
+                                    ],
+                                },
+                            },
+                        ],
+                    }
+                ]
             }
-        : {};
+        : baseCondition;
 
         const [data, totalRows] = await prisma.$transaction([
             prisma.class.findMany({
@@ -81,7 +88,33 @@ const fetchClasses = async (searchFor, page, limit, skipRecord) => {
     }
 };
 
+const deleteClass = async (classId) => {
+    try {
+        const classData = await prisma.class.findUnique({
+            where: { id: classId },
+        });
+        
+        if (!classData) {
+            throw('Class Not Exist in the Database.')
+        }
+
+        const now = new Date();
+
+        // 2. Soft delete the Class
+        const deletedClass =  await prisma.class.update({
+            where: { id: classId },
+            data: { deleted_at: now },
+        });
+    
+        return deletedClass;
+    } catch (error) {
+        console.error('Errro in deleting class : ', error);
+        throw(error)
+    }
+}
+
 module.exports = {
     createClass,
-    fetchClasses
+    fetchClasses,
+    deleteClass
 }
