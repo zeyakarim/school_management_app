@@ -45,43 +45,51 @@ const createAttendance = async (data) => {
 
 const fetchAttendances = async (searchFor, page, limit, skipRecord) => {
     try {
+        const baseCondition = { deleted_at: null }; // Always exclude soft-deleted records
+
         const searchConditions = searchFor ? 
             {
-                OR: [
-                    // { name: { contains: searchFor, mode: 'insensitive' } },
+                AND: [
+                    baseCondition,
                     {
-                        student: {
-                            OR: [
-                                { first_name: { contains: searchFor, mode: 'insensitive' } }, // Search in teacher's first name
-                                { last_name: { contains: searchFor, mode: 'insensitive' } },  // Search in teacher's last name
-                            ],
-                        },
-                    },
-                    {
-                        class: {
-                            OR: [
-                                { name: { contains: searchFor, mode: 'insensitive' } },
-                            ],
-                        },
-                    },
-                    {
-                        lesson: {
-                            OR: [
-                                { name: { contains: searchFor, mode: 'insensitive' } },
-                            ],
-                        },
-                    },
-                    {
-                        teacher: {
-                            OR: [
-                                { first_name: { contains: searchFor, mode: 'insensitive' } }, // Search in teacher's first name
-                                { last_name: { contains: searchFor, mode: 'insensitive' } },  // Search in teacher's last name
-                            ],
-                        },
-                    }
-                ],
+                        OR: [
+                            // { name: { contains: searchFor, mode: 'insensitive' } },
+                            {
+                                student: {
+                                    OR: [
+                                        { first_name: { contains: searchFor, mode: 'insensitive' } }, // Search in teacher's first name
+                                        { last_name: { contains: searchFor, mode: 'insensitive' } },  // Search in teacher's last name
+                                    ],
+                                },
+                            },
+                            {
+                                class: {
+                                    OR: [
+                                        { name: { contains: searchFor, mode: 'insensitive' } },
+                                    ],
+                                },
+                            },
+                            {
+                                lesson: {
+                                    OR: [
+                                        { name: { contains: searchFor, mode: 'insensitive' } },
+                                    ],
+                                },
+                            },
+                            {
+                                teacher: {
+                                    OR: [
+                                        { first_name: { contains: searchFor, mode: 'insensitive' } }, // Search in teacher's first name
+                                        { last_name: { contains: searchFor, mode: 'insensitive' } },  // Search in teacher's last name
+                                    ],
+                                },
+                            }
+                        ],
+                    }    
+                ]
             }
-        : {}; 
+        : baseCondition;
+        
         const [data, totalRows] = await prisma.$transaction([
             prisma.attendance.findMany({
                 where: searchConditions,
@@ -132,7 +140,33 @@ const fetchAttendances = async (searchFor, page, limit, skipRecord) => {
     }
 };
 
+const deleteAttendance = async (attendanceId) => {
+    try {
+        const attendance = await prisma.attendance.findUnique({
+            where: { id: attendanceId },
+        });
+        
+        if (!attendance) {
+            throw('Attendance Not Exist in the Database.')
+        }
+
+        const now = new Date();
+
+        // 2. Soft delete the Attendance
+        const deletedAttendance =  await prisma.attendance.update({
+            where: { id: attendanceId },
+            data: { deleted_at: now },
+        });
+    
+        return deletedAttendance;
+    } catch (error) {
+        console.error('Errro in deleting attendance : ', error);
+        throw(error)
+    }
+}
+
 module.exports = {
     createAttendance,
-    fetchAttendances
+    fetchAttendances,
+    deleteAttendance
 }
