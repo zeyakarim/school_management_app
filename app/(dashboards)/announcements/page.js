@@ -92,13 +92,11 @@ const Announcements = () => {
                 type='create'
             />
 
-            <div>
-                <ConfirmDialog 
-                    isOpen={isOpen}
-                    onOpenChange={onOpenChange}
-                    handleSubmit={handleDeleteAnnoucement}
-                />
-            </div>
+            <ConfirmDialog 
+                isOpen={isOpen}
+                onOpenChange={onOpenChange}
+                handleSubmit={handleDeleteAnnoucement}
+            />
         </div>
     );
 };

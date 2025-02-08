@@ -32,21 +32,28 @@ const createAnnouncement = async (data) => {
 
 const fetchAnnoucements = async (searchFor, page, limit, skipRecord) => {
     try {
-        const searchConditions = searchFor ? 
-            {
-                OR: [
-                    { title: { contains: searchFor, mode: 'insensitive' } },
-                    { description: { contains: searchFor, mode: 'insensitive' } },
-                    {
-                        class: {
-                            OR: [
-                                { name: { contains: searchFor, mode: 'insensitive' } },
-                            ],
-                        },
-                    },
-                ],
-            }
-        : {}; 
+        const baseCondition = { deleted_at: null }; // Always exclude soft-deleted records
+
+        const searchConditions = searchFor
+            ? {
+                  AND: [
+                      baseCondition,
+                      {
+                          OR: [
+                              { title: { contains: searchFor, mode: 'insensitive' } },
+                              { description: { contains: searchFor, mode: 'insensitive' } },
+                              {
+                                  class: {
+                                      OR: [
+                                          { name: { contains: searchFor, mode: 'insensitive' } },
+                                      ],
+                                  },
+                              },
+                          ],
+                      },
+                  ],
+              }
+            : baseCondition;
 
         const [data, totalRows] = await prisma.$transaction([
             prisma.annoucement.findMany({
@@ -91,8 +98,12 @@ const deleteAnnoucement = async (announcementId) => {
             throw('Annoucement Not Exist in the Database.')
         }
 
-        const deletedAnnoucement = await prisma.annoucement.delete({
+        const now = new Date();
+
+        // 2. Soft delete the Announcement
+        const deletedAnnoucement =  await prisma.annoucement.update({
             where: { id: announcementId },
+            data: { deleted_at: now },
         });
     
         return deletedAnnoucement;

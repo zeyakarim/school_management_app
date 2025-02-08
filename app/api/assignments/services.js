@@ -41,35 +41,42 @@ const createAssignment = async (data) => {
 
 const fetchAssignments = async (searchFor, page, limit, skipRecord) => {
     try {
+        const baseCondition = { deleted_at: null }; // Always exclude soft-deleted records
+
         const searchConditions = searchFor ? 
             {
-                OR: [
-                    { title: { contains: searchFor, mode: 'insensitive' } },
+                AND: [
+                    baseCondition,
                     {
-                        teacher: {
-                            OR: [
-                                { first_name: { contains: searchFor, mode: 'insensitive' } }, // Search in teacher's first name
-                                { last_name: { contains: searchFor, mode: 'insensitive' } },  // Search in teacher's last name
-                            ],
-                        },
-                    },
-                    {
-                        subject: {
-                            OR: [
-                                { name: { contains: searchFor, mode: 'insensitive' } },
-                            ],
-                        },
-                    },
-                    {
-                        lesson: {
-                            OR: [
-                                { name: { contains: searchFor, mode: 'insensitive' } },
-                            ],
-                        },
-                    },
-                ],
+                        OR: [
+                            { title: { contains: searchFor, mode: 'insensitive' } },
+                            {
+                                teacher: {
+                                    OR: [
+                                        { first_name: { contains: searchFor, mode: 'insensitive' } }, // Search in teacher's first name
+                                        { last_name: { contains: searchFor, mode: 'insensitive' } },  // Search in teacher's last name
+                                    ],
+                                },
+                            },
+                            {
+                                subject: {
+                                    OR: [
+                                        { name: { contains: searchFor, mode: 'insensitive' } },
+                                    ],
+                                },
+                            },
+                            {
+                                lesson: {
+                                    OR: [
+                                        { name: { contains: searchFor, mode: 'insensitive' } },
+                                    ],
+                                },
+                            },
+                        ],
+                    }
+                ]
             }
-        : {}; 
+        : baseCondition; 
 
         const [data, totalRows] = await prisma.$transaction([
             prisma.assignment.findMany({
@@ -120,7 +127,34 @@ const fetchAssignments = async (searchFor, page, limit, skipRecord) => {
     }
 };
 
+const deleteAssignment = async (assignmentId) => {
+    try {
+        const assignment = await prisma.assignment.findUnique({
+            where: { id: assignmentId },
+            // include: { class: true },
+        });
+        
+        if (!assignment) {
+            throw('Assignment Not Exist in the Database.')
+        }
+
+        const now = new Date();
+
+        // 2. Soft delete the Announcement
+        const deletedAssignment =  await prisma.assignment.update({
+            where: { id: assignmentId },
+            data: { deleted_at: now },
+        });
+    
+        return deletedAssignment;
+    } catch (error) {
+        console.error('Errro in deleting assignment : ', error);
+        throw(error)
+    }
+}
+
 module.exports = {
     createAssignment,
-    fetchAssignments
+    fetchAssignments,
+    deleteAssignment
 }
