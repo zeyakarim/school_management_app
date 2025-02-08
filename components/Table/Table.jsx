@@ -7,6 +7,12 @@ import PaginationControlled from "./newPagination";
 import { Button, InputAdornment, TextField } from "@mui/material";
 import { Search } from "@mui/icons-material";
 
+const columnData = (row, RenderCell)=> {
+    return (
+        <RenderCell {...row}/>
+    )
+}
+
 const Table = (props) => {
     const { 
         title, columns, dialogTitle, table, type, checkBoxSelection, navigateOnRowClickEndpoint, 
@@ -19,7 +25,6 @@ const Table = (props) => {
     const [limit, setLimit] = useState(1);
     const [data, setData] = useState([]);
     const [rowsData,setRowsData] = useState([]);
-    const [columnData, setColumnsData] = useState([]);
     const [columnVisibilityModelTable,setColumnVisibilityModel] = useState(columnVisibilityModel ||  {});
 
     const defaultVersion = 'version-1'

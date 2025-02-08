@@ -80,7 +80,30 @@ const fetchAnnoucements = async (searchFor, page, limit, skipRecord) => {
     }
 };
 
+const deleteAnnoucement = async (announcementId) => {
+    try {
+        const announcement = await prisma.annoucement.findUnique({
+            where: { id: announcementId },
+            // include: { class: true },
+        });
+        
+        if (!announcement) {
+            throw('Annoucement Not Exist in the Database.')
+        }
+
+        const deletedAnnoucement = await prisma.annoucement.delete({
+            where: { id: announcementId },
+        });
+    
+        return deletedAnnoucement;
+    } catch (error) {
+        console.error('Errro in deleting annoucement : ', error);
+        throw(error)
+    }
+}
+
 module.exports = {
     createAnnouncement,
-    fetchAnnoucements
+    fetchAnnoucements,
+    deleteAnnoucement
 }
