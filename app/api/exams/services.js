@@ -36,27 +36,34 @@ const createExam = async (data) => {
 
 const fetchExams = async (searchFor, page, limit, skipRecord) => {
     try {
-        const searchConditions = searchFor ? 
+        const baseCondition = { deleted_at: null }; // Always exclude soft-deleted records
+
+        const searchConditions = searchFor ?
             {
-                OR: [
-                    { title: { contains: searchFor, mode: 'insensitive' } },
+                AND: [
+                    baseCondition,
                     {
-                        class: {
-                            OR: [
-                                { name: { contains: searchFor, mode: 'insensitive' } },
-                            ],
-                        },
-                    },
-                    {
-                        subject: {
-                            OR: [
-                                { name: { contains: searchFor, mode: 'insensitive' } },
-                            ],
-                        },
-                    },
-                ],
+                        OR: [
+                            { title: { contains: searchFor, mode: 'insensitive' } },
+                            {
+                                class: {
+                                    OR: [
+                                        { name: { contains: searchFor, mode: 'insensitive' } },
+                                    ],
+                                },
+                            },
+                            {
+                                subject: {
+                                    OR: [
+                                        { name: { contains: searchFor, mode: 'insensitive' } },
+                                    ],
+                                },
+                            },
+                        ],
+                    }
+                ]
             }
-        : {}; 
+        : baseCondition; 
 
         const [data, totalRows] = await prisma.$transaction([
             prisma.exam.findMany({
@@ -95,7 +102,33 @@ const fetchExams = async (searchFor, page, limit, skipRecord) => {
     }
 };
 
+const deleteExam = async (examId) => {
+    try {
+        const exam = await prisma.exam.findUnique({
+            where: { id: examId },
+        });
+        
+        if (!exam) {
+            throw('Exam Not Exist in the Database.')
+        }
+
+        const now = new Date();
+
+        // 2. Soft delete the exam
+        const deletedExam =  await prisma.exam.update({
+            where: { id: examId },
+            data: { deleted_at: now },
+        });
+    
+        return deletedExam;
+    } catch (error) {
+        console.error('Errro in deleting exam : ', error);
+        throw(error)
+    }
+}
+
 module.exports = {
     createExam,
-    fetchExams
+    fetchExams,
+    deleteExam
 }
