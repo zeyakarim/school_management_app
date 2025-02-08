@@ -34,21 +34,28 @@ const createEvent = async (data) => {
 
 const fetchEvents = async (searchFor, page, limit, skipRecord) => {
     try {
-        const searchConditions = searchFor ? 
+        const baseCondition = { deleted_at: null }; // Always exclude soft-deleted records
+        
+        const searchConditions = searchFor ?
             {
-                OR: [
-                    { title: { contains: searchFor, mode: 'insensitive' } },
-                    { description: { contains: searchFor, mode: 'insensitive' } },
+                AND: [
+                    baseCondition,
                     {
-                        class: {
-                            OR: [
-                                { name: { contains: searchFor, mode: 'insensitive' } },
-                            ],
-                        },
-                    },
-                ],
+                        OR: [
+                            { title: { contains: searchFor, mode: 'insensitive' } },
+                            { description: { contains: searchFor, mode: 'insensitive' } },
+                            {
+                                class: {
+                                    OR: [
+                                        { name: { contains: searchFor, mode: 'insensitive' } },
+                                    ],
+                                },
+                            },
+                        ],
+                    }
+                ]
             }
-        : {};
+        : baseCondition;
 
         const [data, totalRows] = await prisma.$transaction([
             prisma.event.findMany({
@@ -83,7 +90,33 @@ const fetchEvents = async (searchFor, page, limit, skipRecord) => {
     }
 };
 
+const deleteEvent = async (eventId) => {
+    try {
+        const event = await prisma.event.findUnique({
+            where: { id: eventId },
+        });
+        
+        if (!event) {
+            throw('Event Not Exist in the Database.')
+        }
+
+        const now = new Date();
+
+        // 2. Soft delete the event
+        const deletedEvent =  await prisma.event.update({
+            where: { id: eventId },
+            data: { deleted_at: now },
+        });
+    
+        return deletedEvent;
+    } catch (error) {
+        console.error('Errro in deleting event : ', error);
+        throw(error)
+    }
+}
+
 module.exports = {
     createEvent,
-    fetchEvents
+    fetchEvents,
+    deleteEvent
 }
