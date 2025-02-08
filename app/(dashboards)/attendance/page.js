@@ -77,10 +77,10 @@ const Attendance = () => {
                 console.log("Attendance deleted successfully!");
                 onClose();
             } else {
-                console.error("Failed to create attendance.");
+                console.error("Failed to delete attendance.");
             }
         } catch (error) {
-            console.error("Error submitting form:", error);
+            console.error("Error in deleting :", error);
         }
     };
 

@@ -1,14 +1,14 @@
 import { NextResponse } from "next/server";
-import { deleteEvent } from "../services";
+import { deleteLesson } from "../services";
 import { failure, success } from "@/utils/responseHandler";
 
 export async function DELETE(req, { params }) {
     try {
-        const eventId = parseInt(params?.id);
+        const lessonId = parseInt(params?.id);
 
-        const deletedEvent = await deleteEvent(eventId);
+        const deletedLesson = await deleteLesson(lessonId);
         
-        return NextResponse.json(success(deletedEvent, 'Event Deleted Successfully'));
+        return NextResponse.json(success(deletedLesson, 'Lesson Deleted Successfully'));
     } catch (error) {
         return NextResponse.json(failure(error, error?.message))
     }

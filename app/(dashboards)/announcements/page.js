@@ -65,10 +65,10 @@ const Announcements = () => {
                 console.log("Annoucement deleted successfully!");
                 onClose();
             } else {
-                console.error("Failed to create annoucement.");
+                console.error("Failed to delete annoucement.");
             }
         } catch (error) {
-            console.error("Error submitting form:", error);
+            console.error("Error in deleting :", error);
         }
     };
 

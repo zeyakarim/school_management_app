@@ -65,10 +65,10 @@ const Classes = () => {
                 console.log("Class deleted successfully!");
                 onClose();
             } else {
-                console.error("Failed to create class.");
+                console.error("Failed to delete class.");
             }
         } catch (error) {
-            console.error("Error submitting form:", error);
+            console.error("Error in deleting :", error);
         }
     };
 

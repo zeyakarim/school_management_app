@@ -40,35 +40,42 @@ const createLesson = async (data) => {
 
 const fetchLessons = async (searchFor, page, limit, skipRecord) => {
     try {
-        const searchConditions = searchFor ? 
+        const baseCondition = { deleted_at: null }; // Always exclude soft-deleted records
+
+        const searchConditions = searchFor ?
             {
-                OR: [
-                    { name: { contains: searchFor, mode: 'insensitive' } },
+                AND: [
+                    baseCondition,
                     {
-                        teacher: {
-                            OR: [
-                                { first_name: { contains: searchFor, mode: 'insensitive' } }, // Search in teacher's first name
-                                { last_name: { contains: searchFor, mode: 'insensitive' } },  // Search in teacher's last name
-                            ],
-                        },
-                    },
-                    {
-                        class: {
-                            OR: [
-                                { name: { contains: searchFor, mode: 'insensitive' } },
-                            ],
-                        },
-                    },
-                    {
-                        subject: {
-                            OR: [
-                                { name: { contains: searchFor, mode: 'insensitive' } },
-                            ],
-                        },
-                    },
-                ],
+                        OR: [
+                            { name: { contains: searchFor, mode: 'insensitive' } },
+                            {
+                                teacher: {
+                                    OR: [
+                                        { first_name: { contains: searchFor, mode: 'insensitive' } }, // Search in teacher's first name
+                                        { last_name: { contains: searchFor, mode: 'insensitive' } },  // Search in teacher's last name
+                                    ],
+                                },
+                            },
+                            {
+                                class: {
+                                    OR: [
+                                        { name: { contains: searchFor, mode: 'insensitive' } },
+                                    ],
+                                },
+                            },
+                            {
+                                subject: {
+                                    OR: [
+                                        { name: { contains: searchFor, mode: 'insensitive' } },
+                                    ],
+                                },
+                            },
+                        ],
+                    }
+                ]
             }
-        : {}; 
+        : baseCondition; 
 
         const [data, totalRows] = await prisma.$transaction([
             prisma.lesson.findMany({
@@ -113,7 +120,33 @@ const fetchLessons = async (searchFor, page, limit, skipRecord) => {
     }
 };
 
+const deleteLesson = async (lessonId) => {
+    try {
+        const lesson = await prisma.lesson.findUnique({
+            where: { id: lessonId },
+        });
+        
+        if (!lesson) {
+            throw('Lesson Not Exist in the Database.')
+        }
+
+        const now = new Date();
+
+        // 2. Soft delete the lesson
+        const deletedLesson =  await prisma.lesson.update({
+            where: { id: lessonId },
+            data: { deleted_at: now },
+        });
+    
+        return deletedLesson;
+    } catch (error) {
+        console.error('Errro in deleting lesson : ', error);
+        throw(error)
+    }
+}
+
 module.exports = {
     createLesson,
-    fetchLessons
+    fetchLessons,
+    deleteLesson
 }

@@ -77,10 +77,10 @@ const Events = () => {
                 console.log("Event deleted successfully!");
                 onClose();
             } else {
-                console.error("Failed to create event.");
+                console.error("Failed to delete event.");
             }
         } catch (error) {
-            console.error("Error submitting form:", error);
+            console.error("Error in deleting :", error);
         }
     };
 

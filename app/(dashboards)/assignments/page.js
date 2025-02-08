@@ -89,10 +89,10 @@ const Assignments = () => {
                 console.log("Assignment deleted successfully!");
                 onClose();
             } else {
-                console.error("Failed to create assignment.");
+                console.error("Failed to delete assignment.");
             }
         } catch (error) {
-            console.error("Error submitting form:", error);
+            console.error("Error in deleting :", error);
         }
     };
 
