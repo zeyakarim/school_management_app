@@ -50,70 +50,81 @@ const createResult = async (data) => {
 
 const fetchResults = async (searchFor, page, limit, skipRecord) => {
     try {
+        const baseCondition = { deleted_at: null }; // Always exclude soft-deleted records
+
         const searchConditions = searchFor && searchFor?.trim() !== "" 
         ? isNaN(searchFor)
-            ? { 
-                OR: [
-                    {
-                        student: {
-                            OR: [
-                                { first_name: { contains: searchFor, mode: 'insensitive' } }, 
-                                { last_name: { contains: searchFor, mode: 'insensitive' } }
-                            ],
-                        },
-                    },
-                    {
-                        exam: {
-                            OR: [
-                                { title: { contains: searchFor, mode: 'insensitive' } }
-                            ],
-                        },
-                    },
-                    {
-                        assignment: {
-                            OR: [
-                                { title: { contains: searchFor, mode: 'insensitive' } }
-                            ],
-                        },
-                    },
-                    {
-                        teacher: {
-                            OR: [
-                                { first_name: { contains: searchFor, mode: 'insensitive' } }, 
-                                { last_name: { contains: searchFor, mode: 'insensitive' } }
-                            ],
-                        },
-                    },
-                    {
-                        subject: {
-                            OR: [
-                                { name: { contains: searchFor, mode: 'insensitive' } }
-                            ],
-                        },
-                    },
-                    {
-                        class: {
-                            OR: [
-                                { name: { contains: searchFor, mode: 'insensitive' } }
-                            ],
-                        },
-                    },
+            ? {
+                AND: [
+                    baseCondition, 
+                    { 
+                        OR: [
+                            {
+                                student: {
+                                    OR: [
+                                        { first_name: { contains: searchFor, mode: 'insensitive' } }, 
+                                        { last_name: { contains: searchFor, mode: 'insensitive' } }
+                                    ],
+                                },
+                            },
+                            {
+                                exam: {
+                                    OR: [
+                                        { title: { contains: searchFor, mode: 'insensitive' } }
+                                    ],
+                                },
+                            },
+                            {
+                                assignment: {
+                                    OR: [
+                                        { title: { contains: searchFor, mode: 'insensitive' } }
+                                    ],
+                                },
+                            },
+                            {
+                                teacher: {
+                                    OR: [
+                                        { first_name: { contains: searchFor, mode: 'insensitive' } }, 
+                                        { last_name: { contains: searchFor, mode: 'insensitive' } }
+                                    ],
+                                },
+                            },
+                            {
+                                subject: {
+                                    OR: [
+                                        { name: { contains: searchFor, mode: 'insensitive' } }
+                                    ],
+                                },
+                            },
+                            {
+                                class: {
+                                    OR: [
+                                        { name: { contains: searchFor, mode: 'insensitive' } }
+                                    ],
+                                },
+                            },
+                        ]
+                    }
                 ]
             }
-            : { // If searchFor is a number, search by ID fields
-                OR: [
-                        { 
-                            // marks: parseInt(searchFor),
-                            total: parseInt(searchFor),
-                            // grade: {
-                            //     OR: [
-                            //         { level: parseInt(searchFor) }
-                            //     ],
-                            // },
-                        },
-                    ]
-                }
-        : {};
+            :  {
+                AND: [
+                    baseCondition,{ // If searchFor is a number, search by ID fields
+                    OR: [
+                            { 
+                                // marks: parseInt(searchFor),
+                                total: parseInt(searchFor),
+                                // grade: {
+                                //     OR: [
+                                //         { level: parseInt(searchFor) }
+                                //     ],
+                                // },
+                            },
+                        ]
+                    }
+                ]
+            }
+        : baseCondition;
 
         const [data, totalRows] = await prisma.$transaction([
             prisma.result.findMany({
@@ -179,7 +190,33 @@ const fetchResults = async (searchFor, page, limit, skipRecord) => {
     }
 };
 
+const deleteResult = async (resultId) => {
+    try {
+        const result = await prisma.result.findUnique({
+            where: { id: resultId },
+        });
+        
+        if (!result) {
+            throw('Result Not Exist in the Database.')
+        }
+
+        const now = new Date();
+
+        // 2. Soft delete the result
+        const deletedResult =  await prisma.result.update({
+            where: { id: resultId },
+            data: { deleted_at: now },
+        });
+    
+        return deletedResult;
+    } catch (error) {
+        console.error('Errro in deleting result : ', error);
+        throw(error)
+    }
+}
+
 module.exports = {
     createResult,
-    fetchResults
+    fetchResults,
+    deleteResult
 }
