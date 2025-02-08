@@ -15,13 +15,31 @@ const createGrade = async (data) => {
 
 const fetchGrades = async (searchFor, page, limit, skipRecord) => {
     try {
+        const baseCondition = { deleted_at: null }; // Always exclude soft-deleted records
+        
+        const searchConditions = searchFor ?
+            {
+                AND: [
+                    baseCondition,
+                    {
+                        OR: [
+                            { level : { contains: searchFor, mode: 'insensitive' } },
+                        ],
+                    }
+                ]
+            }
+        : baseCondition;
+
         const [data, totalRows] = await prisma.$transaction([
             prisma.grade.findMany({
+                where: searchConditions,
                 skip: skipRecord,    // Number of records to skip
                 take: limit,         // Number of records to fetch
                 orderBy: { created_at: 'desc' }, // Optional: Order results
             }),
-            prisma.grade.count()
+            prisma.grade.count({
+                where: searchConditions
+            })
         ]);
 
         const maxPage = Math.ceil(totalRows / limit);
@@ -37,7 +55,33 @@ const fetchGrades = async (searchFor, page, limit, skipRecord) => {
     }
 };
 
+const deleteGrade = async (gradeId) => {
+    try {
+        const grade = await prisma.grade.findUnique({
+            where: { id: gradeId },
+        });
+        
+        if (!grade) {
+            throw('Grade Not Exist in the Database.')
+        }
+
+        const now = new Date();
+
+        // 2. Soft delete the grade
+        const deletedGrade =  await prisma.grade.update({
+            where: { id: gradeId },
+            data: { deleted_at: now },
+        });
+    
+        return deletedGrade;
+    } catch (error) {
+        console.error('Errro in deleting grade : ', error);
+        throw(error)
+    }
+}
+
 module.exports = {
     createGrade,
-    fetchGrades
+    fetchGrades,
+    deleteGrade
 }
