@@ -44,19 +44,26 @@ const prepareTeachersData = async (teachers) => {
 
 const fetchTeachers = async (searchFor, page, limit, skipRecord) => {
     try {
-        const searchConditions = searchFor
-            ? {
-                OR: [
-                    { username: { contains: searchFor, mode: 'insensitive' } },
-                    { first_name: { contains: searchFor, mode: 'insensitive' } },
-                    { last_name: { contains: searchFor, mode: 'insensitive' } },
-                    { email: { contains: searchFor, mode: 'insensitive' } },
-                    { phone: { contains: searchFor, mode: 'insensitive' } },
-                    { address: { contains: searchFor, mode: 'insensitive' } },
-                    { blood_type: { contains: searchFor, mode: 'insensitive' } },
-                ],
-                }
-            : {}; // 🔥 Prevents an unnecessary OR clause when `searchFor` is empty.
+        const baseCondition = { deleted_at: null }; // Always exclude soft-deleted records
+
+        const searchConditions = searchFor ?
+            {
+                AND: [
+                    baseCondition,
+                    {
+                        OR: [
+                            { username: { contains: searchFor, mode: 'insensitive' } },
+                            { first_name: { contains: searchFor, mode: 'insensitive' } },
+                            { last_name: { contains: searchFor, mode: 'insensitive' } },
+                            { email: { contains: searchFor, mode: 'insensitive' } },
+                            { phone: { contains: searchFor, mode: 'insensitive' } },
+                            { address: { contains: searchFor, mode: 'insensitive' } },
+                            { blood_type: { contains: searchFor, mode: 'insensitive' } },
+                        ],
+                    }
+                ]
+            }
+        : baseCondition; // 🔥 Prteachers an unnecessary OR clause when `searchFor` is empty.
 
         // Adding mode: 'insensitive' makes the search case-insensitive (e.g., matching both "John" and "john").
         const [data, totalRows] = await prisma.$transaction([
@@ -83,7 +90,33 @@ const fetchTeachers = async (searchFor, page, limit, skipRecord) => {
     }
 };
 
+const deleteTeacher = async (teacherId) => {
+    try {
+        const teacher = await prisma.teacher.findUnique({
+            where: { id: teacherId },
+        });
+        
+        if (!teacher) {
+            throw('Teacher Not Exist in the Database.')
+        }
+
+        const now = new Date();
+
+        // 2. Soft delete the teacher
+        const deletedTeacher =  await prisma.teacher.update({
+            where: { id: teacherId },
+            data: { deleted_at: now },
+        });
+    
+        return deletedTeacher;
+    } catch (error) {
+        console.error('Errro in deleting teacher : ', error);
+        throw(error)
+    }
+}
+
 module.exports = {
     createTeacher,
-    fetchTeachers
+    fetchTeachers,
+    deleteTeacher
 }

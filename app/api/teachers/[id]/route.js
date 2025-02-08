@@ -1,6 +1,8 @@
 import prisma from "@/config/database";
 import { fetchIcons } from "@/utils/helper";
 import { NextResponse } from "next/server";
+import { deleteTeacher } from "../services";
+import { failure, success } from "@/utils/responseHandler";
 
 export async function GET(req, { params }) {
     try {
@@ -17,5 +19,17 @@ export async function GET(req, { params }) {
     } catch (error) {
         console.log("Error:",error)
         return NextResponse.json({"msg": "something went wrong"},  {status:'400'})
+    }
+}
+
+export async function DELETE(req, { params }) {
+    try {
+        const teacherId = parseInt(params?.id);
+
+        const deletedTeacher = await deleteTeacher(teacherId);
+        
+        return NextResponse.json(success(deletedTeacher, 'Teacher Deleted Successfully'));
+    } catch (error) {
+        return NextResponse.json(failure(error, error?.message))
     }
 }
