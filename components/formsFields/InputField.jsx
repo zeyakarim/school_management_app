@@ -1,6 +1,6 @@
 import { Input } from "@nextui-org/react";
 
-const InputField = ({type, label, name, icon, isRequired, className }) => {
+const InputField = ({type, label, name, icon, isRequired, className, value, onChange }) => {
     return (
         <Input
             required={isRequired}
@@ -8,6 +8,8 @@ const InputField = ({type, label, name, icon, isRequired, className }) => {
             type={type}
             label={label}
             name={name}
+            value={value}
+            onChange={(e) => onChange(name, e?.target?.value)}  // Pass both name and date
             endContent={icon}
             variant="bordered"
             className={className}

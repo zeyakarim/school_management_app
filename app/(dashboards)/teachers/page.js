@@ -1,9 +1,10 @@
 'use client'; // Ensure this is treated as a Client Component
 
 import ConfirmDialog from "@/components/ConfirmDialog";
+import EditIcon from "@/components/EditIcon";
 import Table from "@/components/Table/Table";
 import { Delete } from "@mui/icons-material";
-import { IconButton } from "@mui/material";
+import { IconButton, Tooltip } from "@mui/material";
 import { useDisclosure } from "@nextui-org/react";
 import { useState } from "react";
 
@@ -76,7 +77,7 @@ const Teachers = () => {
       field: 'delete',
       headerName: 'Delete',
       headerClassName: 'super-app-theme--header',
-      flex: 0.7,
+      flex: 0.5,
       sortable: false,
       filterable: false,
       renderCell: (params) => (
@@ -89,7 +90,26 @@ const Teachers = () => {
         </IconButton>
       ),
     },
+    {
+      field: 'update',
+      headerName: 'Update',
+      flex: 0.5,
+      sortable: false,
+      filterable: false,
+      renderCell: (params) => (
+        <Tooltip title="Edit" onClick={(e) => handleUpdateTeacher(e, params?.id)}>
+          <IconButton>
+            <EditIcon />
+          </IconButton>
+      </Tooltip>
+      )
+    }
   ];
+
+  const handleUpdateTeacher = async (event, id) => {
+    event.stopPropagation()
+    console.log(id, 'id')
+  }
 
   const handleDeleteTeacher = async () => {
     try {

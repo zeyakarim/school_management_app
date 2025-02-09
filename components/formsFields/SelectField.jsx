@@ -1,12 +1,14 @@
 import { Avatar, Select, SelectItem } from "@nextui-org/react";
 
-const SelectField = ({ isRequired, label, name, className, datas, selectionMode, icon }) => {
+const SelectField = ({ isRequired, label, name, className, datas, selectionMode, icon, value, onChange }) => {
     return (
         <Select
             isRequired={isRequired}
             selectionMode={selectionMode}
             label={label}
             name={name}
+            value={value}
+            onChange={(e) => onChange(name, e?.target?.value)}  // Pass both name and date
             className={className}
             classNames={{ trigger: "shadow-none" }}
             variant="bordered"
