@@ -173,8 +173,8 @@ const forms = {
 };
   
   
-const Dialog = ({ isOpen, onOpenChange, onClose, dialogTitle, table, type }) => {
-    const FormComponent = forms[table] ? forms[table](type, {}, [], onClose) : <p>No form available</p>;
+const Dialog = ({ isOpen, onOpenChange, onClose, dialogTitle, table, type, data }) => {
+    const FormComponent = forms[table] ? forms[table](type, data, [], onClose) : <p>No form available</p>;
 
     return (
         <Modal 

@@ -113,10 +113,47 @@ const deleteTeacher = async (teacherId) => {
         console.error('Errro in deleting teacher : ', error);
         throw(error)
     }
+};
+
+const updateTeacher = async (teacherId, formData, file) => {
+    try {
+        const data = {};
+        formData.forEach((value, key) => {
+            if (key !== "file") { // Skip the file key
+                data[key] = value.trim() === "" ? null : value; // Handle empty strings
+            }
+        })
+
+        const teacher = await prisma.teacher.findUnique({
+            where: { id: teacherId },
+        });
+
+        if (!teacher) {
+            throw('Teacher Not Exist in the Database.')
+        }
+
+        if (file) {
+            const mimeType = file.type;
+            const fileUrl = await putSingleDocumentS3("teachers", teacher?.id, file, bucketName, mimeType);
+            data['img'] = fileUrl;
+        }
+
+        // 2. Soft delete the teacher
+        const updatedTeacher =  await prisma.teacher.update({
+            where: { id: teacherId },
+            data: data,
+        });
+    
+        return updatedTeacher;
+    } catch (error) {
+        console.error('Errro in deleting teacher : ', error);
+        throw(error)
+    }
 }
 
 module.exports = {
     createTeacher,
     fetchTeachers,
-    deleteTeacher
+    deleteTeacher,
+    updateTeacher
 }

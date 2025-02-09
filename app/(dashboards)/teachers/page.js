@@ -1,6 +1,7 @@
 'use client'; // Ensure this is treated as a Client Component
 
 import ConfirmDialog from "@/components/ConfirmDialog";
+import Dialog from "@/components/Dialog";
 import EditIcon from "@/components/EditIcon";
 import Table from "@/components/Table/Table";
 import { Delete } from "@mui/icons-material";
@@ -11,6 +12,8 @@ import { useState } from "react";
 const Teachers = () => {
   const {isOpen, onOpen, onOpenChange, onClose } = useDisclosure();
   const [deleteId, setDeleteId] = useState(null);
+  const [data, setData] = useState({})
+  const [dialogType, setDialogType] = useState(null)
 
   const columns = [
     {
@@ -97,7 +100,7 @@ const Teachers = () => {
       sortable: false,
       filterable: false,
       renderCell: (params) => (
-        <Tooltip title="Edit" onClick={(e) => handleUpdateTeacher(e, params?.id)}>
+        <Tooltip title="Edit" onClick={(e) => handleUpdateTeacher(e, params)}>
           <IconButton>
             <EditIcon />
           </IconButton>
@@ -106,9 +109,11 @@ const Teachers = () => {
     }
   ];
 
-  const handleUpdateTeacher = async (event, id) => {
+  const handleUpdateTeacher = async (event, row) => {
     event.stopPropagation()
-    console.log(id, 'id')
+    setData(row);
+    setDialogType("update");  // Open update dialog
+    onOpen();
   }
 
   const handleDeleteTeacher = async () => {
@@ -131,7 +136,8 @@ const Teachers = () => {
   const handleConfirmDelete = (event,id) => {
     event.stopPropagation();
     setDeleteId(id)
-    onOpen()
+    setDialogType("delete");  // Open delete confirmation dialog
+    onOpen();
   }
 
   return (
@@ -148,13 +154,28 @@ const Teachers = () => {
         dialogTitle='Create A New Teacher'
         table="teacher"
         type="create"
+        data={data}
       />
 
-      <ConfirmDialog
-        isOpen={isOpen}
-        onOpenChange={onOpenChange}
-        handleSubmit={handleDeleteTeacher}
-      />
+      {dialogType === "delete" && (
+        <ConfirmDialog
+          isOpen={isOpen}
+          onOpenChange={onOpenChange}
+          handleSubmit={handleDeleteTeacher}
+        />
+      )}
+
+      {dialogType === "update" && (
+        <Dialog
+          isOpen={isOpen}
+          onOpenChange={onOpenChange}
+          onClose={onClose}
+          dialogTitle={`Update Teacher ${data?.first_name}`}
+          table="teacher"
+          type="update"
+          data={data}
+        />
+      )}
     </div>
   )
 }

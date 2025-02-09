@@ -1,7 +1,7 @@
 import prisma from "@/config/database";
 import { fetchIcons } from "@/utils/helper";
 import { NextResponse } from "next/server";
-import { deleteTeacher } from "../services";
+import { deleteTeacher, updateTeacher } from "../services";
 import { failure, success } from "@/utils/responseHandler";
 
 export async function GET(req, { params }) {
@@ -19,6 +19,21 @@ export async function GET(req, { params }) {
     } catch (error) {
         console.log("Error:",error)
         return NextResponse.json({"msg": "something went wrong"},  {status:'400'})
+    }
+}
+
+export async function PUT(req, { params }) {
+    try {
+        const formData = await req.formData();
+        const file = formData.get("file"); // Extract file
+
+        const teacherId = parseInt(params?.id);
+
+        const updatedTeacher = await updateTeacher(teacherId, formData, file);
+        
+        return NextResponse.json(success(updatedTeacher, 'Teacher Updated Successfully'));
+    } catch (error) {
+        return NextResponse.json(failure(error, error?.message))
     }
 }
 

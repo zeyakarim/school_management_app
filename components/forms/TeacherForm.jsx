@@ -1,20 +1,26 @@
 import { Phone, Home, Bloodtype, Person, VisibilityOff, Visibility, Email } from '@mui/icons-material';
-import { useCallback, useState } from 'react';
+import { useState } from 'react';
 import InputField from '../formsFields/InputField';
 import DatePickerField from '../formsFields/DatePickerField';
 import SelectField from '../formsFields/SelectField';
-import useFetchData from '@/utils/useFetchData';
 import { Button } from '@nextui-org/react';
-import {now, parseAbsoluteToLocal, parseDate } from "@internationalized/date";
+import { parseDate } from "@internationalized/date";
 
 const genders = [
-    { label: "MALE", key: "MALE" },
-    { label: "FEMALE", key: "FEMALE" }
+    { label: "MALE", key: "MALE", id: "MALE" },
+    { label: "FEMALE", key: "FEMALE", id: "FEMALE" }
 ];
 
 const TeacherForm = ({ type, data, onClose }) => {
     const [isVisible, setIsVisible] = useState(false);
     const toggleVisibility = () => setIsVisible(!isVisible);
+    const getFormattedDate = (date) => {
+        const year = date.getFullYear();
+        const month = String(date.getMonth() + 1).padStart(2, '0'); // Add leading zero to month
+        const day = String(date.getDate()).padStart(2, '0');       // Add leading zero to day
+      
+        return `${year}-${month}-${day}`;
+    };
 
     const [formValues, setFormValues] = useState({
         username: data?.username || '',
@@ -25,7 +31,7 @@ const TeacherForm = ({ type, data, onClose }) => {
         phone: data?.phone || '',
         address: data?.address || '',
         bloodType: data?.blood_type || '',
-        birthDate: data?.birth_date ? parseDate(data?.birth_date) : null,  // Ensure ISO format
+        birthDate: data?.birth_date ? parseDate(getFormattedDate(new Date(data?.birth_date))) : null,  // Ensure ISO format
         gender: data?.gender || '',
         file: data?.file || ''
     });
@@ -39,7 +45,7 @@ const TeacherForm = ({ type, data, onClose }) => {
 
     const handleSubmit = async (event) => {
         event.preventDefault();
-        const formObject = new formValues();
+        const formObject = new FormData();
         const file = event.target.file?.files[0];
         const birthDate = event.target.birthDate?.value;
         const formattedBirthDate = birthDate ? new Date(birthDate).toISOString() : null;

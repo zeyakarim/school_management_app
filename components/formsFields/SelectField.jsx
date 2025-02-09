@@ -8,6 +8,7 @@ const SelectField = ({ isRequired, label, name, className, datas, selectionMode,
             label={label}
             name={name}
             value={value}
+            selectedKeys={[value]}
             onChange={(e) => onChange(name, e?.target?.value)}  // Pass both name and date
             className={className}
             classNames={{ trigger: "shadow-none" }}
@@ -17,7 +18,7 @@ const SelectField = ({ isRequired, label, name, className, datas, selectionMode,
         >
             {datas?.length > 0 && datas?.map((data) => (
                 <SelectItem 
-                    key={data?.key}
+                    key={data?.key || data?.id}
                     value={data?.id}
                     startContent={data?.icon ? <Avatar alt="" className="w-6 h-6" src={data?.icon} /> : null}
                 >
