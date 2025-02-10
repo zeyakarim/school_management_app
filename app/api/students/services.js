@@ -29,7 +29,6 @@ const createStudent = async (formData, file) => {
                 }
             }
         });
-        console.log("Parsed Data:", data);
 
         const student = await prisma.student.create({
             data: data,
@@ -70,8 +69,8 @@ const fetchStudents = async (searchFor, page, limit, skipRecord) => {
                                 parent: {
                                     OR: [
                                         { username: { contains: searchFor, mode: 'insensitive' } },
-                                        { first_name: { contains: searchFor, mode: 'insensitive' } }, // Search in teacher's first name
-                                        { last_name: { contains: searchFor, mode: 'insensitive' } },  // Search in teacher's last name
+                                        { first_name: { contains: searchFor, mode: 'insensitive' } }, // Search in student's first name
+                                        { last_name: { contains: searchFor, mode: 'insensitive' } },  // Search in student's last name
                                     ],
                                 },
                             },
@@ -127,6 +126,46 @@ const fetchStudents = async (searchFor, page, limit, skipRecord) => {
     }
 };
 
+const updateStudent = async (studentId, formData, file) => {
+    try {
+        const data = {};
+        formData.forEach((value, key) => {
+            if (key !== "file") { // Skip the file key
+                if (["parent_id", "class_id"].includes(key)) {
+                    data[key] = value.trim() === "" ? null : parseInt(value, 10); // Convert to number
+                } else {
+                    data[key] = value.trim() === "" ? null : value; // Handle empty strings
+                }
+            }
+        });
+
+        const student = await prisma.student.findUnique({
+            where: { id: studentId },
+        });
+
+        if (!student) {
+            throw('Student Not Exist in the Database.')
+        }
+
+        if (file) {
+            const mimeType = file.type;
+            const fileUrl = await putSingleDocumentS3("students", student?.id, file, bucketName, mimeType);
+            data['img'] = fileUrl;
+        }
+
+        // 2. Soft delete the student
+        const updatedStudent =  await prisma.student.update({
+            where: { id: studentId },
+            data: data,
+        });
+    
+        return updatedStudent;
+    } catch (error) {
+        console.error('Error in updating student : ', error);
+        throw(error)
+    }
+}
+
 const deleteStudent = async (studentId) => {
     try {
         const student = await prisma.student.findUnique({
@@ -154,6 +193,7 @@ const deleteStudent = async (studentId) => {
 
 module.exports = {
     createStudent,
+    updateStudent,
     fetchStudents,
     deleteStudent
 }

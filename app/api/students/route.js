@@ -1,5 +1,5 @@
 import { createStudent, fetchStudents } from "./services";
-import { success } from "@/utils/responseHandler";
+import { success, failure } from "@/utils/responseHandler";
 const { NextResponse } = require("next/server");
 
 export async function POST(req) {
@@ -8,10 +8,9 @@ export async function POST(req) {
         const file = formData.get("file"); // Extract file
 
         const createdStudent = await createStudent(formData, file);
-        return NextResponse.json({ data: { student: createdStudent, status: 200 } });
+        return NextResponse.json(success(createdStudent, 'Student Created Successfully'));
     } catch (error) {
-        console.log("Error:",error)
-        return NextResponse.json({"msg": "something went wrong"},  {status:'400'})
+        return NextResponse.json(failure(error,error?.message))
     }
 }
 

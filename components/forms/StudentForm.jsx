@@ -5,11 +5,12 @@ import DatePickerField from '../formsFields/DatePickerField';
 import SelectField from '../formsFields/SelectField';
 import { Button } from '@nextui-org/react';
 import useFetchData from '@/utils/useFetchData';
+import { parseDate } from "@internationalized/date";
 
 const genders = [
-    { "label": "MALE", "key": "MALE"},
-    { "label": "FEMALE", "key": "FEMALE" }
-]
+    { label: "MALE", key: "MALE", id: "MALE" },
+    { label: "FEMALE", key: "FEMALE", id: "FEMALE" }
+];
 
 const StudentForm = ({ type, data, relatedData, onClose }) => {
     const [isVisible, setIsVisible] = useState(false);
@@ -22,6 +23,37 @@ const StudentForm = ({ type, data, relatedData, onClose }) => {
     const { data: classes, loading: classesLoading } = useFetchData("classes", formatSubjectLabel);
     const { data: parents, loading: parentsLoading } = useFetchData("parents", formatParentLabel);
 
+    const getFormattedDate = (date) => {
+        const year = date.getFullYear();
+        const month = String(date.getMonth() + 1).padStart(2, '0'); // Add leading zero to month
+        const day = String(date.getDate()).padStart(2, '0');       // Add leading zero to day
+        
+        return `${year}-${month}-${day}`;
+    };
+
+    const [formValues, setFormValues] = useState({
+        username: data?.username || '',
+        email: data?.email || '',
+        password: '',  // Keep empty for security
+        firstName: data?.first_name || '',
+        lastName: data?.last_name || '',
+        phone: data?.phone || '',
+        address: data?.address || '',
+        bloodType: data?.blood_type || '',
+        birthDate: data?.birth_date ? parseDate(getFormattedDate(new Date(data?.birth_date))) : null,  // Ensure ISO format
+        gender: data?.gender || '',
+        file: data?.file || '',
+        class: data?.class_id || '',
+        parent: data?.parent_id || ''
+    });
+
+    const handleChange = (name, value) => {
+        setFormValues((prev) => ({
+            ...prev,
+            [name]: value,
+        }));
+    };
+
     const handleSubmit = async (event) => {
         event.preventDefault();
         const file = event?.target?.file?.files[0];
@@ -29,17 +61,17 @@ const StudentForm = ({ type, data, relatedData, onClose }) => {
         const formattedBirthDate = birthDate ? new Date(birthDate).toISOString() : null;
 
         const formData = new FormData()
-        formData.append("file", file);
-        formData.append("username", event?.target?.username?.value || '');
-        formData.append("email", event?.target?.email?.value || '');
-        formData.append("password", event?.target?.password?.value || '');
-        formData.append("first_name", event?.target?.firstName?.value || '');
-        formData.append("last_name", event?.target?.lastName?.value || '');
-        formData.append("phone", event?.target?.phone?.value || '');
-        formData.append("address", event?.target?.address?.value || '');
-        formData.append("blood_type", event?.target?.bloodType?.value || '');
+        if (file) formData.append("file", file);
+        formData.append("username", formValues.username);
+        formData.append("email", formValues.email);
+        if (type === 'create') formData.append("password", formValues.password);
+        formData.append("first_name", formValues.firstName);
+        formData.append("last_name", formValues.lastName);
+        formData.append("phone", formValues.phone);
+        formData.append("address", formValues.address);
+        formData.append("blood_type", formValues.bloodType);
         formData.append("birth_date", formattedBirthDate);
-        formData.append("gender", event?.target?.gender?.value || '');
+        formData.append("gender", formValues.gender);
         const parentId = event?.target?.parent?.value ? parseInt(event?.target?.parent?.value, 10) : null;
         const classId = event?.target?.class?.value ? parseInt(event?.target?.class?.value, 10) : null;
 
@@ -48,8 +80,13 @@ const StudentForm = ({ type, data, relatedData, onClose }) => {
 
 
         try {
-            const response = await fetch(`${process.env.NEXT_PUBLIC_WEBSITE_URL}/students`, {
-                method: "POST",
+            const method = type === 'create' ? 'POST' : 'PUT';
+            const url = type === 'create'
+                ? `${process.env.NEXT_PUBLIC_WEBSITE_URL}/students`
+                : `${process.env.NEXT_PUBLIC_WEBSITE_URL}/students/${data.id}`;
+
+            const response = await fetch(url, {
+                method,
                 body: formData,
             });
 
@@ -74,6 +111,8 @@ const StudentForm = ({ type, data, relatedData, onClose }) => {
                     name='username'
                     className="w-[32%]"
                     isRequired={true}
+                    value={formValues.username}
+                    onChange={handleChange}
                     icon={ <Person style={{fontSize:'20px'}} className="text-default-400 pointer-events-none flex-shrink-0" /> }
                 />
                 <InputField 
@@ -82,6 +121,8 @@ const StudentForm = ({ type, data, relatedData, onClose }) => {
                     name='email'
                     className="w-[32%]"
                     isRequired={true}
+                    value={formValues.email}
+                    onChange={handleChange}
                     icon={ <Email style={{fontSize:'20px'}} className="text-default-400 pointer-events-none flex-shrink-0" /> }
                 />
                 <InputField 
@@ -90,6 +131,8 @@ const StudentForm = ({ type, data, relatedData, onClose }) => {
                     name='password'
                     className="w-[32%]"
                     isRequired={true}
+                    value={formValues.password}
+                    onChange={handleChange}
                     icon={ 
                         <button className="focus:outline-none" type="button" onClick={toggleVisibility} aria-label="toggle password visibility">
                             {isVisible ? (
@@ -110,6 +153,8 @@ const StudentForm = ({ type, data, relatedData, onClose }) => {
                     name='firstName'
                     className="w-[32%]"
                     isRequired={true}
+                    value={formValues.firstName}
+                    onChange={handleChange}
                     icon={ <Person style={{fontSize:'20px'}} className="text-default-400 pointer-events-none flex-shrink-0" /> }
                 />
                 <InputField 
@@ -118,6 +163,8 @@ const StudentForm = ({ type, data, relatedData, onClose }) => {
                     name='lastName'
                     className="w-[32%]"
                     isRequired={false}
+                    value={formValues.lastName}
+                    onChange={handleChange}
                     icon={ <Person style={{fontSize:'20px'}} className="text-default-400 pointer-events-none flex-shrink-0" /> }
                 />
                 <InputField 
@@ -126,6 +173,8 @@ const StudentForm = ({ type, data, relatedData, onClose }) => {
                     name='phone'
                     className="w-[32%]"
                     isRequired={true}
+                    value={formValues.phone}
+                    onChange={handleChange}
                     icon={ <Phone style={{fontSize:'20px'}} className="text-default-400 pointer-events-none flex-shrink-0" /> }
                 />
                 <InputField 
@@ -134,6 +183,8 @@ const StudentForm = ({ type, data, relatedData, onClose }) => {
                     name='address'
                     className="w-[32%]"
                     isRequired={true}
+                    value={formValues.address}
+                    onChange={handleChange}
                     icon={ <Home style={{fontSize:'20px'}} className="text-default-400 pointer-events-none flex-shrink-0" /> }
                 />
                 <InputField 
@@ -142,6 +193,8 @@ const StudentForm = ({ type, data, relatedData, onClose }) => {
                     name='bloodType'
                     className="w-[32%]"
                     isRequired={false}
+                    value={formValues.bloodType}
+                    onChange={handleChange}
                     icon={ <Bloodtype style={{fontSize:'20px'}} className="text-default-400 pointer-events-none flex-shrink-0"  /> }
                 />
                 <DatePickerField
@@ -149,6 +202,8 @@ const StudentForm = ({ type, data, relatedData, onClose }) => {
                     label='Birth Date'
                     name='birthDate'
                     className="w-[32%]"
+                    value={formValues.birthDate}
+                    onChange={handleChange}
                 />
                 <SelectField
                     isRequired={true}
@@ -157,6 +212,8 @@ const StudentForm = ({ type, data, relatedData, onClose }) => {
                     name='gender'
                     className="w-[32%]"
                     datas={genders}
+                    value={formValues.gender}
+                    onChange={handleChange}
                 />
                 <SelectField
                     isRequired={true}
@@ -165,6 +222,8 @@ const StudentForm = ({ type, data, relatedData, onClose }) => {
                     name='parent'
                     className="w-[32%]"
                     datas={parents}
+                    value={formValues.parent}
+                    onChange={handleChange}
                     icon={ <Person style={{fontSize:'20px'}} className="text-default-400 pointer-events-none flex-shrink-0" /> }
                 />
                 <SelectField
@@ -174,6 +233,8 @@ const StudentForm = ({ type, data, relatedData, onClose }) => {
                     name='class'
                     className="w-[32%] mt-1"
                     datas={classes}
+                    value={formValues.class}
+                    onChange={handleChange}
                     icon={ <AirlineSeatReclineNormal style={{fontSize:'20px'}} className="text-default-400 pointer-events-none flex-shrink-0" /> }
                 />
                 <InputField 
@@ -181,7 +242,9 @@ const StudentForm = ({ type, data, relatedData, onClose }) => {
                     label='Upload a Photo'
                     name='file'
                     className="w-[66%]"
-                    isRequired={true}
+                    isRequired={type === 'create' ? true : false}
+                    value={formValues.file}
+                    onChange={handleChange}
                     icon={ <Person style={{fontSize:'20px'}} className="text-default-400 pointer-events-none flex-shrink-0" /> }
                 />
             </div>
@@ -191,7 +254,7 @@ const StudentForm = ({ type, data, relatedData, onClose }) => {
                     Close
                 </Button>
                 <Button type="submit" radius="full" className="bg-gradient-to-tr from-[#4CC67C] to-[#46DCDF] text-white shadow-lg">
-                    Create
+                    {type === 'create' ? 'Create' : 'Update'}
                 </Button>
             </div>
         </form>

@@ -84,8 +84,6 @@ const TeacherForm = ({ type, data, onClose }) => {
         }
     };
 
-    console.log(formValues,'formValues')
-
     return (
         <form method="post" onSubmit={handleSubmit}>
             <p className="text-xs text-gray-500 py-2 pl-[5px]">Authentication Information</p>

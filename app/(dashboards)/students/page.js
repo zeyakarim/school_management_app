@@ -1,9 +1,11 @@
 'use client'; // Ensure this is treated as a Client Component
 
 import ConfirmDialog from "@/components/ConfirmDialog";
+import Dialog from "@/components/Dialog";
+import EditIcon from "@/components/EditIcon";
 import Table from "@/components/Table/Table";
 import { Delete } from "@mui/icons-material";
-import { IconButton } from "@mui/material";
+import { IconButton, Tooltip } from "@mui/material";
 import { useDisclosure } from "@nextui-org/react";
 import { useState } from "react";
 
@@ -16,6 +18,8 @@ const columnVisibilityModel = {
 const Students = () => {
     const {isOpen, onOpen, onOpenChange, onClose } = useDisclosure();
     const [deleteId, setDeleteId] = useState(null);
+    const [data, setData] = useState({})
+    const [dialogType, setDialogType] = useState(null)
 
     const columns = [
         {
@@ -99,7 +103,7 @@ const Students = () => {
             filterable: false,
             renderCell: (params) => (
                 <IconButton
-                    onClick={() => handleConfirmDelete(params?.id)}
+                    onClick={(e) => handleConfirmDelete(e, params?.id)}
                     style={{ padding:'0px' }}
                     color="error"
                 >
@@ -107,7 +111,30 @@ const Students = () => {
                 </IconButton>
             ),
         },
+        {
+            field: 'update',
+            headerName: 'Update',
+            flex: 0.5,
+            sortable: false,
+            filterable: false,
+            renderCell: (params) => (
+                <Tooltip title="Edit" onClick={(e) => handleUpdateStudent(e, params)}>
+                    <IconButton>
+                        <EditIcon />
+                    </IconButton>
+                </Tooltip>
+            )
+        }
+        
     ];
+
+    const handleUpdateStudent = async (event, row) => {
+        event.stopPropagation()
+        setData(row);
+        setDialogType("update");  // Open update dialog
+        onOpen();
+    }
+    
 
     const handleDeleteStudent = async () => {
         try {
@@ -126,9 +153,11 @@ const Students = () => {
         }
     };
 
-    const handleConfirmDelete = (id) => {
+    const handleConfirmDelete = (event, id) => {
+        event.stopPropagation()
         setDeleteId(id)
-        onOpen()
+        setDialogType("delete");  // Open delete confirmation dialog
+        onOpen();
     }
 
     return (
@@ -145,13 +174,28 @@ const Students = () => {
                 table="student"
                 type="create"
                 dialogTitle='Create A New Student'
+                data={data}
             />
 
-            <ConfirmDialog
-                isOpen={isOpen}
-                onOpenChange={onOpenChange}
-                handleSubmit={handleDeleteStudent}
-            />
+            {dialogType === "delete" && (
+                <ConfirmDialog
+                    isOpen={isOpen}
+                    onOpenChange={onOpenChange}
+                    handleSubmit={handleDeleteStudent}
+                />
+            )}
+
+            {dialogType === "update" && (
+                <Dialog
+                    isOpen={isOpen}
+                    onOpenChange={onOpenChange}
+                    onClose={onClose}
+                    dialogTitle={`Update Student ${data?.first_name}`}
+                    table="student"
+                    type="update"
+                    data={data}
+                />
+            )}
         </div>
     )
 };

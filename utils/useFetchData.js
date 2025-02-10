@@ -20,7 +20,8 @@ const useFetchData = (endpoint, labelCallback) => {
 
                 const formattedData = fetchedData.map((item) => ({
                     label: labelCallback(item), // Custom label formatting
-                    key: item.id
+                    key: item.id,
+                    id: item.id
                 }));
 
                 setData(formattedData);
