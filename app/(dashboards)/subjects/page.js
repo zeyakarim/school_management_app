@@ -57,21 +57,27 @@ const Subjects = () => {
                 </IconButton>
             ),
         },
-        // {
-        //     field: 'update',
-        //     headerName: 'Update',
-        //     flex: 0.5,
-        //     sortable: false,
-        //     filterable: false,
-        //     renderCell: (params) => (
-        //         <Tooltip title="Edit" onClick={(e) => handleUpdateSubject(e, params)}>
-        //             <IconButton>
-        //                 <EditIcon />
-        //             </IconButton>
-        //         </Tooltip>
-        //     )
-        // }
+        {
+            field: 'update',
+            headerName: 'Update',
+            flex: 0.5,
+            sortable: false,
+            filterable: false,
+            renderCell: (params) => (
+                <Tooltip title="Edit" onClick={() => handleUpdateSubject(params)}>
+                    <IconButton>
+                        <EditIcon />
+                    </IconButton>
+                </Tooltip>
+            )
+        }
     ];
+
+    const handleUpdateSubject = async (row) => {
+        setData(row);
+        setDialogType("update");  // Open update dialog
+        onOpen();
+    }
 
     const handleDeleteSubject = async () => {
         try {
@@ -92,6 +98,7 @@ const Subjects = () => {
 
     const handleConfirmDelete = (id) => {
         setDeleteId(id)
+        setDialogType("delete");  // Open delete confirmation dialog
         onOpen()
     }
 
@@ -110,11 +117,25 @@ const Subjects = () => {
                 type="create"
             />
 
-            <ConfirmDialog
-                isOpen={isOpen}
-                onOpenChange={onOpenChange}
-                handleSubmit={handleDeleteSubject}
-            />
+            {dialogType === "delete" && (
+                <ConfirmDialog
+                    isOpen={isOpen}
+                    onOpenChange={onOpenChange}
+                    handleSubmit={handleDeleteSubject}
+                />
+            )}
+
+            {dialogType === "update" && (
+                <Dialog
+                    isOpen={isOpen}
+                    onOpenChange={onOpenChange}
+                    onClose={onClose}
+                    dialogTitle={`Update Subject ${data?.name}`}
+                    table="subject"
+                    type="update"
+                    data={data}
+                />
+            )}
         </div>
     )
 }

@@ -1,6 +1,20 @@
 import { NextResponse } from "next/server";
-import { deleteSubject } from "../services";
+import { deleteSubject, updateSubject } from "../services";
 import { failure, success } from "@/utils/responseHandler";
+
+export async function PUT(req, { params }) {
+    try {
+        const data = await req.json();
+
+        const subjectId = parseInt(params?.id);
+
+        const updatedSubject = await updateSubject(subjectId, data);
+        
+        return NextResponse.json(success(updatedSubject, 'Subject Updated Successfully'));
+    } catch (error) {
+        return NextResponse.json(failure(error, error?.message))
+    }
+}
 
 export async function DELETE(req, { params }) {
     try {

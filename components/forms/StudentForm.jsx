@@ -91,10 +91,10 @@ const StudentForm = ({ type, data, relatedData, onClose }) => {
             });
 
             if (response.ok) {
-                console.log("Student created successfully!");
+                console.log(`Student ${type === 'create' ? 'created' : 'updated'} successfully!`);
                 onClose();
             } else {
-                console.error("Failed to create student.");
+                console.error(`Failed to ${type === 'create' ? 'created' : 'updated'} student.`);
             }
         } catch (error) {
             console.error("Error submitting form:", error);

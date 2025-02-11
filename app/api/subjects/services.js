@@ -101,6 +101,36 @@ const fetchSubjects = async (searchFor, page, limit, skipRecord) => {
     }
 };
 
+const updateSubject = async (subjectId, data) => {
+    try {
+        const subject = await prisma.subject.findUnique({
+            where: { id: subjectId },
+        });
+        
+        if (!subject) {
+            throw('Subject Not Exist in the Database.')
+        }
+
+        const class_id = parseInt(data.class_id, 10);
+        const teacher_id = parseInt(data.teacher_id, 10);
+
+        // 2. Soft delete the subject
+        const updatedSubject =  await prisma.subject.update({
+            where: { id: subjectId },
+            data: {
+                name: data.subject, // Assuming 'subject' field exists
+                class_id: class_id,
+                teacher_id: teacher_id,
+            },
+        });
+    
+        return updatedSubject;
+    } catch (error) {
+        console.error('Errro in updating subject : ', error);
+        throw(error)
+    }
+}
+
 const deleteSubject = async (subjectId) => {
     try {
         const subject = await prisma.subject.findUnique({
@@ -129,5 +159,6 @@ const deleteSubject = async (subjectId) => {
 module.exports = {
     createSubject,
     fetchSubjects,
+    updateSubject,
     deleteSubject
 }
