@@ -88,6 +88,36 @@ const fetchClasses = async (searchFor, page, limit, skipRecord) => {
     }
 };
 
+const updateClass = async (classId, data) => {
+    try {
+        const classData = await prisma.class.findUnique({
+            where: { id: classId },
+        });
+        
+        if (!classData) {
+            throw('Class Not Exist in the Database.')
+        }
+
+        const supervisor_id = parseInt(data.supervisor_id, 10);
+        const capacity = parseInt(data.capacity, 10)
+
+        // 2. Soft delete the Class
+        const updatedClass =  await prisma.class.update({
+            where: { id: classId },
+            data: {
+                name: data.class, // Assuming 'subject' field exists
+                capacity: capacity,
+                supervisor_id: supervisor_id,
+            },
+        });
+    
+        return updatedClass;
+    } catch (error) {
+        console.error('Errro in updating class : ', error);
+        throw(error)
+    }
+}
+
 const deleteClass = async (classId) => {
     try {
         const classData = await prisma.class.findUnique({
@@ -116,5 +146,6 @@ const deleteClass = async (classId) => {
 module.exports = {
     createClass,
     fetchClasses,
+    updateClass,
     deleteClass
 }

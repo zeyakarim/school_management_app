@@ -1,36 +1,54 @@
 import { AirlineSeatReclineNormal, ReduceCapacity, School } from '@mui/icons-material';
-import { useCallback } from 'react';
+import { useCallback, useState } from 'react';
 import InputField from '../formsFields/InputField';
 import SelectField from '../formsFields/SelectField';
 import useFetchData from '@/utils/useFetchData';
 import { Button } from '@nextui-org/react';
 
-const ClassForm = ({ onClose }) => {
+const ClassForm = ({ type, data, onClose }) => {
     const formatTeacherLabel = useCallback(
         (item) => (item?.last_name ? `${item?.first_name} ${item?.last_name}` : item?.first_name), []
     );
     const { data: teachers, loading: teachersLoading } = useFetchData("teachers", formatTeacherLabel);
 
+    const [formValues, setFormValues] = useState({
+        class: data?.name || '',
+        capacity: data?.capacity || '',
+        supervisor: data?.supervisor_id || ''
+    });
+
+    const handleChange = (name, value) => {
+        setFormValues((prev) => ({
+            ...prev,
+            [name]: value,
+        }));
+    };
+
     const handleSubmit = async (event) => {
         event.preventDefault();
 
-        const data = {
-            class: event.target.class.value,
-            capacity: event.target.capacity.value,
-            supervisor_id: event.target.supervisor.value
+        const formData = {
+            class: formValues.class,
+            capacity: formValues.capacity,
+            supervisor_id: formValues.supervisor
         }
 
         try {
-            const response = await fetch(`${process.env.NEXT_PUBLIC_WEBSITE_URL}/classes`, {
-                method: "POST",
-                body: JSON.stringify(data),
+            const method = type === 'create' ? 'POST' : 'PUT';
+            const url = type === 'create'
+                ? `${process.env.NEXT_PUBLIC_WEBSITE_URL}/classes`
+                : `${process.env.NEXT_PUBLIC_WEBSITE_URL}/classes/${data.id}`;
+
+            const response = await fetch(url, {
+                method,
+                body: JSON.stringify(formData),
             });
 
             if (response.ok) {
-                console.log("Class created successfully!");
+                console.log(`Class${type === 'create' ? 'created' : 'updated'} successfully!`);
                 onClose();
             } else {
-                console.error("Failed to create class.");
+                console.error(`Failed to ${type === 'create' ? 'created' : 'updated'} class.`);
             }
         } catch (error) {
             console.error("Error submitting form:", error);
@@ -46,6 +64,8 @@ const ClassForm = ({ onClose }) => {
                     name='class'
                     className="w-[32%]"
                     isRequired={true}
+                    value={formValues.class}
+                    onChange={handleChange}
                     icon={ <AirlineSeatReclineNormal style={{fontSize:'20px'}} className="text-default-400 pointer-events-none flex-shrink-0" /> }
                 />
                 <InputField
@@ -54,6 +74,8 @@ const ClassForm = ({ onClose }) => {
                     name='capacity'
                     className="w-[32%]"
                     isRequired={true}
+                    value={formValues.capacity}
+                    onChange={handleChange}
                     icon={ <ReduceCapacity style={{fontSize:'20px'}} className="text-default-400 pointer-events-none flex-shrink-0" /> }
                 />
                 <SelectField
@@ -63,6 +85,8 @@ const ClassForm = ({ onClose }) => {
                     name='supervisor'
                     className="w-[32%]"
                     datas={teachers}
+                    value={formValues.supervisor}
+                    onChange={handleChange}
                     icon={ <School style={{fontSize:'20px'}} className="text-default-400 pointer-events-none flex-shrink-0" /> }
                 />
             </div>
@@ -71,7 +95,7 @@ const ClassForm = ({ onClose }) => {
                     Close
                 </Button>
                 <Button type="submit" radius="full" className="bg-gradient-to-tr from-[#4CC67C] to-[#46DCDF] text-white shadow-lg">
-                    Create
+                    {type === 'create' ? 'Create' : 'Update'}
                 </Button>
             </div>
         </form>
