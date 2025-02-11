@@ -1,15 +1,19 @@
 'use client'; // Ensure this is treated as a Client Component
 
 import ConfirmDialog from "@/components/ConfirmDialog";
+import Dialog from "@/components/Dialog";
+import EditIcon from "@/components/EditIcon";
 import Table from "@/components/Table/Table";
 import { Delete } from "@mui/icons-material";
-import { IconButton } from "@mui/material";
+import { IconButton, Tooltip } from "@mui/material";
 import { useDisclosure } from "@nextui-org/react";
 import { useState } from "react";
 
 const Parents = () => {
     const {isOpen, onOpen, onOpenChange, onClose } = useDisclosure();
     const [deleteId, setDeleteId] = useState(null);
+    const [data, setData] = useState({})
+    const [dialogType, setDialogType] = useState(null)
 
     const columns = [
         {
@@ -63,7 +67,7 @@ const Parents = () => {
             filterable: false,
             renderCell: (params) => (
                 <IconButton
-                    onClick={() => handleConfirmDelete(params?.id)}
+                    onClick={(e) => handleConfirmDelete(e, params?.id)}
                     style={{ padding:'0px' }}
                     color="error"
                 >
@@ -71,7 +75,28 @@ const Parents = () => {
                 </IconButton>
             ),
         },
+        {
+            field: 'update',
+            headerName: 'Update',
+            flex: 0.5,
+            sortable: false,
+            filterable: false,
+            renderCell: (params) => (
+                <Tooltip title="Edit" onClick={(e) => handleUpdateParent(e, params)}>
+                    <IconButton>
+                        <EditIcon />
+                    </IconButton>
+                </Tooltip>
+            )
+          }
     ];
+
+    const handleUpdateParent = async (event, row) => {
+        event.stopPropagation()
+        setData(row);
+        setDialogType("update");  // Open update dialog
+        onOpen();
+    }
 
     const handleDeleteParent = async () => {
         try {
@@ -90,8 +115,10 @@ const Parents = () => {
         }
     };
 
-    const handleConfirmDelete = (id) => {
+    const handleConfirmDelete = (event,id) => {
+        event.stopPropagation();
         setDeleteId(id)
+        setDialogType("delete");  // Open delete confirmation dialog
         onOpen()
     }
 
@@ -109,12 +136,26 @@ const Parents = () => {
                 table="parent"
                 type="create"
             />
+        
+            {dialogType === "delete" && (
+                <ConfirmDialog
+                    isOpen={isOpen}
+                    onOpenChange={onOpenChange}
+                    handleSubmit={handleDeleteParent}
+                />
+            )}
 
-            <ConfirmDialog
-                isOpen={isOpen}
-                onOpenChange={onOpenChange}
-                handleSubmit={handleDeleteParent}
-            />
+            {dialogType === "update" && (
+                <Dialog
+                    isOpen={isOpen}
+                    onOpenChange={onOpenChange}
+                    onClose={onClose}
+                    dialogTitle={`Update Parent ${data?.first_name}`}
+                    table="parent"
+                    type="update"
+                    data={data}
+                />
+            )}
         </div>
     )
 };

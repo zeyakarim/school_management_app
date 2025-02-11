@@ -1,5 +1,5 @@
 import { createParent, fetchParents } from "./services";
-import { success } from "@/utils/responseHandler";
+import { failure, success } from "@/utils/responseHandler";
 const { NextResponse } = require("next/server");
 
 export async function GET(req) {
@@ -19,9 +19,8 @@ export async function POST(req) {
     const data = await req.json();
     try {
         const createdParent = await createParent(data);
-        return NextResponse.json({data: {parent: createdParent, status: 200}});
+        return NextResponse.json(success(createdParent, "Parent Created Successfully!"));
     } catch (error) {
-        console.log("Error:",error)
-        return NextResponse.json({"msg": error },  {status:'400'})
+        return NextResponse.json(failure(error, error?.message))
     }
 }

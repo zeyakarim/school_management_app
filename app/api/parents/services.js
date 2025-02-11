@@ -60,6 +60,28 @@ const fetchParents = async (searchFor, page, limit, skipRecord) => {
     }
 }
 
+const updateParent = async (parentId, data) => {
+    try {
+        const parent = await prisma.parent.findUnique({
+            where: { id: parentId },
+        });
+
+        if (!parent) {
+            throw('Parent Not Exist in the Database.')
+        }
+
+        const updatedParent =  await prisma.parent.update({
+            where: { id: parentId },
+            data: data,
+        });
+    
+        return updatedParent;
+    } catch (error) {
+        console.error('error in updating parent : ', error)
+        throw(error)
+    }
+}
+
 const deleteParent = async (parentId) => {
     try {
         const parent = await prisma.parent.findUnique({
@@ -89,5 +111,6 @@ const deleteParent = async (parentId) => {
 module.exports = {
     createParent,
     fetchParents,
+    updateParent,
     deleteParent
 }
