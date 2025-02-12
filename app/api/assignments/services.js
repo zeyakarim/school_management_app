@@ -127,6 +127,41 @@ const fetchAssignments = async (searchFor, page, limit, skipRecord) => {
     }
 };
 
+const updateAssignment = async (assignmentId, data) => {
+    try {
+        const assignment = await prisma.assignment.findUnique({
+            where: { id: assignmentId },
+        });
+        
+        if (!assignment) {
+            throw('Assignment Not Exist in the Database.')
+        }
+
+        const subject_id = parseInt(data.subject_id, 10);
+        const class_id = parseInt(data.class_id, 10);
+        const lesson_id = parseInt(data.lesson_id, 10);
+        const teacher_id = parseInt(data.teacher_id, 10);
+
+        const updatedAssignment =  await prisma.assignment.update({
+            where: { id: assignmentId },
+            data: {
+                title: data?.title,
+                subject_id: subject_id,
+                class_id: class_id,
+                lesson_id: lesson_id,
+                teacher_id: teacher_id,
+                submit_date: data?.submit_date,
+                given_date: data?.given_date
+            }
+        });
+    
+        return updatedAssignment;
+    } catch (error) {
+        console.error('Error in updating assignment : ', error);
+        throw(error)
+    }
+}
+
 const deleteAssignment = async (assignmentId) => {
     try {
         const assignment = await prisma.assignment.findUnique({
@@ -156,5 +191,6 @@ const deleteAssignment = async (assignmentId) => {
 module.exports = {
     createAssignment,
     fetchAssignments,
+    updateAssignment,
     deleteAssignment
 }
