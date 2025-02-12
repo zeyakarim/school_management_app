@@ -102,6 +102,38 @@ const fetchExams = async (searchFor, page, limit, skipRecord) => {
     }
 };
 
+const updateExam = async (examId, data) => {
+    try {
+        const exam = await prisma.exam.findUnique({
+            where: { id: examId },
+        });
+        
+        if (!exam) {
+            throw('Exam Not Exist in the Database.')
+        }
+
+        const subject_id = parseInt(data.subject_id, 10);
+        const class_id = parseInt(data.class_id, 10);
+      
+        const updatedExam =  await prisma.exam.update({
+            where: { id: examId },
+            data: {
+                title: data?.title,
+                class_id: class_id,
+                subject_id: subject_id,
+                start_time: data?.start_time,
+                end_time: data?.end_time,
+                date: data?.date
+            }
+        });
+    
+        return updatedExam;
+    } catch (error) {
+        console.error('Errro in updating exam : ', error);
+        throw(error)
+    }
+}
+
 const deleteExam = async (examId) => {
     try {
         const exam = await prisma.exam.findUnique({
@@ -130,5 +162,6 @@ const deleteExam = async (examId) => {
 module.exports = {
     createExam,
     fetchExams,
+    updateExam,
     deleteExam
 }

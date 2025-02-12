@@ -63,7 +63,6 @@ const LessonForm = ({ type, data, onClose }) => {
                 ? `${process.env.NEXT_PUBLIC_WEBSITE_URL}/lessons`
                 : `${process.env.NEXT_PUBLIC_WEBSITE_URL}/lessons/${data.id}`;
 
-
             const response = await fetch(url, {
                 method,
                 body: JSON.stringify(formData),
@@ -73,7 +72,7 @@ const LessonForm = ({ type, data, onClose }) => {
                 console.log(`Lesson ${type === 'create' ? 'created' : 'updated'} successfully!`);
                 onClose();
             } else {
-                console.error(`Failed to ${type === 'create' ? 'created' : 'updated'} lesson.`);
+                console.error(`Failed to ${type === 'create' ? 'create' : 'update'} lesson.`);
             }
         } catch (error) {
             console.error("Error submitting form:", error);
