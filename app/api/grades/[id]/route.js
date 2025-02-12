@@ -1,6 +1,20 @@
 import { NextResponse } from "next/server";
-import { deleteGrade } from "../services";
+import { deleteGrade, updateGrade } from "../services";
 import { failure, success } from "@/utils/responseHandler";
+
+export async function PUT(req, { params }) {
+    try {
+        const data = await req.json();
+
+        const gradeId = parseInt(params?.id);
+
+        const updatedGrade = await updateGrade(gradeId, data);
+        
+        return NextResponse.json(success(updatedGrade, 'Grade Updated Successfully'));
+    } catch (error) {
+        return NextResponse.json(failure(error, error?.message))
+    }
+}
 
 export async function DELETE(req, { params }) {
     try {

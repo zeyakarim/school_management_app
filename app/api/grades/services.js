@@ -55,6 +55,28 @@ const fetchGrades = async (searchFor, page, limit, skipRecord) => {
     }
 };
 
+const updateGrade = async (gradeId, data) => {
+    try {
+        const grade = await prisma.grade.findUnique({
+            where: { id: gradeId },
+        });
+        
+        if (!grade) {
+            throw('Grade Not Exist in the Database.')
+        }
+
+        const updatedGrade =  await prisma.grade.update({
+            where: { id: gradeId },
+            data: data,
+        });
+    
+        return updatedGrade;
+    } catch (error) {
+        console.error('Errro in updating grade : ', error);
+        throw(error)
+    }
+}
+
 const deleteGrade = async (gradeId) => {
     try {
         const grade = await prisma.grade.findUnique({
@@ -83,5 +105,6 @@ const deleteGrade = async (gradeId) => {
 module.exports = {
     createGrade,
     fetchGrades,
+    updateGrade,
     deleteGrade
 }

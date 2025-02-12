@@ -2,14 +2,18 @@
 
 import ConfirmDialog from "@/components/ConfirmDialog";
 import Table from "@/components/Table/Table";
+import Dialog from "@/components/Dialog";
+import EditIcon from "@/components/EditIcon";
 import { Delete } from "@mui/icons-material";
-import { IconButton } from "@mui/material";
+import { IconButton, Tooltip } from "@mui/material";
 import { useDisclosure } from "@nextui-org/react";
 import { useState } from "react";
 
 const Exams = () => {
     const {isOpen, onOpen, onOpenChange, onClose } = useDisclosure();
     const [deleteId, setDeleteId] = useState(null);
+    const [data, setData] = useState({})
+    const [dialogType, setDialogType] = useState(null)
 
     const columns = [
         {
@@ -47,7 +51,27 @@ const Exams = () => {
                 </IconButton>
             ),
         },
+        {
+            field: 'update',
+            headerName: 'Update',
+            flex: 0.5,
+            sortable: false,
+            filterable: false,
+            renderCell: (params) => (
+                <Tooltip title="Edit" onClick={() => handleUpdateGrade(params)}>
+                    <IconButton>
+                        <EditIcon />
+                    </IconButton>
+                </Tooltip>
+            )
+        }
     ];
+
+    const handleUpdateGrade = async (row) => {
+        setData(row);
+        setDialogType("update");  // Open update dialog
+        onOpen();
+    }
 
     const handleDeleteGrade = async () => {
         try {
@@ -68,6 +92,7 @@ const Exams = () => {
 
     const handleConfirmDelete = (id) => {
         setDeleteId(id)
+        setDialogType("delete");
         onOpen()
     }
 
@@ -86,11 +111,25 @@ const Exams = () => {
                 type="create"
             />
 
-            <ConfirmDialog
-                isOpen={isOpen}
-                onOpenChange={onOpenChange}
-                handleSubmit={handleDeleteGrade}
-            />
+            {dialogType === "delete" && (
+                <ConfirmDialog
+                    isOpen={isOpen}
+                    onOpenChange={onOpenChange}
+                    handleSubmit={handleDeleteGrade}
+                />
+            )}
+
+            {dialogType === "update" && (
+                <Dialog
+                    isOpen={isOpen}
+                    onOpenChange={onOpenChange}
+                    onClose={onClose}
+                    dialogTitle={`Update Grade ${data?.level}`}
+                    table="grade"
+                    type="update"
+                    data={data}
+                />
+            )}
         </div>
     )
 }

@@ -1,28 +1,46 @@
 import InputField from "../formsFields/InputField";
 import { Grade, Percent } from '@mui/icons-material';
 import { Button } from "@nextui-org/react";
+import { useState } from "react";
 
-const GradeForm = ({ onClose }) => {
+const GradeForm = ({ type, data, onClose }) => {
+
+    const [formValues, setFormValues] = useState({
+        level: data?.level || '',
+        percentage: data?.percentage || ''
+    });
+
+    const handleChange = (name, value) => {
+        setFormValues((prev) => ({
+            ...prev,
+            [name]: value,
+        }));
+    };
 
     const handleSubmit = async (event) => {
         event.preventDefault();
 
-        const data = {
-            level: event.target.level.value,
-            percentage: event.target.percentage.value
+        const formData = {
+            level: formValues?.level,
+            percentage: formValues?.percentage
         }
 
         try {
-            const response = await fetch(`${process.env.NEXT_PUBLIC_WEBSITE_URL}/grades`, {
-                method: "POST",
-                body: JSON.stringify(data),
+            const method = type === 'create' ? 'POST' : 'PUT';
+            const url = type === 'create'
+                ? `${process.env.NEXT_PUBLIC_WEBSITE_URL}/grades`
+                : `${process.env.NEXT_PUBLIC_WEBSITE_URL}/grades/${data.id}`;
+
+            const response = await fetch(url, {
+                method,
+                body: JSON.stringify(formData),
             });
 
             if (response.ok) {
-                console.log("Grade created successfully!");
+                console.log(`Grade ${type === 'create' ? 'created' : 'updated'} successfully!`);
                 onClose();
             } else {
-                console.error("Failed to create grade.");
+                console.error(`Failed to ${type === 'create' ? 'create' : 'update'} grade.`);
             }
         } catch (error) {
             console.error("Error submitting form:", error);
@@ -38,6 +56,8 @@ const GradeForm = ({ onClose }) => {
                     name='level'
                     className="w-[48%]"
                     isRequired={true}
+                    value={formValues.level}
+                    onChange={handleChange}
                     icon={ <Grade style={{fontSize:'20px'}} className="text-default-400 pointer-events-none flex-shrink-0" /> }
                 />
                 <InputField
@@ -46,6 +66,8 @@ const GradeForm = ({ onClose }) => {
                     name='percentage'
                     className="w-[48%]"
                     isRequired={true}
+                    value={formValues.percentage}
+                    onChange={handleChange}
                     icon={ <Percent style={{fontSize:'20px'}} className="text-default-400 pointer-events-none flex-shrink-0" /> }
                 />
             </div>
@@ -55,7 +77,7 @@ const GradeForm = ({ onClose }) => {
                     Close
                 </Button>
                 <Button type="submit" radius="full" className="bg-gradient-to-tr from-[#4CC67C] to-[#46DCDF] text-white shadow-lg">
-                    Create
+                    {type === 'create' ? 'Create' : 'Update'}
                 </Button>
             </div>
         </form>
