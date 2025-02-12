@@ -120,6 +120,40 @@ const fetchLessons = async (searchFor, page, limit, skipRecord) => {
     }
 };
 
+const updateLesson = async (lessonId, data) => {
+    try {
+        const lesson = await prisma.lesson.findUnique({
+            where: { id: lessonId },
+        });
+        
+        if (!lesson) {
+            throw('Lesson Not Exist in the Database.')
+        }
+
+        const teacher_id = parseInt(data.teacher_id, 10);
+        const subject_id = parseInt(data.subject_id, 10);
+        const class_id = parseInt(data.class_id, 10);
+
+        const updatedLesson =  await prisma.lesson.update({
+            where: { id: lessonId },
+            data: {
+                name: data?.lesson,
+                subject_id: subject_id,
+                teacher_id: teacher_id,
+                class_id: class_id,
+                start_time: data?.start_time,
+                end_time: data?.end_time,
+                day: data?.day
+            }
+        });
+    
+        return updatedLesson;
+    } catch (error) {
+        console.error('Errro in updating lesson : ', error);
+        throw(error)
+    }
+}
+
 const deleteLesson = async (lessonId) => {
     try {
         const lesson = await prisma.lesson.findUnique({
@@ -148,5 +182,6 @@ const deleteLesson = async (lessonId) => {
 module.exports = {
     createLesson,
     fetchLessons,
+    updateLesson,
     deleteLesson
 }

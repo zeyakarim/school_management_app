@@ -1,23 +1,23 @@
 import { AccessTime, AirlineSeatReclineNormal, AutoStories, EightMp, Event, School } from '@mui/icons-material';
-import { Time } from "@internationalized/date";
 import SelectField from '../formsFields/SelectField';
 import TimeInputField from '../formsFields/TimeInputField';
 import useFetchData from '@/utils/useFetchData';
-import { useCallback } from 'react';
+import { useCallback, useState } from 'react';
 import InputField from '../formsFields/InputField';
 import { Button } from '@nextui-org/react';
 import { formatTime } from '@/utils/helper';
+import { parseAbsoluteToLocal } from "@internationalized/date";
 
 const days = [
-    { "label": 'MONDAY',    "key": 'MONDAY' },
-    { "label": 'TUESDAY',   "key": 'TUESDAY' },
-    { "label": 'WEDNESDAY', "key": 'WEDNESDAY' },
-    { "label": 'THURSDAY',  "key": 'THURSDAY' },
-    { "label": 'FRIDAY',    "key": 'FRIDAY' },
-    { "label": 'SATURDAY',  "key": 'SATURDAY' }
+    { "label": 'MONDAY',    "key": 'MONDAY', "id": 'MONDAY'  },
+    { "label": 'TUESDAY',   "key": 'TUESDAY', "id": 'TUESDAY'},
+    { "label": 'WEDNESDAY', "key": 'WEDNESDAY', "id": 'WEDNESDAY' },
+    { "label": 'THURSDAY',  "key": 'THURSDAY', "id": 'THURSDAY' },
+    { "label": 'FRIDAY',    "key": 'FRIDAY', "id": 'FRIDAY' },
+    { "label": 'SATURDAY',  "key": 'SATURDAY', "id": 'SATURDAY' }
 ]
 
-const LessonForm = ({ onClose }) => {
+const LessonForm = ({ type, data, onClose }) => {
     const formatTeacherLabel = useCallback(
         (item) => (item?.last_name ? `${item?.first_name} ${item?.last_name}` : item?.first_name), []
     );
@@ -25,32 +25,55 @@ const LessonForm = ({ onClose }) => {
 
     const { data: subjects, loading: subjectsLoading } = useFetchData("subjects", formatSubjectLabel);
     const { data: classes, loading: classesLoading } = useFetchData("classes", formatSubjectLabel);
-    const { data: teachers, loading: teachersLoading } = useFetchData("teachers", formatTeacherLabel);
+    const { data: teachers, loading: teachersLoading } = useFetchData("teachers", formatTeacherLabel);      
+
+    const [formValues, setFormValues] = useState({
+        lesson: data?.name || '',
+        subject: data?.subject_id || '',
+        class: data?.class_id || '',
+        teacher: data?.teacher_id || '',
+        day: data?.day || '',
+        startTime: data?.start_time ? parseAbsoluteToLocal(data?.start_time) : '',
+        endTime: data?.end_time ? parseAbsoluteToLocal(data?.end_time) : ''
+    });
+
+    const handleChange = (name, value) => {
+        setFormValues((prev) => ({
+            ...prev,
+            [name]: value,
+        }));
+    };
 
     const handleSubmit = async (event) => {
         event.preventDefault();
         
-        const data = {
-            lesson: event.target.lesson.value,
-            subject_id: event.target.subject.value,
-            class_id: event.target.class.value,
-            teacher_id: event.target.teacher.value,
+        const formData = {
+            lesson: formValues.lesson,
+            subject_id: formValues.subject,
+            class_id: formValues.class,
+            teacher_id: formValues.teacher,
             start_time: formatTime(event.target.startTime.value),
             end_time: formatTime(event.target.endTime.value),
-            day: event.target.day.value
+            day: formValues.day
         }
 
         try {
-            const response = await fetch(`${process.env.NEXT_PUBLIC_WEBSITE_URL}/lessons`, {
-                method: "POST",
-                body: JSON.stringify(data),
+            const method = type === 'create' ? 'POST' : 'PUT';
+            const url = type === 'create'
+                ? `${process.env.NEXT_PUBLIC_WEBSITE_URL}/lessons`
+                : `${process.env.NEXT_PUBLIC_WEBSITE_URL}/lessons/${data.id}`;
+
+
+            const response = await fetch(url, {
+                method,
+                body: JSON.stringify(formData),
             });
 
             if (response.ok) {
-                console.log("Lesson created successfully!");
+                console.log(`Lesson ${type === 'create' ? 'created' : 'updated'} successfully!`);
                 onClose();
             } else {
-                console.error("Failed to create lesson.");
+                console.error(`Failed to ${type === 'create' ? 'created' : 'updated'} lesson.`);
             }
         } catch (error) {
             console.error("Error submitting form:", error);
@@ -66,6 +89,8 @@ const LessonForm = ({ onClose }) => {
                     name='lesson'
                     className="w-[32%] mt-1"
                     isRequired={true}
+                    value={formValues.lesson}
+                    onChange={handleChange}
                     icon={ <EightMp style={{fontSize:'20px'}} className="text-default-400 pointer-events-none flex-shrink-0" /> }
                 />
                 <SelectField
@@ -75,6 +100,8 @@ const LessonForm = ({ onClose }) => {
                     name='subject'
                     className="w-[32%] mt-1"
                     datas={subjects}
+                    value={formValues.subject}
+                    onChange={handleChange}
                     icon={ <AutoStories style={{fontSize:'20px'}} className="text-default-400 pointer-events-none flex-shrink-0" /> }
                 />
                 <SelectField
@@ -84,6 +111,8 @@ const LessonForm = ({ onClose }) => {
                     name='class'
                     className="w-[32%] mt-1"
                     datas={classes}
+                    value={formValues.class}
+                    onChange={handleChange}
                     icon={ <AirlineSeatReclineNormal style={{fontSize:'20px'}} className="text-default-400 pointer-events-none flex-shrink-0" /> }
                 />
                 <SelectField
@@ -93,13 +122,16 @@ const LessonForm = ({ onClose }) => {
                     name='teacher'
                     className="w-[32%] mt-1"
                     datas={teachers}
+                    value={formValues.teacher}
+                    onChange={handleChange}
                     icon={ <School style={{fontSize:'20px'}} className="text-default-400 pointer-events-none flex-shrink-0" /> }
                 />
                 <TimeInputField
                     isRequired={true}
                     label="Start Time" 
                     name='startTime'
-                    defaultValue={new Time(9, 0)} 
+                    value={formValues.startTime}
+                    onChange={handleChange}
                     className="w-[32%] mt-1"
                     icon={<AccessTime className="text-xl text-default-400 pointer-events-none flex-shrink-0" /> }
                 />
@@ -107,7 +139,8 @@ const LessonForm = ({ onClose }) => {
                     isRequired={true}
                     label="End Time"
                     name='endTime'
-                    defaultValue={new Time(12)} 
+                    value={formValues.endTime}
+                    onChange={handleChange} 
                     className="w-[32%] mt-1"
                     icon={<AccessTime className="text-xl text-default-400 pointer-events-none flex-shrink-0" /> }
                 />
@@ -118,6 +151,8 @@ const LessonForm = ({ onClose }) => {
                     name='day'
                     className="w-[32%] mt-1"
                     datas={days}
+                    value={formValues.day}
+                    onChange={handleChange}
                     icon={ <Event style={{fontSize:'20px'}} className="text-default-400 pointer-events-none flex-shrink-0" /> }
                 />
             </div>
@@ -127,7 +162,7 @@ const LessonForm = ({ onClose }) => {
                     Close
                 </Button>
                 <Button type="submit" radius="full" className="bg-gradient-to-tr from-[#4CC67C] to-[#46DCDF] text-white shadow-lg">
-                    Create
+                    {type === 'create' ? 'Create' : 'Update'}
                 </Button>
             </div>
         </form>
