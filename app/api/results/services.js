@@ -190,6 +190,45 @@ const fetchResults = async (searchFor, page, limit, skipRecord) => {
     }
 };
 
+const updateResult = async (resultId, data) => {
+    try {
+        const result = await prisma.result.findUnique({
+            where: { id: resultId },
+        });
+        
+        if (!result) {
+            throw('Result Not Exist in the Database.')
+        }
+
+        const subject_id = parseInt(data.subject_id, 10);
+        const class_id = parseInt(data.class_id, 10);
+        const grade_id = parseInt(data.grade_id, 10);
+        const teacher_id = parseInt(data.teacher_id, 10);
+        const student_id = parseInt(data.student_id, 10);
+        const exam_id = parseInt(data.exam_id, 10);
+
+        const updatedResult =  await prisma.result.update({
+            where: { id: resultId },
+            data: {
+                marks: data?.marks,
+                total: parseInt(data?.total),
+                percentage: data?.percentage,
+                subject_id: subject_id,
+                class_id: class_id,
+                grade_id: grade_id,
+                teacher_id: teacher_id,
+                student_id: student_id,
+                exam_id: exam_id
+            }
+        });
+    
+        return updatedResult;
+    } catch (error) {
+        console.error('Errro in updating result : ', error);
+        throw(error)
+    }
+}
+
 const deleteResult = async (resultId) => {
     try {
         const result = await prisma.result.findUnique({
@@ -218,5 +257,6 @@ const deleteResult = async (resultId) => {
 module.exports = {
     createResult,
     fetchResults,
+    updateResult,
     deleteResult
 }

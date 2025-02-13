@@ -2,10 +2,10 @@ import { AirlineSeatReclineNormal, AutoStories, FactCheck, Grade, Percent, Perso
 import SelectField from "../formsFields/SelectField";
 import InputField from "../formsFields/InputField";
 import useFetchData from '@/utils/useFetchData';
-import { useCallback } from 'react';
+import { useCallback, useState } from 'react';
 import { Button } from '@nextui-org/react';
 
-const ResultForm = ({ onClose }) => {
+const ResultForm = ({ type, data, onClose }) => {
     const formatTeacherLabel = useCallback(
         (item) => (item?.last_name ? `${item?.first_name} ${item?.last_name}` : item?.first_name), []
     );
@@ -20,32 +20,56 @@ const ResultForm = ({ onClose }) => {
     const { data: grades, loading: gradesLoading } = useFetchData("grades", formatGradeLabel);
     const { data: exams, loadint: examsLoading } = useFetchData("exams", formatExamLabel);
 
+    const [formValues, setFormValues] = useState({
+        subject: data?.subject_id || '',
+        class: data?.class_id || '',
+        student: data?.student_id || '',
+        teacher: data?.teacher_id || '',
+        grade: data?.grade_id || '',
+        exam: data?.exam_id || '',
+        percentage: data?.percentage || '',
+        mark: data?.marks || '',
+        total: data?.total || ''
+    });
+
+    const handleChange = (name, value) => {
+        setFormValues((prev) => ({
+            ...prev,
+            [name]: value,
+        }));
+    };
+
     const handleSubmit = async (event) => {
         event.preventDefault();
 
-        const data = {
-            subject_id: event.target.subject.value,
-            class_id: event.target.class.value,
-            student_id: event.target.student.value,
-            teacher_id: event.target.teacher.value,
-            grade_id: event.target.grade.value,
-            exam_id: event.target.exam.value,
-            percentage: event.target.percentage.value,
-            marks: event.target.mark.value,
-            total: event.target.total.value
+        const formData = {
+            subject_id: formValues?.subject,
+            class_id: formValues?.class,
+            student_id: formValues?.student,
+            teacher_id: formValues?.teacher,
+            grade_id: formValues?.grade,
+            exam_id: formValues?.exam,
+            percentage: formValues?.percentage,
+            marks: formValues?.mark,
+            total: formValues?.total
         }
 
         try {
-            const response = await fetch(`${process.env.NEXT_PUBLIC_WEBSITE_URL}/results`, {
-                method: "POST",
-                body: JSON.stringify(data),
+            const method = type === 'create' ? 'POST' : 'PUT';
+            const url = type === 'create'
+                ? `${process.env.NEXT_PUBLIC_WEBSITE_URL}/results`
+                : `${process.env.NEXT_PUBLIC_WEBSITE_URL}/results/${data.id}`;
+
+            const response = await fetch(url, {
+                method,
+                body: JSON.stringify(formData),
             });
 
             if (response.ok) {
-                console.log("Result created successfully!");
+                console.log(`Result ${type === 'create' ? 'created' : 'updated'} successfully!`);
                 onClose();
             } else {
-                console.error("Failed to create result.");
+                console.error(`Failed to ${type === 'create' ? 'create' : 'update'} result.`);
             }
         } catch (error) {
             console.error("Error submitting form:", error);
@@ -62,6 +86,8 @@ const ResultForm = ({ onClose }) => {
                     name='subject'
                     className="w-[48%]"
                     datas={subjects}
+                    value={formValues.subject}
+                    onChange={handleChange}
                     icon={ <AutoStories style={{fontSize:'20px'}} className="text-default-400 pointer-events-none flex-shrink-0" /> }
                 />
                 <SelectField
@@ -71,6 +97,8 @@ const ResultForm = ({ onClose }) => {
                     name='class'
                     className="w-[48%]"
                     datas={classes}
+                    value={formValues.class}
+                    onChange={handleChange}
                     icon={ <AirlineSeatReclineNormal style={{fontSize:'20px'}} className="text-default-400 pointer-events-none flex-shrink-0" /> }
                 />
                 <SelectField
@@ -80,6 +108,8 @@ const ResultForm = ({ onClose }) => {
                     name='student'
                     className="w-[48%]"
                     datas={students}
+                    value={formValues.student}
+                    onChange={handleChange}
                     icon={ <Person style={{fontSize:'20px'}} className="text-default-400 pointer-events-none flex-shrink-0" /> }
                 />
                 <SelectField
@@ -89,6 +119,8 @@ const ResultForm = ({ onClose }) => {
                     name='teacher'
                     className="w-[48%]"
                     datas={teachers}
+                    value={formValues.teacher}
+                    onChange={handleChange}
                     icon={ <School style={{fontSize:'20px'}} className="text-default-400 pointer-events-none flex-shrink-0" /> }
                 />
                 <SelectField
@@ -98,6 +130,8 @@ const ResultForm = ({ onClose }) => {
                     name='grade'
                     className="w-[48%]"
                     datas={grades}
+                    value={formValues.grade}
+                    onChange={handleChange}
                     icon={ <Grade style={{fontSize:'20px'}} className="text-default-400 pointer-events-none flex-shrink-0" /> }
                 />
                 <SelectField
@@ -107,6 +141,8 @@ const ResultForm = ({ onClose }) => {
                     name='exam'
                     className="w-[48%]"
                     datas={exams}
+                    value={formValues.exam}
+                    onChange={handleChange}
                     icon={ <FactCheck style={{fontSize:'20px'}} className="text-default-400 pointer-events-none flex-shrink-0" /> }
                 />
                 <InputField
@@ -115,6 +151,8 @@ const ResultForm = ({ onClose }) => {
                     name='mark'
                     className="w-[48%]"
                     isRequired={true}
+                    value={formValues.mark}
+                    onChange={handleChange}
                     icon={ <FactCheck style={{fontSize:'20px'}} className="text-default-400 pointer-events-none flex-shrink-0" /> }
                 />
                 <InputField
@@ -123,6 +161,8 @@ const ResultForm = ({ onClose }) => {
                     name='total'
                     className="w-[48%]"
                     isRequired={true}
+                    value={formValues.total}
+                    onChange={handleChange}
                     icon={ <TaskAlt style={{fontSize:'20px'}} className="text-default-400 pointer-events-none flex-shrink-0" /> }
                 />
                 <InputField
@@ -131,6 +171,8 @@ const ResultForm = ({ onClose }) => {
                     name='percentage'
                     className="w-[48%]"
                     isRequired={true}
+                    value={formValues.percentage}
+                    onChange={handleChange}
                     icon={ <Percent style={{fontSize:'20px'}} className="text-default-400 pointer-events-none flex-shrink-0" /> }
                 />
             </div>
@@ -140,7 +182,7 @@ const ResultForm = ({ onClose }) => {
                     Close
                 </Button>
                 <Button type="submit" radius="full" className="bg-gradient-to-tr from-[#4CC67C] to-[#46DCDF] text-white shadow-lg">
-                    Create
+                    {type === 'create' ? 'Create' : 'Update'}
                 </Button>
             </div>
         </form>
