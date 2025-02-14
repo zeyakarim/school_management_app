@@ -1,36 +1,64 @@
 import { AirlineSeatReclineNormal, ClosedCaptionOff } from '@mui/icons-material';
 import SelectField from '../formsFields/SelectField';
 import useFetchData from '@/utils/useFetchData';
-import { useCallback } from 'react';
+import { useCallback, useState } from 'react';
 import InputField from '../formsFields/InputField';
 import { Button } from '@nextui-org/react';
 import DatePickerField from '../formsFields/DatePickerField';
+import { parseDate } from '@internationalized/date';
 
-const AnnouncementForm = ({ onClose }) => {
+const AnnouncementForm = ({ type, data, onClose }) => {
     const formatSubjectLabel = useCallback((item) => item?.name, []);
     const { data: classes, loading: classesLoading } = useFetchData("classes", formatSubjectLabel);
+
+    const getFormattedDate = (date) => {
+        const year = date.getFullYear();
+        const month = String(date.getMonth() + 1).padStart(2, '0'); // Add leading zero to month
+        const day = String(date.getDate()).padStart(2, '0');       // Add leading zero to day
+        
+        return `${year}-${month}-${day}`;
+    };
+
+    const handleChange = (name, value) => {
+        setFormValues((prev) => ({
+            ...prev,
+            [name]: value,
+        }));
+    };
+
+    const [formValues, setFormValues] = useState({
+        title: data?.title || '',
+        description: data?.description || '',
+        class: data?.class_id || '',
+        date: data?.date ? parseDate(getFormattedDate(new Date(data?.date))) : null
+    });
 
     const handleSubmit = async (event) => {
         event.preventDefault();
         
-        const data = {
-            title: event.target.title.value,
-            description: event.target.description.value,
-            class_id: event.target.class.value,
+        const formData = {
+            title: formValues?.title,
+            description: formValues?.description,
+            class_id: formValues?.class,
             date: event.target.date.value ? new Date(event.target.date.value).toISOString() : null
         }
 
         try {
-            const response = await fetch(`${process.env.NEXT_PUBLIC_WEBSITE_URL}/annoucements`, {
-                method: "POST",
-                body: JSON.stringify(data),
+            const method = type === 'create' ? 'POST' : 'PUT';
+            const url = type === 'create'
+                ? `${process.env.NEXT_PUBLIC_WEBSITE_URL}/annoucements`
+                : `${process.env.NEXT_PUBLIC_WEBSITE_URL}/annoucements/${data.id}`;
+
+            const response = await fetch(url, {
+                method,
+                body: JSON.stringify(formData),
             });
 
             if (response.ok) {
-                console.log("Announcement created successfully!");
+                console.log(`Announcement ${type === 'create' ? 'created' : 'updated'} successfully!`);
                 onClose();
             } else {
-                console.error("Failed to create announcement.");
+                console.error(`Failed to ${type === 'create' ? 'create' : 'update'} announcement.`);
             }
         } catch (error) {
             console.error("Error submitting form:", error);
@@ -47,6 +75,8 @@ const AnnouncementForm = ({ onClose }) => {
                     name='class'
                     className="w-[48%]"
                     datas={classes}
+                    value={formValues.class}
+                    onChange={handleChange}
                     icon={ <AirlineSeatReclineNormal style={{fontSize:'20px'}} className="text-default-400 pointer-events-none flex-shrink-0" /> }
                 />
                 <DatePickerField
@@ -54,6 +84,8 @@ const AnnouncementForm = ({ onClose }) => {
                     label='Date'
                     name='date'
                     className="w-[48%]"
+                    value={formValues.date}
+                    onChange={handleChange}
                 />
                 <InputField
                     type="text"
@@ -61,6 +93,8 @@ const AnnouncementForm = ({ onClose }) => {
                     name='title'
                     className="w-[48%]"
                     isRequired={true}
+                    value={formValues.title}
+                    onChange={handleChange}
                     icon={ <ClosedCaptionOff style={{fontSize:'20px'}} className="text-default-400 pointer-events-none flex-shrink-0" /> }
                 />
 
@@ -70,6 +104,8 @@ const AnnouncementForm = ({ onClose }) => {
                     name='description'
                     className="w-[48%]"
                     isRequired={true}
+                    value={formValues.description}
+                    onChange={handleChange}
                     icon={ <ClosedCaptionOff style={{fontSize:'20px'}} className="text-default-400 pointer-events-none flex-shrink-0" /> }
                 />
             </div>
@@ -79,7 +115,7 @@ const AnnouncementForm = ({ onClose }) => {
                     Close
                 </Button>
                 <Button type="submit" radius="full" className="bg-gradient-to-tr from-[#4CC67C] to-[#46DCDF] text-white shadow-lg">
-                    Create
+                    {type === 'create' ? 'Create' : 'Update'}
                 </Button>
             </div>
         </form>

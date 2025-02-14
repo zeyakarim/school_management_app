@@ -2,14 +2,18 @@
 
 import ConfirmDialog from "@/components/ConfirmDialog";
 import Table from "@/components/Table/Table";
+import Dialog from "@/components/Dialog";
+import EditIcon from "@/components/EditIcon";
 import { Delete } from "@mui/icons-material";
-import IconButton from "@mui/material/IconButton";
+import { IconButton, Tooltip } from "@mui/material";
 import { useState } from "react";
 import { useDisclosure } from "@nextui-org/react";
 
 const Announcements = () => {
     const {isOpen, onOpen, onOpenChange, onClose } = useDisclosure();
     const [deleteId, setDeleteId] = useState(null)
+    const [data, setData] = useState({})
+    const [dialogType, setDialogType] = useState(null)
 
     const columns = [
         {
@@ -53,7 +57,27 @@ const Announcements = () => {
                 </IconButton>
             ),
         },
+        {
+            field: 'update',
+            headerName: 'Update',
+            flex: 0.5,
+            sortable: false,
+            filterable: false,
+            renderCell: (params) => (
+                <Tooltip title="Edit" onClick={() => handleUpdateAnnouncement(params)}>
+                    <IconButton>
+                        <EditIcon />
+                    </IconButton>
+                </Tooltip>
+            )
+        }
     ];
+
+    const handleUpdateAnnouncement = async (row) => {
+        setData(row);
+        setDialogType("update");  // Open update dialog
+        onOpen();
+    }
 
     const handleDeleteAnnoucement = async () => {
         try {
@@ -74,6 +98,7 @@ const Announcements = () => {
 
     const handleConfirmDelete = (id) => {
         setDeleteId(id)
+        setDialogType("delete");
         onOpen()
     }
 
@@ -92,11 +117,25 @@ const Announcements = () => {
                 type='create'
             />
 
-            <ConfirmDialog 
-                isOpen={isOpen}
-                onOpenChange={onOpenChange}
-                handleSubmit={handleDeleteAnnoucement}
-            />
+            {dialogType === "delete" && (
+                <ConfirmDialog 
+                    isOpen={isOpen}
+                    onOpenChange={onOpenChange}
+                    handleSubmit={handleDeleteAnnoucement}
+                />
+            )}
+
+            {dialogType === "update" && (
+                <Dialog
+                    isOpen={isOpen}
+                    onOpenChange={onOpenChange}
+                    onClose={onClose}
+                    dialogTitle={`Update Announcement ${data?.title}`}
+                    table="annoucement"
+                    type="update"
+                    data={data}
+                />
+            )}
         </div>
     );
 };
