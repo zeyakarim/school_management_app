@@ -1,9 +1,11 @@
+import { useSnackBar } from "@/utils/snackbarContext";
 import InputField from "../formsFields/InputField";
 import { Grade, Percent } from '@mui/icons-material';
 import { Button } from "@nextui-org/react";
 import { useState } from "react";
 
 const GradeForm = ({ type, data, onClose }) => {
+    const { setSnackBar } = useSnackBar();
 
     const [formValues, setFormValues] = useState({
         level: data?.level || '',
@@ -21,7 +23,7 @@ const GradeForm = ({ type, data, onClose }) => {
         event.preventDefault();
 
         const formData = {
-            level: formValues?.level,
+            level: 1,
             percentage: formValues?.percentage
         }
 
@@ -35,15 +37,24 @@ const GradeForm = ({ type, data, onClose }) => {
                 method,
                 body: JSON.stringify(formData),
             });
-
+            console.log(response,'reponse')
+            onClose();
             if (response.ok) {
-                console.log(`Grade ${type === 'create' ? 'created' : 'updated'} successfully!`);
-                onClose();
+                const successMessage = `Grade ${type === 'create' ? 'created' : 'updated'} successfully!`;
+                setSnackBar((prevSnackBar) => {
+                    return { ...prevSnackBar, display: true, message: successMessage, type: "success" }
+                });
             } else {
-                console.error(`Failed to ${type === 'create' ? 'create' : 'update'} grade.`);
+                const errorMessage = response?.error?.message || `Failed to ${type === 'create' ? 'create' : 'update'} grade.`
+                setSnackBar((prevSnackBar) => {
+                    return { ...prevSnackBar, display: true, message: errorMessage, type: "error" }
+                });
             }
         } catch (error) {
-            console.error("Error submitting form:", error);
+            const errorMessage = error?.response?.data?.message
+            setSnackBar((prevSnackBar) => {
+                return { ...prevSnackBar, display: true, message: errorMessage, type: "error" }
+            });
         }
     }
 
