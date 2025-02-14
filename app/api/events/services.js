@@ -90,6 +90,37 @@ const fetchEvents = async (searchFor, page, limit, skipRecord) => {
     }
 };
 
+const updateEvent = async (eventId, data) => {
+    try {
+        const event = await prisma.event.findUnique({
+            where: { id: eventId },
+        });
+        
+        if (!event) {
+            throw('Event Not Exist in the Database.')
+        }
+
+        const class_id = parseInt(data.class_id, 10);
+
+        const updatedEvent =  await prisma.event.update({
+            where: { id: eventId },
+            data: {
+                class_id: class_id,
+                title: data?.title,
+                description: data?.description,
+                date: data?.date,
+                start_time: data?.start_time,
+                end_time: data?.end_time
+            }
+        });
+    
+        return updatedEvent;
+    } catch (error) {
+        console.error('Errro in updating event : ', error);
+        throw(error)
+    }
+}
+
 const deleteEvent = async (eventId) => {
     try {
         const event = await prisma.event.findUnique({
@@ -118,5 +149,6 @@ const deleteEvent = async (eventId) => {
 module.exports = {
     createEvent,
     fetchEvents,
+    updateEvent,
     deleteEvent
 }

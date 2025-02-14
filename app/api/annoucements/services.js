@@ -99,7 +99,7 @@ const updateAnnoucement = async (announcementId, data) => {
             throw('Annoucement Not Exist in the Database.')
         }
 
-        const deletedAnnoucement =  await prisma.annoucement.update({
+        const updatedAnnoucement =  await prisma.annoucement.update({
             where: { id: announcementId },
             data: {
                 class_id: class_id,
@@ -109,7 +109,7 @@ const updateAnnoucement = async (announcementId, data) => {
             }
         });
     
-        return deletedAnnoucement;
+        return updatedAnnoucement;
     } catch (error) {
         console.error('Errro in updating annoucement : ', error);
         throw(error)
