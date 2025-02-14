@@ -23,7 +23,7 @@ const GradeForm = ({ type, data, onClose }) => {
         event.preventDefault();
 
         const formData = {
-            level: 1,
+            level: formValues?.level,
             percentage: formValues?.percentage
         }
 
