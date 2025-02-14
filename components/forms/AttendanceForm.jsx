@@ -1,11 +1,12 @@
 import { AirlineSeatReclineNormal, AutoStories, FactCheck, Grade, Percent, Person, School, TaskAlt, Attribution } from '@mui/icons-material';
 import SelectField from "../formsFields/SelectField";
 import useFetchData from '@/utils/useFetchData';
-import { useCallback } from 'react';
+import { useCallback, useState } from 'react';
 import { Button } from '@nextui-org/react';
 import DatePickerField from '../formsFields/DatePickerField';
+import { parseDate } from '@internationalized/date';
 
-const AttendanceForm = ({ onClose }) => {
+const AttendanceForm = ({ type, data, onClose }) => {
     const formatTeacherLabel = useCallback(
         (item) => (item?.last_name ? `${item?.first_name} ${item?.last_name}` : item?.first_name), []
     );
@@ -16,36 +17,66 @@ const AttendanceForm = ({ onClose }) => {
     const { data: teachers, loading: teachersLoading } = useFetchData("teachers", formatTeacherLabel);
     const { data: students, loading: studentsLoading } = useFetchData("students", formatTeacherLabel);
     const { data: lessons, loading: lessonsLoading } = useFetchData("lessons", formatSubjectLabel);
+    
+    const getFormattedDate = (date) => {
+        const year = date.getFullYear();
+        const month = String(date.getMonth() + 1).padStart(2, '0'); // Add leading zero to month
+        const day = String(date.getDate()).padStart(2, '0');       // Add leading zero to day
+        
+        return `${year}-${month}-${day}`;
+    };
+
+    const [formValues, setFormValues] = useState({
+        subject: data?.subject_id || '',
+        class: data?.class_id || '',
+        teacher: data?.teacher_id || '',
+        student: data?.student_id || '',
+        lesson: data?.lesson_id || '',
+        present: data?.present ? 'TRUE': 'FALSE',
+        date: data?.date ? parseDate(getFormattedDate(new Date(data?.date))) : null
+    });
 
     const handleSubmit = async (event) => {
         event.preventDefault();
 
-        const data = {
-            subject_id: event.target.subject.value,
-            class_id: event.target.class.value,
-            student_id: event.target.student.value,
-            teacher_id: event.target.teacher.value,
-            lesson_id: event.target.lesson.value,
+        const formData = {
+            subject_id: formValues?.subject,
+            class_id: formValues?.class,
+            student_id: formValues?.student,
+            teacher_id: formValues?.teacher,
+            lesson_id: formValues?.lesson,
             present: event.target.present.value,
             date: event.target.date.value ? new Date(event.target.date.value).toISOString() : null
         }
 
         try {
-            const response = await fetch(`${process.env.NEXT_PUBLIC_WEBSITE_URL}/attendances`, {
-                method: "POST",
-                body: JSON.stringify(data),
+            const method = type === 'create' ? 'POST' : 'PUT';
+            const url = type === 'create'
+                ? `${process.env.NEXT_PUBLIC_WEBSITE_URL}/attendances`
+                : `${process.env.NEXT_PUBLIC_WEBSITE_URL}/attendances/${data.id}`;
+
+            const response = await fetch(url, {
+                method,
+                body: JSON.stringify(formData),
             });
 
             if (response.ok) {
-                console.log("Attendance created successfully!");
+                console.log(`Attendance ${type === 'create' ? 'created' : 'updated'} successfully!`);
                 onClose();
             } else {
-                console.error("Failed to create attendance.");
+                console.error(`Failed to ${type === 'create' ? 'create' : 'update'} attendance.`);
             }
         } catch (error) {
             console.error("Error submitting form:", error);
         }
     }
+
+    const handleChange = (name, value) => {
+        setFormValues((prev) => ({
+            ...prev,
+            [name]: value,
+        }));
+    };
 
     return (
         <form method="post" onSubmit={handleSubmit}>
@@ -56,7 +87,9 @@ const AttendanceForm = ({ onClose }) => {
                     label="Present"
                     name='present'
                     className="w-[48%]"
-                    datas={[{"label": 'TRUE', "key": 'TRUE' }, { "label": 'FALSE', "key": 'FALSE' }]}
+                    datas={[{"label": 'TRUE', "key": 'TRUE', "id": 'TRUE' }, { "label": 'FALSE', "key": 'FALSE', "id": 'FALSE' }]}
+                    value={formValues.present}
+                    onChange={handleChange}
                     icon={ <Attribution style={{fontSize:'20px'}} className="text-default-400 pointer-events-none flex-shrink-0" /> }
                 />
                 <DatePickerField
@@ -64,6 +97,8 @@ const AttendanceForm = ({ onClose }) => {
                     label='Date'
                     name='date'
                     className="w-[48%]"
+                    value={formValues.date}
+                    onChange={handleChange}
                 />
                 <SelectField
                     isRequired={true}
@@ -72,6 +107,8 @@ const AttendanceForm = ({ onClose }) => {
                     name='lesson'
                     className="w-[48%]"
                     datas={lessons}
+                    value={formValues.lesson}
+                    onChange={handleChange}
                     icon={ <AutoStories style={{fontSize:'20px'}} className="text-default-400 pointer-events-none flex-shrink-0" /> }
                 />
                 <SelectField
@@ -81,6 +118,8 @@ const AttendanceForm = ({ onClose }) => {
                     name='subject'
                     className="w-[48%]"
                     datas={subjects}
+                    value={formValues.subject}
+                    onChange={handleChange}
                     icon={ <AutoStories style={{fontSize:'20px'}} className="text-default-400 pointer-events-none flex-shrink-0" /> }
                 />
                 <SelectField
@@ -90,6 +129,8 @@ const AttendanceForm = ({ onClose }) => {
                     name='class'
                     className="w-[48%]"
                     datas={classes}
+                    value={formValues.class}
+                    onChange={handleChange}
                     icon={ <AirlineSeatReclineNormal style={{fontSize:'20px'}} className="text-default-400 pointer-events-none flex-shrink-0" /> }
                 />
                 <SelectField
@@ -99,6 +140,8 @@ const AttendanceForm = ({ onClose }) => {
                     name='student'
                     className="w-[48%]"
                     datas={students}
+                    value={formValues.student}
+                    onChange={handleChange}
                     icon={ <Person style={{fontSize:'20px'}} className="text-default-400 pointer-events-none flex-shrink-0" /> }
                 />
                 <SelectField
@@ -108,6 +151,8 @@ const AttendanceForm = ({ onClose }) => {
                     name='teacher'
                     className="w-[48%]"
                     datas={teachers}
+                    value={formValues.teacher}
+                    onChange={handleChange}
                     icon={ <School style={{fontSize:'20px'}} className="text-default-400 pointer-events-none flex-shrink-0" /> }
                 />
             </div>
@@ -117,7 +162,7 @@ const AttendanceForm = ({ onClose }) => {
                     Close
                 </Button>
                 <Button type="submit" radius="full" className="bg-gradient-to-tr from-[#4CC67C] to-[#46DCDF] text-white shadow-lg">
-                    Create
+                    {type === 'create' ? 'Create' : 'Update'}
                 </Button>
             </div>
         </form>

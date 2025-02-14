@@ -140,6 +140,43 @@ const fetchAttendances = async (searchFor, page, limit, skipRecord) => {
     }
 };
 
+const updateAttendance = async (attendanceId, data) => {
+    try {
+        const attendance = await prisma.attendance.findUnique({
+            where: { id: attendanceId },
+        });
+        
+        if (!attendance) {
+            throw('Attendance Not Exist in the Database.')
+        }
+
+        const subject_id = parseInt(data.subject_id, 10);
+        const class_id = parseInt(data.class_id, 10);
+        const lesson_id = parseInt(data.lesson_id, 10);
+        const teacher_id = parseInt(data.teacher_id, 10);
+        const student_id = parseInt(data.student_id, 10);
+        const present = data?.present === 'TRUE' ? true : false;
+
+        const updatedAttendance =  await prisma.attendance.update({
+            where: { id: attendanceId },
+            data: {
+                present: present,
+                date: data?.date,
+                student_id: student_id,
+                lesson_id: lesson_id,
+                subject_id: subject_id,
+                class_id: class_id,
+                teacher_id: teacher_id
+            }
+        });
+    
+        return updatedAttendance;
+    } catch (error) {
+        console.error('Errro in updating attendance : ', error);
+        throw(error)
+    }
+}
+
 const deleteAttendance = async (attendanceId) => {
     try {
         const attendance = await prisma.attendance.findUnique({
@@ -168,5 +205,6 @@ const deleteAttendance = async (attendanceId) => {
 module.exports = {
     createAttendance,
     fetchAttendances,
+    updateAttendance,
     deleteAttendance
 }
