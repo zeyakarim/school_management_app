@@ -35,27 +35,29 @@ const GradeForm = ({ type, data, onClose }) => {
 
             const response = await fetch(url, {
                 method,
+                headers: { "Content-Type": "application/json" },
                 body: JSON.stringify(formData),
             });
-            console.log(response,'reponse')
+        
+            const result = await response.json();
             onClose();
-            if (response.ok) {
+        
+            if (response.ok && result.success) {
                 const successMessage = `Grade ${type === 'create' ? 'created' : 'updated'} successfully!`;
-                setSnackBar((prevSnackBar) => {
-                    return { ...prevSnackBar, display: true, message: successMessage, type: "success" }
-                });
+                setSnackBar((prevSnackBar) => ({
+                    ...prevSnackBar, display: true, message: successMessage, type: "success"
+                }));
             } else {
-                const errorMessage = response?.error?.message || `Failed to ${type === 'create' ? 'create' : 'update'} grade.`
-                setSnackBar((prevSnackBar) => {
-                    return { ...prevSnackBar, display: true, message: errorMessage, type: "error" }
-                });
+                const errorMessage = result?.message || `Failed to ${type === 'create' ? 'create' : 'update'} grade.`;
+                setSnackBar((prevSnackBar) => ({
+                    ...prevSnackBar, display: true, message: errorMessage, type: "error"
+                }));
             }
         } catch (error) {
-            const errorMessage = error?.response?.data?.message
-            setSnackBar((prevSnackBar) => {
-                return { ...prevSnackBar, display: true, message: errorMessage, type: "error" }
-            });
-        }
+            setSnackBar((prevSnackBar) => ({
+                ...prevSnackBar, display: true, message: "Something went wrong. Please try again.", type: "error"
+            }));
+        }        
     }
 
     return (

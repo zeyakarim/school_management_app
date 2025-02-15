@@ -1,4 +1,5 @@
 const prisma = require("@/config/database");
+import { handlePrismaError } from "@/utils/prismaErrorHandler";
 
 const createGrade = async (data) => {
     try {
@@ -72,8 +73,7 @@ const updateGrade = async (gradeId, data) => {
     
         return updatedGrade;
     } catch (error) {
-        console.error('Errro in updating grade : ', error);
-        throw(error)
+        handlePrismaError(error);
     }
 }
 
