@@ -53,128 +53,141 @@ const AnnouncementForm = dynamic(() => import("./forms/AnnouncementForm"), {
 
 
 const forms = {
-    subject: (type, data, relatedData, onClose) => (
+    subject: (type, data, relatedData, onClose, setReRender) => (
         <SubjectForm
             type={type}
             data={data}
             onClose={onClose}
             // setOpen={setOpen}
             relatedData={relatedData}
+            setReRender={setReRender}
         />
     ),
-    lesson: (type, data, relatedData, onClose) => (
+    lesson: (type, data, relatedData, onClose, setReRender) => (
         <LessonForm
             type={type}
             data={data}
             onClose={onClose}
             // setOpen={setOpen}
             relatedData={relatedData}
+            setReRender={setReRender}
         />
     ),
-    event: (type, data, relatedData, onClose) => (
+    event: (type, data, relatedData, onClose, setReRender) => (
         <EventForm
             type={type}
             data={data}
             onClose={onClose}
             // setOpen={setOpen}
             relatedData={relatedData}
+            setReRender={setReRender}
         />
     ),
-    annoucement: (type, data, relatedData, onClose) => (
+    annoucement: (type, data, relatedData, onClose, setReRender) => (
         <AnnouncementForm
             type={type}
             data={data}
             onClose={onClose}
             // setOpen={setOpen}
             relatedData={relatedData}
+            setReRender={setReRender}
         />
     ),
-    attendance: (type, data, relatedData, onClose) => (
+    attendance: (type, data, relatedData, onClose, setReRender) => (
         <AttendanceForm
             type={type}
             data={data}
             onClose={onClose}
             // setOpen={setOpen}
             relatedData={relatedData}
+            setReRender={setReRender}
         />
     ),
-    grade: (type, data, relatedData, onClose) => (
+    grade: (type, data, relatedData, onClose, setReRender) => (
         <GradeForm
             type={type}
             data={data}
             onClose={onClose}
             // setOpen={setOpen}
             relatedData={relatedData}
+            setReRender={setReRender}
         />
     ),
-    class: (type, data, relatedData, onClose) => (
+    class: (type, data, relatedData, onClose, setReRender) => (
         <ClassForm
             type={type}
             data={data}
             onClose={onClose}
             // setOpen={setOpen}
             relatedData={relatedData}
+            setReRender={setReRender}
         />
     ),
-    parent: (type, data, relatedData, onClose) => (
+    parent: (type, data, relatedData, onClose, setReRender) => (
         <ParentForm
             type={type}
             data={data}
             // setOpen={setOpen}
             onClose={onClose}
             relatedData={relatedData}
+            setReRender={setReRender}
         />
     ),
-    teacher: (type, data, relatedData, onClose) => (
+    teacher: (type, data, relatedData, onClose, setReRender) => (
         <TeacherForm
             type={type}
             data={data}
             // setOpen={setOpen}
             onClose={onClose}
             relatedData={relatedData}
+            setReRender={setReRender}
         />
     ),
-    student: (type, data, relatedData, onClose) => (
+    student: (type, data, relatedData, onClose, setReRender) => (
         <StudentForm
             type={type}
             data={data}
             // setOpen={setOpen}
             onClose={onClose}
             relatedData={relatedData}
+            setReRender={setReRender}
         />
     ),
-    exam: (type, data, relatedData, onClose) => (
+    exam: (type, data, relatedData, onClose, setReRender) => (
         <ExamForm
             type={type}
             data={data}
             // setOpen={setOpen}
             onClose={onClose}
             relatedData={relatedData}
+            setReRender={setReRender}
         />
     ),
-    assignment: (type, data, relatedData, onClose) => (
+    assignment: (type, data, relatedData, onClose, setReRender) => (
         <AssignmentForm
             type={type}
             data={data}
             // setOpen={setOpen}
             onClose={onClose}
             relatedData={relatedData}
+            setReRender={setReRender}
         />
     ),
-    result: (type, data, relatedData, onClose) => (
+    result: (type, data, relatedData, onClose, setReRender) => (
         <ResultForm 
             type={type}
             data={data}
             // setOpen={setOpen}
             onClose={onClose}
             relatedData={relatedData}
+            setReRender={setReRender}
         />
     )
 };
   
   
-const Dialog = ({ isOpen, onOpenChange, onClose, dialogTitle, table, type, data }) => {
-    const FormComponent = forms[table] ? forms[table](type, data, [], onClose) : <p>No form available</p>;
+const Dialog = ({ isOpen, onOpenChange, onClose, dialogTitle, table, type, data, setReRender }) => {
+    const FormComponent = forms[table] ? forms[table](type, data, [], onClose, setReRender) : <p>No form available</p>;
 
     return (
         <Modal 

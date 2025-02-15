@@ -16,7 +16,7 @@ const columnData = (row, RenderCell)=> {
 const Table = (props) => {
     const { 
         title, columns, dialogTitle, table, type, checkBoxSelection, navigateOnRowClickEndpoint, 
-        version, columnVisibilityModel, endPoint, dataPosition, rowId
+        version, columnVisibilityModel, endPoint, dataPosition, rowId, reRender
     } = props;
     const {isOpen, onOpen, onOpenChange, onClose } = useDisclosure();
     const [searchFor, setSearchFor] = useState('');
@@ -60,7 +60,7 @@ const Table = (props) => {
 
     useEffect(() => {
         fetchData(1);
-    }, [searchFor])
+    }, [searchFor, reRender])
 
     const dateFormat = (row, field) => {
         return moment(row?.[field]).format('MMM DD, YYYY h:mm:ss A')

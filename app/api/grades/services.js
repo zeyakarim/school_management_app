@@ -9,8 +9,7 @@ const createGrade = async (data) => {
         
         return createdGrade;
     } catch(error) {
-        console.error('Error in creating grade : ', error)
-        throw(error)
+        handlePrismaError(error);
     }
 }
 
@@ -63,7 +62,7 @@ const updateGrade = async (gradeId, data) => {
         });
         
         if (!grade) {
-            throw('Grade Not Exist in the Database.')
+            throw { message: 'Grade Not Exist in the Database.' }
         }
 
         const updatedGrade =  await prisma.grade.update({
@@ -84,7 +83,7 @@ const deleteGrade = async (gradeId) => {
         });
         
         if (!grade) {
-            throw('Grade Not Exist in the Database.')
+            throw { message: 'Grade Not Exist in the Database.' }
         }
 
         const now = new Date();
@@ -97,8 +96,7 @@ const deleteGrade = async (gradeId) => {
     
         return deletedGrade;
     } catch (error) {
-        console.error('Errro in deleting grade : ', error);
-        throw(error)
+        handlePrismaError(error);
     }
 }
 

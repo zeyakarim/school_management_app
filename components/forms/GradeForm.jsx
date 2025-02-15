@@ -4,7 +4,7 @@ import { Grade, Percent } from '@mui/icons-material';
 import { Button } from "@nextui-org/react";
 import { useState } from "react";
 
-const GradeForm = ({ type, data, onClose }) => {
+const GradeForm = ({ type, data, onClose, setReRender }) => {
     const { setSnackBar } = useSnackBar();
 
     const [formValues, setFormValues] = useState({
@@ -41,6 +41,7 @@ const GradeForm = ({ type, data, onClose }) => {
         
             const result = await response.json();
             onClose();
+            setReRender((prev) => !prev);
         
             if (response.ok && result.success) {
                 const successMessage = `Grade ${type === 'create' ? 'created' : 'updated'} successfully!`;
@@ -57,6 +58,7 @@ const GradeForm = ({ type, data, onClose }) => {
             setSnackBar((prevSnackBar) => ({
                 ...prevSnackBar, display: true, message: "Something went wrong. Please try again.", type: "error"
             }));
+            setReRender((prev) => !prev);
         }        
     }
 
