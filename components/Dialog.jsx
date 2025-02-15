@@ -51,7 +51,6 @@ const AnnouncementForm = dynamic(() => import("./forms/AnnouncementForm"), {
     loading: () => <h1>Loading...</h1>,
 });
 
-
 const forms = {
     subject: (type, data, relatedData, onClose, setReRender) => (
         <SubjectForm

@@ -8,12 +8,15 @@ import { Delete } from "@mui/icons-material";
 import { IconButton, Tooltip } from "@mui/material";
 import { useState } from "react";
 import { useDisclosure } from "@nextui-org/react";
+import { useSnackBar } from "@/utils/snackbarContext";
 
 const Announcements = () => {
     const {isOpen, onOpen, onOpenChange, onClose } = useDisclosure();
     const [deleteId, setDeleteId] = useState(null)
     const [data, setData] = useState({})
     const [dialogType, setDialogType] = useState(null)
+    const [reRender, setReRender] = useState(false);
+    const { setSnackBar } = useSnackBar();
 
     const columns = [
         {
@@ -84,15 +87,27 @@ const Announcements = () => {
             const response = await fetch(`${process.env.NEXT_PUBLIC_WEBSITE_URL}/annoucements/${deleteId}`, {
                 method: "DELETE"
             });
-    
-            if (response.ok) {
-                console.log("Annoucement deleted successfully!");
-                onClose();
+
+            const result = await response.json();
+            onClose();
+            setReRender((prev) => !prev);
+        
+            if (response.ok && result.success) {
+                const successMessage = `Annoucement deleted successfully!`;
+                setSnackBar((prevSnackBar) => ({
+                    ...prevSnackBar, display: true, message: successMessage, type: "success"
+                }));
             } else {
-                console.error("Failed to delete annoucement.");
+                const errorMessage = result?.message || `Failed to delete annoucement.`;
+                setSnackBar((prevSnackBar) => ({
+                    ...prevSnackBar, display: true, message: errorMessage, type: "error"
+                }));
             }
         } catch (error) {
-            console.error("Error in deleting :", error);
+            setSnackBar((prevSnackBar) => ({
+                ...prevSnackBar, display: true, message: "Something went wrong. Please try again.", type: "error"
+            }));
+            setReRender((prev) => !prev);
         }
     };
 
@@ -115,6 +130,8 @@ const Announcements = () => {
                 dialogTitle='Create A New Announcement'
                 table='annoucement'
                 type='create'
+                reRender={reRender}
+                setReRender={setReRender}
             />
 
             {dialogType === "delete" && (
@@ -134,6 +151,7 @@ const Announcements = () => {
                     table="annoucement"
                     type="update"
                     data={data}
+                    setReRender={setReRender}
                 />
             )}
         </div>

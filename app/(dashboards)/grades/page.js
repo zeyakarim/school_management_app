@@ -84,7 +84,6 @@ const Exams = () => {
 
             const result = await response.json();
             onClose();
-
             setReRender((prev) => !prev);
         
             if (response.ok && result.success) {
@@ -126,6 +125,7 @@ const Exams = () => {
                 table="grade"
                 type="create"
                 reRender={reRender}
+                setReRender={setReRender}
             />
 
             {dialogType === "delete" && (

@@ -16,7 +16,7 @@ const columnData = (row, RenderCell)=> {
 const Table = (props) => {
     const { 
         title, columns, dialogTitle, table, type, checkBoxSelection, navigateOnRowClickEndpoint, 
-        version, columnVisibilityModel, endPoint, dataPosition, rowId, reRender
+        version, columnVisibilityModel, endPoint, dataPosition, rowId, reRender, setReRender
     } = props;
     const {isOpen, onOpen, onOpenChange, onClose } = useDisclosure();
     const [searchFor, setSearchFor] = useState('');
@@ -171,6 +171,7 @@ const Table = (props) => {
                 onClose={onClose}
                 table={table}
                 type={type}
+                setReRender={setReRender}
             />
         </div>
     );

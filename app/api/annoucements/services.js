@@ -1,4 +1,5 @@
 const prisma = require("@/config/database");
+const { handlePrismaError } = require("@/utils/prismaErrorHandler");
 
 const simplifiedAnnoucements = (annoucements) => {
     return annoucements?.map((annoucement) => {
@@ -25,8 +26,7 @@ const createAnnouncement = async (data) => {
 
         return createdAnnoucement;
     } catch (error) {
-        console.error('Error in creating announcement : ', error);
-        throw(error)
+        handlePrismaError(error);
     }
 }
 
@@ -96,7 +96,7 @@ const updateAnnoucement = async (announcementId, data) => {
         });
         
         if (!announcement) {
-            throw('Annoucement Not Exist in the Database.')
+            throw { message: 'Annoucement Not Exist in the Database.' }
         }
 
         const updatedAnnoucement =  await prisma.annoucement.update({
@@ -111,8 +111,7 @@ const updateAnnoucement = async (announcementId, data) => {
     
         return updatedAnnoucement;
     } catch (error) {
-        console.error('Errro in updating annoucement : ', error);
-        throw(error)
+        handlePrismaError(error);
     }
 };
 
@@ -124,7 +123,7 @@ const deleteAnnoucement = async (announcementId) => {
         });
         
         if (!announcement) {
-            throw('Annoucement Not Exist in the Database.')
+            throw { message: 'Annoucement Not Exist in the Database.' }
         }
 
         const now = new Date();
@@ -137,8 +136,7 @@ const deleteAnnoucement = async (announcementId) => {
     
         return deletedAnnoucement;
     } catch (error) {
-        console.error('Errro in deleting annoucement : ', error);
-        throw(error)
+        handlePrismaError(error);
     }
 }
 

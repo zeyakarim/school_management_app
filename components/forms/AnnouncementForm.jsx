@@ -6,8 +6,11 @@ import InputField from '../formsFields/InputField';
 import { Button } from '@nextui-org/react';
 import DatePickerField from '../formsFields/DatePickerField';
 import { parseDate } from '@internationalized/date';
+import { useSnackBar } from '@/utils/snackbarContext';
 
-const AnnouncementForm = ({ type, data, onClose }) => {
+const AnnouncementForm = ({ type, data, onClose, setReRender }) => {
+    const { setSnackBar } = useSnackBar();
+
     const formatSubjectLabel = useCallback((item) => item?.name, []);
     const { data: classes, loading: classesLoading } = useFetchData("classes", formatSubjectLabel);
 
@@ -51,17 +54,30 @@ const AnnouncementForm = ({ type, data, onClose }) => {
 
             const response = await fetch(url, {
                 method,
+                headers: { "Content-Type": "application/json" },
                 body: JSON.stringify(formData),
             });
 
-            if (response.ok) {
-                console.log(`Announcement ${type === 'create' ? 'created' : 'updated'} successfully!`);
-                onClose();
+            const result = await response.json();
+            onClose();
+            setReRender((prev) => !prev);
+
+            if (response.ok && result.success) {
+                const successMessage = `Announcement ${type === 'create' ? 'created' : 'updated'} successfully!`;
+                setSnackBar((prevSnackBar) => ({
+                    ...prevSnackBar, display: true, message: successMessage, type: "success"
+                }));
             } else {
-                console.error(`Failed to ${type === 'create' ? 'create' : 'update'} announcement.`);
+                const errorMessage = result?.message || `Failed to ${type === 'create' ? 'create' : 'update'} announcement.`;
+                setSnackBar((prevSnackBar) => ({
+                    ...prevSnackBar, display: true, message: errorMessage, type: "error"
+                }));
             }
         } catch (error) {
-            console.error("Error submitting form:", error);
+            setSnackBar((prevSnackBar) => ({
+                ...prevSnackBar, display: true, message: "Something went wrong. Please try again.", type: "error"
+            }));
+            setReRender((prev) => !prev);
         }
     }
 
