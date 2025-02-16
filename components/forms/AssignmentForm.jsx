@@ -6,8 +6,11 @@ import { useCallback, useState } from "react";
 import useFetchData from "@/utils/useFetchData";
 import { Button } from "@nextui-org/react";
 import { parseDate } from "@internationalized/date";
+import { useSnackBar } from "@/utils/snackbarContext";
 
-const AssignmentForm = ({ type, data, onClose }) => {
+const AssignmentForm = ({ type, data, onClose, setReRender }) => {
+    const { setSnackBar } = useSnackBar();
+
     const formatTeacherLabel = useCallback(
         (item) => (item?.last_name ? `${item?.first_name} ${item?.last_name}` : item?.first_name), []
     );
@@ -68,14 +71,26 @@ const AssignmentForm = ({ type, data, onClose }) => {
                 body: JSON.stringify(formData),
             });
 
-            if (response.ok) {
-                console.log(`Assignment ${type === 'create' ? 'created' : 'updated'} successfully!`);
-                onClose();
+            const result = await response.json();
+            onClose();
+            setReRender((prev) => !prev);
+
+            if (response.ok && result.success) {
+                const successMessage = `Assignment ${type === 'create' ? 'created' : 'updated'} successfully!`;
+                setSnackBar((prevSnackBar) => ({
+                    ...prevSnackBar, display: true, message: successMessage, type: "success"
+                }));
             } else {
-                console.error(`Failed to ${type === 'create' ? 'create' : 'update'} assignment.`);
+                const errorMessage = result?.message || `Failed to ${type === 'create' ? 'create' : 'update'} assignment.`;
+                setSnackBar((prevSnackBar) => ({
+                    ...prevSnackBar, display: true, message: errorMessage, type: "error"
+                }));
             }
         } catch (error) {
-            console.error("Error submitting form:", error);
+            setSnackBar((prevSnackBar) => ({
+                ...prevSnackBar, display: true, message: "Something went wrong. Please try again.", type: "error"
+            }));
+            setReRender((prev) => !prev);
         }
     }
 

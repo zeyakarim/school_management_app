@@ -1,4 +1,5 @@
 const prisma = require("@/config/database");
+const { handlePrismaError } = require("@/utils/prismaErrorHandler");
 
 const simplifiedAssignments = (assignments) => {
     return assignments?.map((assignment) => {
@@ -34,8 +35,7 @@ const createAssignment = async (data) => {
         });
         return createdAssignment;
     } catch(error) {
-        console.error('Error in creating assignment : ', error);
-        throw(error)
+        handlePrismaError(error);
     }
 }
 
@@ -134,7 +134,7 @@ const updateAssignment = async (assignmentId, data) => {
         });
         
         if (!assignment) {
-            throw('Assignment Not Exist in the Database.')
+            throw { message: 'Assignment Not Exist in the Database.' }
         }
 
         const subject_id = parseInt(data.subject_id, 10);
@@ -157,8 +157,7 @@ const updateAssignment = async (assignmentId, data) => {
     
         return updatedAssignment;
     } catch (error) {
-        console.error('Error in updating assignment : ', error);
-        throw(error)
+        handlePrismaError(error);
     }
 }
 
@@ -170,7 +169,7 @@ const deleteAssignment = async (assignmentId) => {
         });
         
         if (!assignment) {
-            throw('Assignment Not Exist in the Database.')
+            throw { message: 'Assignment Not Exist in the Database.' }
         }
 
         const now = new Date();
@@ -183,8 +182,7 @@ const deleteAssignment = async (assignmentId) => {
     
         return deletedAssignment;
     } catch (error) {
-        console.error('Errro in deleting assignment : ', error);
-        throw(error)
+        handlePrismaError(error);
     }
 }
 
