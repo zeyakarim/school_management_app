@@ -8,12 +8,15 @@ import { Delete } from "@mui/icons-material";
 import { IconButton, Tooltip } from "@mui/material";
 import { useDisclosure } from "@nextui-org/react";
 import { useState } from "react";
+import { useSnackBar } from "@/utils/snackbarContext";
 
 const Attendance = () => {
     const {isOpen, onOpen, onOpenChange, onClose } = useDisclosure();
     const [deleteId, setDeleteId] = useState(null);
     const [data, setData] = useState({})
     const [dialogType, setDialogType] = useState(null)
+    const [reRender, setReRender] = useState(false);
+    const { setSnackBar } = useSnackBar();
 
     const columns = [
         {
@@ -96,15 +99,27 @@ const Attendance = () => {
             const response = await fetch(`${process.env.NEXT_PUBLIC_WEBSITE_URL}/attendances/${deleteId}`, {
                 method: "DELETE"
             });
-    
-            if (response.ok) {
-                console.log("Attendance deleted successfully!");
-                onClose();
+
+            const result = await response.json();
+            onClose();
+            setReRender((prev) => !prev);
+
+            if (response.ok && result.success) {
+                const successMessage = `Attendance deleted successfully!`;
+                setSnackBar((prevSnackBar) => ({
+                    ...prevSnackBar, display: true, message: successMessage, type: "success"
+                }));
             } else {
-                console.error("Failed to delete attendance.");
+                const errorMessage = result?.message || `Failed to delete attendance.`;
+                setSnackBar((prevSnackBar) => ({
+                    ...prevSnackBar, display: true, message: errorMessage, type: "error"
+                }));
             }
         } catch (error) {
-            console.error("Error in deleting :", error);
+            setSnackBar((prevSnackBar) => ({
+                ...prevSnackBar, display: true, message: "Something went wrong. Please try again.", type: "error"
+            }));
+            setReRender((prev) => !prev);
         }
     };
 
@@ -127,6 +142,8 @@ const Attendance = () => {
                 dialogTitle='Create A New Attendance'
                 table="attendance"
                 type="create"
+                reRender={reRender}
+                setReRender={setReRender}
             />
 
             {dialogType === "delete" && (
@@ -146,6 +163,7 @@ const Attendance = () => {
                     table="attendance"
                     type="update"
                     data={data}
+                    setReRender={setReRender}
                 />
             )}
         </div>

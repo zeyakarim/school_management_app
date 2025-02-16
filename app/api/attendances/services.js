@@ -1,4 +1,5 @@
 import prisma from "@/config/database";
+import { handlePrismaError } from "@/utils/prismaErrorHandler";
 
 const simplifiedAttendances = (attendances) => {
     return attendances?.map((attendance) => {
@@ -38,8 +39,7 @@ const createAttendance = async (data) => {
         
         return createdAttendance;
     } catch (error) {
-        console.error('Error in creating attendance : ', error);
-        throw(error)
+        handlePrismaError(error);
     }
 }
 
@@ -147,7 +147,7 @@ const updateAttendance = async (attendanceId, data) => {
         });
         
         if (!attendance) {
-            throw('Attendance Not Exist in the Database.')
+            throw { message: 'Attendance Not Exist in the Database.' }
         }
 
         const subject_id = parseInt(data.subject_id, 10);
@@ -172,8 +172,7 @@ const updateAttendance = async (attendanceId, data) => {
     
         return updatedAttendance;
     } catch (error) {
-        console.error('Errro in updating attendance : ', error);
-        throw(error)
+        handlePrismaError(error);
     }
 }
 
@@ -184,7 +183,7 @@ const deleteAttendance = async (attendanceId) => {
         });
         
         if (!attendance) {
-            throw('Attendance Not Exist in the Database.')
+            throw { message: 'Attendance Not Exist in the Database.' }
         }
 
         const now = new Date();
@@ -197,8 +196,7 @@ const deleteAttendance = async (attendanceId) => {
     
         return deletedAttendance;
     } catch (error) {
-        console.error('Errro in deleting attendance : ', error);
-        throw(error)
+        handlePrismaError(error);
     }
 }
 
