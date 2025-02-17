@@ -1,4 +1,5 @@
 const prisma = require("@/config/database");
+import { handlePrismaError } from "@/utils/prismaErrorHandler";
 
 const simplifiedClasses = (classes) => {
     return classes?.map((classData) => {
@@ -26,8 +27,7 @@ const createClass = async (data) => {
 
         return classCreated;
     } catch (error) {
-        console.log("Error in creating class : ", error)
-        throw(error)
+        handlePrismaError(error);
     }
 }
 
@@ -95,7 +95,7 @@ const updateClass = async (classId, data) => {
         });
         
         if (!classData) {
-            throw('Class Not Exist in the Database.')
+            throw { message: 'Class Not Exist in the Database.' }
         }
 
         const supervisor_id = parseInt(data.supervisor_id, 10);
@@ -113,8 +113,7 @@ const updateClass = async (classId, data) => {
     
         return updatedClass;
     } catch (error) {
-        console.error('Errro in updating class : ', error);
-        throw(error)
+        handlePrismaError(error);
     }
 }
 
@@ -125,7 +124,7 @@ const deleteClass = async (classId) => {
         });
         
         if (!classData) {
-            throw('Class Not Exist in the Database.')
+            throw { message: 'Class Not Exist in the Database.' }
         }
 
         const now = new Date();
@@ -138,8 +137,7 @@ const deleteClass = async (classId) => {
     
         return deletedClass;
     } catch (error) {
-        console.error('Errro in deleting class : ', error);
-        throw(error)
+        handlePrismaError(error);
     }
 }
 
