@@ -1,4 +1,5 @@
 const prisma = require("@/config/database");
+const { handlePrismaError } = require("@/utils/prismaErrorHandler");
 
 const simplifiedExams = (exams) => {
     return exams?.map((exam) => {
@@ -29,8 +30,7 @@ const createExam = async (data) => {
         
         return createdExam;
     } catch(error) {
-        console.error('Error in creating exam : ', error)
-        throw(error)
+        handlePrismaError(error);
     }
 }
 
@@ -109,7 +109,7 @@ const updateExam = async (examId, data) => {
         });
         
         if (!exam) {
-            throw('Exam Not Exist in the Database.')
+            throw { message: 'Exam Not Exist in the Database.' }
         }
 
         const subject_id = parseInt(data.subject_id, 10);
@@ -129,8 +129,7 @@ const updateExam = async (examId, data) => {
     
         return updatedExam;
     } catch (error) {
-        console.error('Errro in updating exam : ', error);
-        throw(error)
+        handlePrismaError(error);
     }
 }
 
@@ -141,7 +140,7 @@ const deleteExam = async (examId) => {
         });
         
         if (!exam) {
-            throw('Exam Not Exist in the Database.')
+            throw { message: 'Exam Not Exist in the Database.' }
         }
 
         const now = new Date();
@@ -154,8 +153,7 @@ const deleteExam = async (examId) => {
     
         return deletedExam;
     } catch (error) {
-        console.error('Errro in deleting exam : ', error);
-        throw(error)
+        handlePrismaError(error);
     }
 }
 

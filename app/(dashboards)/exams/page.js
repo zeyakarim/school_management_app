@@ -8,12 +8,15 @@ import { Delete } from "@mui/icons-material";
 import { IconButton, Tooltip } from "@mui/material";
 import { useDisclosure } from "@nextui-org/react";
 import { useState } from "react";
+import { useSnackBar } from "@/utils/snackbarContext";
 
 const Exams = () => {
     const {isOpen, onOpen, onOpenChange, onClose } = useDisclosure();
     const [deleteId, setDeleteId] = useState(null);
     const [data, setData] = useState({})
     const [dialogType, setDialogType] = useState(null)
+    const [reRender, setReRender] = useState(false);
+    const { setSnackBar } = useSnackBar();
 
     const columns = [
         {
@@ -102,15 +105,27 @@ const Exams = () => {
             const response = await fetch(`${process.env.NEXT_PUBLIC_WEBSITE_URL}/exams/${deleteId}`, {
                 method: "DELETE"
             });
-    
-            if (response.ok) {
-                console.log("Exam deleted successfully!");
-                onClose();
+
+            const result = await response.json();
+            onClose();
+            setReRender((prev) => !prev);
+
+            if (response.ok && result.success) {
+                const successMessage = `Exam deleted successfully!`;
+                setSnackBar((prevSnackBar) => ({
+                    ...prevSnackBar, display: true, message: successMessage, type: "success"
+                }));
             } else {
-                console.error("Failed to create exam.");
+                const errorMessage = result?.message || `Failed to delete exam.`;
+                setSnackBar((prevSnackBar) => ({
+                    ...prevSnackBar, display: true, message: errorMessage, type: "error"
+                }));
             }
         } catch (error) {
-            console.error("Error submitting form:", error);
+            setSnackBar((prevSnackBar) => ({
+                ...prevSnackBar, display: true, message: "Something went wrong. Please try again.", type: "error"
+            }));
+            setReRender((prev) => !prev);
         }
     };
 
@@ -133,6 +148,8 @@ const Exams = () => {
                 dialogTitle='Create A New Exam'
                 table="exam"
                 type="create"
+                reRender={reRender}
+                setReRender={setReRender}
             />
 
             {dialogType === "delete" && (
@@ -152,6 +169,7 @@ const Exams = () => {
                     table="exam"
                     type="update"
                     data={data}
+                    setReRender={setReRender}
                 />
             )}
         </div>
