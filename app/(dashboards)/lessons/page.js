@@ -8,12 +8,15 @@ import { Delete } from "@mui/icons-material";
 import { IconButton, Tooltip } from "@mui/material";
 import { useDisclosure } from "@nextui-org/react";
 import { useState } from "react";
+import { useSnackBar } from "@/utils/snackbarContext";
 
 const Lessons = () => {
     const {isOpen, onOpen, onOpenChange, onClose } = useDisclosure();
     const [deleteId, setDeleteId] = useState(null);
     const [data, setData] = useState({})
-    const [dialogType, setDialogType] = useState(null)
+    const [dialogType, setDialogType] = useState(null);
+    const [reRender, setReRender] = useState(false);
+    const { setSnackBar } = useSnackBar();
 
     const columns = [
         {
@@ -108,15 +111,27 @@ const Lessons = () => {
             const response = await fetch(`${process.env.NEXT_PUBLIC_WEBSITE_URL}/lessons/${deleteId}`, {
                 method: "DELETE"
             });
-    
-            if (response.ok) {
-                console.log("Lesson deleted successfully!");
-                onClose();
+
+            const result = await response.json();
+            onClose();
+            setReRender((prev) => !prev);
+
+            if (response.ok && result.success) {
+                const successMessage = `Lesson deleted successfully!`;
+                setSnackBar((prevSnackBar) => ({
+                    ...prevSnackBar, display: true, message: successMessage, type: "success"
+                }));
             } else {
-                console.error("Failed to delete lesson.");
+                const errorMessage = result?.message || `Failed to delete lesson.`;
+                setSnackBar((prevSnackBar) => ({
+                    ...prevSnackBar, display: true, message: errorMessage, type: "error"
+                }));
             }
         } catch (error) {
-            console.error("Error submitting form:", error);
+            setSnackBar((prevSnackBar) => ({
+                ...prevSnackBar, display: true, message: "Something went wrong. Please try again.", type: "error"
+            }));
+            setReRender((prev) => !prev);
         }
     };
 
@@ -139,6 +154,8 @@ const Lessons = () => {
                 dialogTitle='Create A New Lesson'
                 table="lesson"
                 type="create"
+                reRender={reRender}
+                setReRender={setReRender}
             />
 
             {dialogType === "delete" && (
@@ -158,6 +175,7 @@ const Lessons = () => {
                     table="lesson"
                     type="update"
                     data={data}
+                    setReRender={setReRender}
                 />
             )}
         </div>

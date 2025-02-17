@@ -7,6 +7,7 @@ import InputField from '../formsFields/InputField';
 import { Button } from '@nextui-org/react';
 import { formatTime } from '@/utils/helper';
 import { parseAbsoluteToLocal } from "@internationalized/date";
+import { useSnackBar } from '@/utils/snackbarContext';
 
 const days = [
     { "label": 'MONDAY',    "key": 'MONDAY', "id": 'MONDAY'  },
@@ -17,7 +18,9 @@ const days = [
     { "label": 'SATURDAY',  "key": 'SATURDAY', "id": 'SATURDAY' }
 ]
 
-const LessonForm = ({ type, data, onClose }) => {
+const LessonForm = ({ type, data, onClose, setReRender }) => {
+    const { setSnackBar } = useSnackBar();
+
     const formatTeacherLabel = useCallback(
         (item) => (item?.last_name ? `${item?.first_name} ${item?.last_name}` : item?.first_name), []
     );
@@ -65,17 +68,30 @@ const LessonForm = ({ type, data, onClose }) => {
 
             const response = await fetch(url, {
                 method,
+                headers: { "Content-Type": "application/json" },
                 body: JSON.stringify(formData),
             });
 
-            if (response.ok) {
-                console.log(`Lesson ${type === 'create' ? 'created' : 'updated'} successfully!`);
-                onClose();
+            const result = await response.json();
+            onClose();
+            setReRender((prev) => !prev);
+
+            if (response.ok && result.success) {
+                const successMessage = `Lesson ${type === 'create' ? 'created' : 'updated'} successfully!`;
+                setSnackBar((prevSnackBar) => ({
+                    ...prevSnackBar, display: true, message: successMessage, type: "success"
+                }));
             } else {
-                console.error(`Failed to ${type === 'create' ? 'create' : 'update'} lesson.`);
+                const errorMessage = result?.message || `Failed to ${type === 'create' ? 'create' : 'update'} lesson.`;
+                setSnackBar((prevSnackBar) => ({
+                    ...prevSnackBar, display: true, message: errorMessage, type: "error"
+                }));
             }
         } catch (error) {
-            console.error("Error submitting form:", error);
+            setSnackBar((prevSnackBar) => ({
+                ...prevSnackBar, display: true, message: "Something went wrong. Please try again.", type: "error"
+            }));
+            setReRender((prev) => !prev);
         }
     }
 

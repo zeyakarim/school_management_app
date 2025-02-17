@@ -1,15 +1,14 @@
 import { NextResponse } from "next/server";
 import { createLesson, fetchLessons } from "./services";
-import { success } from "@/utils/responseHandler";
+import { failure, success } from "@/utils/responseHandler";
 
 export async function POST(req) {
     const data = await req.json();
     try {
         const createdLesson = await createLesson(data);
-        return NextResponse.json({data: {lesson: createdLesson, status: 200}});
+        return NextResponse.json(success(createdLesson,'Lesson Created Successfully!'));
     } catch (error) {
-        console.log("Error:",error)
-        return NextResponse.json({"msg": "something went wrong", error: error},  {status:'400'})
+        return NextResponse.json(failure(error, error?.message))
     }
 }
 

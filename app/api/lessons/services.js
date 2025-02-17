@@ -1,4 +1,5 @@
 const prisma = require("@/config/database");
+const { handlePrismaError } = require("@/utils/prismaErrorHandler");
 
 const simplifiedLessons = (lessons) => {
     return lessons?.map((lesson) => {
@@ -33,8 +34,7 @@ const createLesson = async (data) => {
 
         return createdLesson;
     } catch (error) {
-        console.error('Error in creating lesson : ', error)
-        throw(error)
+        handlePrismaError(error);
     }
 }
 
@@ -127,7 +127,7 @@ const updateLesson = async (lessonId, data) => {
         });
         
         if (!lesson) {
-            throw('Lesson Not Exist in the Database.')
+            throw { message: 'Lesson Not Exist in the Database.' }
         }
 
         const teacher_id = parseInt(data.teacher_id, 10);
@@ -149,8 +149,7 @@ const updateLesson = async (lessonId, data) => {
     
         return updatedLesson;
     } catch (error) {
-        console.error('Errro in updating lesson : ', error);
-        throw(error)
+        handlePrismaError(error);
     }
 }
 
@@ -161,7 +160,7 @@ const deleteLesson = async (lessonId) => {
         });
         
         if (!lesson) {
-            throw('Lesson Not Exist in the Database.')
+            throw { message: 'Lesson Not Exist in the Database.' }
         }
 
         const now = new Date();
@@ -174,8 +173,7 @@ const deleteLesson = async (lessonId) => {
     
         return deletedLesson;
     } catch (error) {
-        console.error('Errro in deleting lesson : ', error);
-        throw(error)
+        handlePrismaError(error);
     }
 }
 
