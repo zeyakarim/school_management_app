@@ -4,8 +4,11 @@ import { AirlineSeatReclineNormal, AutoStories, School } from '@mui/icons-materi
 import useFetchData from '@/utils/useFetchData';
 import { useCallback, useState } from 'react';
 import { Button } from "@nextui-org/react";
+import { useSnackBar } from "@/utils/snackbarContext";
 
-const SubjectForm = ({ type, data, onClose }) => {
+const SubjectForm = ({ type, data, onClose, setReRender }) => {
+    const { setSnackBar } = useSnackBar();
+
     const formatTeacherLabel = useCallback(
         (item) => (item?.last_name ? `${item?.first_name} ${item?.last_name}` : item?.first_name), []
     );
@@ -43,17 +46,30 @@ const SubjectForm = ({ type, data, onClose }) => {
 
             const response = await fetch(url, {
                 method,
+                headers: { "Content-Type": "application/json" },
                 body: JSON.stringify(formData),
             });
 
-            if (response.ok) {
-                console.log(`Subject ${type === 'create' ? 'created' : 'updated'} successfully!`);
-                onClose();
+            const result = await response.json();
+            onClose();
+            setReRender((prev) => !prev);
+        
+            if (response.ok && result.success) {
+                const successMessage = `Subject ${type === 'create' ? 'created' : 'updated'} successfully!`;
+                setSnackBar((prevSnackBar) => ({
+                    ...prevSnackBar, display: true, message: successMessage, type: "success"
+                }));
             } else {
-                console.error(`Failed to ${type === 'create' ? 'created' : 'updated'} subject.`);
+                const errorMessage = result?.message || `Failed to ${type === 'create' ? 'create' : 'update'} subject.`;
+                setSnackBar((prevSnackBar) => ({
+                    ...prevSnackBar, display: true, message: errorMessage, type: "error"
+                }));
             }
         } catch (error) {
-            console.error("Error submitting form:", error);
+            setSnackBar((prevSnackBar) => ({
+                ...prevSnackBar, display: true, message: "Something went wrong. Please try again.", type: "error"
+            }));
+            setReRender((prev) => !prev);
         }
     }
 

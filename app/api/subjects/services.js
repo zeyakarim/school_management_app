@@ -1,4 +1,5 @@
 const prisma = require("@/config/database");
+const { handlePrismaError } = require("@/utils/prismaErrorHandler");
 
 const simplifiedSubjects = (subjects) => {
     return subjects?.map((subject) => {
@@ -27,8 +28,7 @@ const createSubject = async (data) => {
 
         return subject;
     } catch (error) {
-        console.log("Error:",error)
-        throw(error)
+        handlePrismaError(error);
     }
 }
 
@@ -108,7 +108,7 @@ const updateSubject = async (subjectId, data) => {
         });
         
         if (!subject) {
-            throw('Subject Not Exist in the Database.')
+            throw { message: 'Subject Not Exist in the Database.' }
         }
 
         const class_id = parseInt(data.class_id, 10);
@@ -126,8 +126,7 @@ const updateSubject = async (subjectId, data) => {
     
         return updatedSubject;
     } catch (error) {
-        console.error('Errro in updating subject : ', error);
-        throw(error)
+        handlePrismaError(error);
     }
 }
 
@@ -138,7 +137,7 @@ const deleteSubject = async (subjectId) => {
         });
         
         if (!subject) {
-            throw('Subject Not Exist in the Database.')
+            throw { message: 'Subject Not Exist in the Database.' }
         }
 
         const now = new Date();
@@ -151,8 +150,7 @@ const deleteSubject = async (subjectId) => {
     
         return deletedSubject;
     } catch (error) {
-        console.error('Errro in deleting subject : ', error);
-        throw(error)
+        handlePrismaError(error);
     }
 }
 
