@@ -1,4 +1,5 @@
 const prisma = require("@/config/database");
+const { handlePrismaError } = require("@/utils/prismaErrorHandler");
 
 const createParent = async (data) => {
     try {
@@ -8,8 +9,7 @@ const createParent = async (data) => {
 
         return createdParent;
     } catch (error) {
-        console.error('error in creating parent : ', error)
-        throw(error)
+        handlePrismaError(error);
     }
 }
 
@@ -67,7 +67,7 @@ const updateParent = async (parentId, data) => {
         });
 
         if (!parent) {
-            throw('Parent Not Exist in the Database.')
+            throw { message: 'Parent Not Exist in the Database.' }
         }
 
         const updatedParent =  await prisma.parent.update({
@@ -77,8 +77,7 @@ const updateParent = async (parentId, data) => {
     
         return updatedParent;
     } catch (error) {
-        console.error('error in updating parent : ', error)
-        throw(error)
+        handlePrismaError(error);
     }
 }
 
@@ -89,7 +88,7 @@ const deleteParent = async (parentId) => {
         });
         
         if (!parent) {
-            throw('Parent Not Exist in the Database.')
+            throw { message: 'Parent Not Exist in the Database.' }
         }
 
         const now = new Date();
@@ -102,8 +101,7 @@ const deleteParent = async (parentId) => {
     
         return deletedParent;
     } catch (error) {
-        console.error('Errro in deleting parent : ', error);
-        throw(error)
+        handlePrismaError(error);
     }
 }
 

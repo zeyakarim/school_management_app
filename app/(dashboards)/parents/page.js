@@ -4,6 +4,7 @@ import ConfirmDialog from "@/components/ConfirmDialog";
 import Dialog from "@/components/Dialog";
 import EditIcon from "@/components/EditIcon";
 import Table from "@/components/Table/Table";
+import { useSnackBar } from "@/utils/snackbarContext";
 import { Delete } from "@mui/icons-material";
 import { IconButton, Tooltip } from "@mui/material";
 import { useDisclosure } from "@nextui-org/react";
@@ -14,6 +15,8 @@ const Parents = () => {
     const [deleteId, setDeleteId] = useState(null);
     const [data, setData] = useState({})
     const [dialogType, setDialogType] = useState(null)
+    const [reRender, setReRender] = useState(false);
+    const { setSnackBar } = useSnackBar();
 
     const columns = [
         {
@@ -103,15 +106,27 @@ const Parents = () => {
             const response = await fetch(`${process.env.NEXT_PUBLIC_WEBSITE_URL}/parents/${deleteId}`, {
                 method: "DELETE"
             });
-    
-            if (response.ok) {
-                console.log("Parent deleted successfully!");
-                onClose();
+
+            const result = await response.json();
+            onClose();
+            setReRender((prev) => !prev);
+
+            if (response.ok && result.success) {
+                const successMessage = `Parent deleted successfully!`;
+                setSnackBar((prevSnackBar) => ({
+                    ...prevSnackBar, display: true, message: successMessage, type: "success"
+                }));
             } else {
-                console.error("Failed to delete parent.");
+                const errorMessage = result?.message || `Failed to delete parent.`;
+                setSnackBar((prevSnackBar) => ({
+                    ...prevSnackBar, display: true, message: errorMessage, type: "error"
+                }));
             }
         } catch (error) {
-            console.error("Error in deleting :", error);
+            setSnackBar((prevSnackBar) => ({
+                ...prevSnackBar, display: true, message: "Something went wrong. Please try again.", type: "error"
+            }));
+            setReRender((prev) => !prev);
         }
     };
 
@@ -135,6 +150,8 @@ const Parents = () => {
                 dialogTitle='Create A New Parent'
                 table="parent"
                 type="create"
+                reRender={reRender}
+                setReRender={setReRender}
             />
         
             {dialogType === "delete" && (
@@ -154,6 +171,7 @@ const Parents = () => {
                     table="parent"
                     type="update"
                     data={data}
+                    setReRender={setReRender}
                 />
             )}
         </div>
