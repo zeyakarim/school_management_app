@@ -1,4 +1,5 @@
 const prisma = require("@/config/database");
+const { handlePrismaError } = require("@/utils/prismaErrorHandler");
 
 const simplifiedResults = (results) => {
     return results?.map((result) => {
@@ -43,8 +44,7 @@ const createResult = async (data) => {
 
         return createdResult;
     } catch (error) {
-        console.error('Error in creating result : ', error);
-        throw(error)
+        handlePrismaError(error);
     }
 }
 
@@ -197,7 +197,7 @@ const updateResult = async (resultId, data) => {
         });
         
         if (!result) {
-            throw('Result Not Exist in the Database.')
+            throw { message: 'Result Not Exist in the Database.' }
         }
 
         const subject_id = parseInt(data.subject_id, 10);
@@ -224,8 +224,7 @@ const updateResult = async (resultId, data) => {
     
         return updatedResult;
     } catch (error) {
-        console.error('Errro in updating result : ', error);
-        throw(error)
+        handlePrismaError(error);
     }
 }
 
@@ -236,7 +235,7 @@ const deleteResult = async (resultId) => {
         });
         
         if (!result) {
-            throw('Result Not Exist in the Database.')
+            throw { message: 'Result Not Exist in the Database.' }
         }
 
         const now = new Date();
@@ -249,8 +248,7 @@ const deleteResult = async (resultId) => {
     
         return deletedResult;
     } catch (error) {
-        console.error('Errro in deleting result : ', error);
-        throw(error)
+        handlePrismaError(error);
     }
 }
 
