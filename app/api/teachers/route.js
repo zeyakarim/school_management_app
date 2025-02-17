@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
 import { createTeacher, fetchTeachers } from "./services";
-import { success } from "@/utils/responseHandler";
+import { failure, success } from "@/utils/responseHandler";
 
 export async function POST(req) {
     try {
@@ -8,10 +8,9 @@ export async function POST(req) {
         const file = formData.get("file"); // Extract file
 
         const createdTeacher = await createTeacher(formData, file);
-        return NextResponse.json({data: {teacher: createdTeacher, status: 200}});
+        return NextResponse.json(success(createdTeacher, 'Teacher Created Successfully!'));
     } catch (error) {
-        console.log("Error:",error)
-        return NextResponse.json({"msg": "something went wrong"},  {status:'400'})
+        return NextResponse.json(failure(error, error?.message))
     }
 }
 

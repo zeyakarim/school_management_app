@@ -8,12 +8,15 @@ import { Delete } from "@mui/icons-material";
 import { IconButton, Tooltip } from "@mui/material";
 import { useDisclosure } from "@nextui-org/react";
 import { useState } from "react";
+import { useSnackBar } from "@/utils/snackbarContext";
 
 const Teachers = () => {
   const {isOpen, onOpen, onOpenChange, onClose } = useDisclosure();
   const [deleteId, setDeleteId] = useState(null);
   const [data, setData] = useState({})
-  const [dialogType, setDialogType] = useState(null)
+  const [dialogType, setDialogType] = useState(null);
+  const [reRender, setReRender] = useState(false);
+  const { setSnackBar } = useSnackBar();
 
   const columns = [
     {
@@ -122,11 +125,20 @@ const Teachers = () => {
         method: "DELETE"
       });
 
-      if (response.ok) {
-        console.log("Teacher deleted successfully!");
-        onClose();
+      const result = await response.json();
+      onClose();
+      setReRender((prev) => !prev);
+  
+      if (response.ok && result.success) {
+        const successMessage = `Teacher deleted successfully!`;
+        setSnackBar((prevSnackBar) => ({
+          ...prevSnackBar, display: true, message: successMessage, type: "success"
+        }));
       } else {
-        console.error("Failed to delete teacher.");
+        const errorMessage = result?.message || `Failed to delete teacher.`;
+        setSnackBar((prevSnackBar) => ({
+          ...prevSnackBar, display: true, message: errorMessage, type: "error"
+        }));
       }
     } catch (error) {
       console.error("Error in deleting :", error);
@@ -155,6 +167,8 @@ const Teachers = () => {
         table="teacher"
         type="create"
         data={data}
+        reRender={reRender}
+        setReRender={setReRender}
       />
 
       {dialogType === "delete" && (
@@ -174,6 +188,7 @@ const Teachers = () => {
           table="teacher"
           type="update"
           data={data}
+          setReRender={setReRender}
         />
       )}
     </div>

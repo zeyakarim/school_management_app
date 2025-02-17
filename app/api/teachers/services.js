@@ -1,4 +1,5 @@
 const prisma = require("@/config/database");
+const { handlePrismaError } = require("@/utils/prismaErrorHandler");
 const { putSingleDocumentS3, readDocumentsFromS3 } = require("@/utils/s3");
 const bucketName = process.env.AWS_S3_BUCKET;
 
@@ -25,8 +26,7 @@ const createTeacher = async (formData, file) => {
 
         return updatedTeacher;
     } catch (error) {
-        console.log("Error in Creating Teacher: ", error)
-        throw(error)
+        handlePrismaError(error);
     }
 }
 
@@ -97,7 +97,7 @@ const deleteTeacher = async (teacherId) => {
         });
         
         if (!teacher) {
-            throw('Teacher Not Exist in the Database.')
+            throw { message: 'Teacher Not Exist in the Database.' }
         }
 
         const now = new Date();
@@ -110,8 +110,7 @@ const deleteTeacher = async (teacherId) => {
     
         return deletedTeacher;
     } catch (error) {
-        console.error('Errro in deleting teacher : ', error);
-        throw(error)
+        handlePrismaError(error);
     }
 };
 
@@ -129,7 +128,7 @@ const updateTeacher = async (teacherId, formData, file) => {
         });
 
         if (!teacher) {
-            throw('Teacher Not Exist in the Database.')
+            throw { message: 'Teacher Not Exist in the Database.' }
         }
 
         if (file) {
@@ -146,8 +145,7 @@ const updateTeacher = async (teacherId, formData, file) => {
     
         return updatedTeacher;
     } catch (error) {
-        console.error('Errro in deleting teacher : ', error);
-        throw(error)
+        handlePrismaError(error);
     }
 }
 
