@@ -1,4 +1,5 @@
 import prisma from "@/config/database";
+import { handlePrismaError } from "@/utils/prismaErrorHandler";
 
 const simplifiedEvents = (events) => {
     return events?.map((event) => {
@@ -27,8 +28,7 @@ const createEvent = async (data) => {
 
         return createdEvent;
     } catch (error) {
-        console.error('Error in creating event : ', error);
-        throw(error)
+        handlePrismaError(error);
     }
 }
 
@@ -97,7 +97,7 @@ const updateEvent = async (eventId, data) => {
         });
         
         if (!event) {
-            throw('Event Not Exist in the Database.')
+            throw { message: 'Event Not Exist in the Database.' }
         }
 
         const class_id = parseInt(data.class_id, 10);
@@ -116,8 +116,7 @@ const updateEvent = async (eventId, data) => {
     
         return updatedEvent;
     } catch (error) {
-        console.error('Errro in updating event : ', error);
-        throw(error)
+        handlePrismaError(error);
     }
 }
 
@@ -128,7 +127,7 @@ const deleteEvent = async (eventId) => {
         });
         
         if (!event) {
-            throw('Event Not Exist in the Database.')
+            throw { message: 'Event Not Exist in the Database.' }
         }
 
         const now = new Date();
@@ -141,8 +140,7 @@ const deleteEvent = async (eventId) => {
     
         return deletedEvent;
     } catch (error) {
-        console.error('Errro in deleting event : ', error);
-        throw(error)
+        handlePrismaError(error);
     }
 }
 
