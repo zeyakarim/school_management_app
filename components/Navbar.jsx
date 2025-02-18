@@ -52,7 +52,7 @@ const Navbar = () => {
             <div className="flex items-center gap-2 pr-5 pt-5 justify-center md:justify-start" style={{ paddingLeft:5}}>
                 <Image src="/schoolLogo.png" alt="schoolLogo" width={55} height={50} />
                 <p
-                    className="font-semibold hidden md:block text-[22px] h-[40px]"
+                    className="font-semibold hidden md:block text-[22px] h-[40px] lg:text-[18px] 2xl:text-[22px]"
                     style={{
                         color: 'black', // Black text color
                         textShadow: `
