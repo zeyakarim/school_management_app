@@ -18,6 +18,7 @@ const nextConfig = {
                 pathname: "/teachers/**", // Allow all images from the "teachers" folder
             },
         ],
+        unoptimized: true,
     },
 };
 
