@@ -192,6 +192,7 @@ const Students = () => {
                 data={data}
                 reRender={reRender}
                 setReRender={setReRender}
+                mobileResponsive={true}
             />
 
             {dialogType === "delete" && (

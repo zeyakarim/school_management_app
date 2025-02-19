@@ -144,6 +144,7 @@ const Attendance = () => {
                 type="create"
                 reRender={reRender}
                 setReRender={setReRender}
+                mobileResponsive={true}
             />
 
             {dialogType === "delete" && (

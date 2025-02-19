@@ -15,32 +15,12 @@ const columnData = (row, RenderCell)=> {
 
 const DesktopResponsiveTable = (props) => {
     const { 
-        title, columns, dialogTitle, table, type, checkBoxSelection, navigateOnRowClickEndpoint, 
-        version, columnVisibilityModel, endPoint, dataPosition, rowId, reRender, setReRender
+        title, columns, dialogTitle, table, type, navigateOnRowClickEndpoint, 
+        endPoint, dataPosition, rowId, reRender, setReRender
     } = props;
     const {isOpen, onOpen, onOpenChange, onClose } = useDisclosure();
     const [searchFor, setSearchFor] = useState('');
-    const [page, setPage] = useState(1);
-    const [filterValue, setFilterValue] = useState("");
-    const [limit, setLimit] = useState(1);
     const [data, setData] = useState([]);
-    const [rowsData,setRowsData] = useState([]);
-    const [columnVisibilityModelTable,setColumnVisibilityModel] = useState(columnVisibilityModel ||  {});
-
-    const defaultVersion = 'version-1'
-    const versionMap = {
-        "version-1": {
-            initialSortState: { field: 'created_at', sort: 'desc' }
-        },
-        "version-2": {
-            initialSortState: { field: 'alter_at', sort: 'desc' }
-        },
-        "version-3": {
-            initialSortState: { field: "name", sort: "asc" }
-        },
-    }
-    const initialSortState = versionMap?.[version]?.initialSortState
-    const [sort, setSort] = useState(initialSortState)
 
     const fetchData = async (page) => {
         const params = new URLSearchParams({
