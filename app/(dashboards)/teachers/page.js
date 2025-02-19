@@ -104,7 +104,7 @@ const Teachers = () => {
       filterable: false,
       renderCell: (params) => (
         <Tooltip title="Edit" onClick={(e) => handleUpdateTeacher(e, params)}>
-          <IconButton>
+          <IconButton style={{ padding:'0px' }}>
             <EditIcon />
           </IconButton>
       </Tooltip>
@@ -169,6 +169,7 @@ const Teachers = () => {
         data={data}
         reRender={reRender}
         setReRender={setReRender}
+        mobileResponsive={true}
       />
 
       {dialogType === "delete" && (

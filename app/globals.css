@@ -153,3 +153,26 @@
   border-top-right-radius: 5px;
   border-bottom-right-radius: 5px;
 }
+
+.mobile-responsive-box {
+  border-radius: 6px;
+  box-shadow: 0 0 4px 2px hsla(0,0%,50%,.3);
+  margin: 10px 0;
+  padding: 15px 10px;
+  font-size: 14px;
+  border-left: 2px solid #34bff3;
+}
+
+.mobile-responsive-table { 
+  display: none;
+}
+
+/* Hide Desktop responsive table and display mobile responsive table */
+@media screen and (max-width:540px){
+  .desktop-responsive-table {
+    display: none;
+  }
+  .mobile-responsive-table {
+    display: block;
+  }
+}
