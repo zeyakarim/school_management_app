@@ -56,9 +56,7 @@ const RenderData = (row, column) => {
 
 
 const MobileResponsiveTable = (props) => {
-    const [loading,setLoading] = useState(false);
     const [data,setData] = useState([]);
-    const [snackBar, setSnackBar] = useState({ display: true, type: "success", message: "default message!" })
     const [searchFor,setSearchFor] = useState("");
     const {isOpen, onOpen, onOpenChange, onClose } = useDisclosure();
 
