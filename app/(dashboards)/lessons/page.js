@@ -92,7 +92,7 @@ const Lessons = () => {
             filterable: false,
             renderCell: (params) => (
                 <Tooltip title="Edit" onClick={() => handleUpdateLesson(params)}>
-                    <IconButton>
+                    <IconButton style={{ padding:'0px' }}>
                         <EditIcon />
                     </IconButton>
                 </Tooltip>

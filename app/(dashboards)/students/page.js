@@ -122,7 +122,7 @@ const Students = () => {
             filterable: false,
             renderCell: (params) => (
                 <Tooltip title="Edit" onClick={(e) => handleUpdateStudent(e, params)}>
-                    <IconButton>
+                    <IconButton style={{ padding:'0px' }}>
                         <EditIcon />
                     </IconButton>
                 </Tooltip>

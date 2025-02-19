@@ -68,7 +68,7 @@ const Subjects = () => {
             filterable: false,
             renderCell: (params) => (
                 <Tooltip title="Edit" onClick={() => handleUpdateSubject(params)}>
-                    <IconButton>
+                    <IconButton style={{ padding:'0px' }}>
                         <EditIcon />
                     </IconButton>
                 </Tooltip>
