@@ -1,6 +1,6 @@
 import DesktopResponsiveTable from "./DesktopResponsiveTable";
 import { useEffect, useState } from "react";
-import MobileResponsiveTable from "./MobileResponsiveTable";
+import MobileResponsiveTableComponent from "./MobileResponsiveTableComponent";
 
 export default function Table(props) {
     const [isMobile, setIsMobile] = useState(false); // Avoid SSR issue by setting a safe default
@@ -30,7 +30,7 @@ export default function Table(props) {
             {mobileResponsive ? (
                 isMobile ? (
                     <div className='mobile-responsive-table'>
-                        <MobileResponsiveTable
+                        <MobileResponsiveTableComponent
                             columns={columns}
                             dataPosition={dataPosition}
                             endPoint={endPoint}

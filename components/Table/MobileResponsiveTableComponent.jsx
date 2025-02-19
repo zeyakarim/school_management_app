@@ -55,7 +55,7 @@ const RenderData = (row, column) => {
 };
 
 
-const MobileResponsiveTable = (props) => {
+const MobileResponsiveTableComponent = (props) => {
     const [data,setData] = useState([]);
     const [searchFor,setSearchFor] = useState("");
     const {isOpen, onOpen, onOpenChange, onClose } = useDisclosure();
@@ -149,4 +149,4 @@ const MobileResponsiveTable = (props) => {
     )
 };
 
-export default MobileResponsiveTable;
+export default MobileResponsiveTableComponent;
