@@ -6,6 +6,8 @@ import moment from 'moment';
 import PaginationControlled from "./newPagination";
 import { Button, InputAdornment, TextField } from "@mui/material";
 import { Search } from "@mui/icons-material";
+import Spinner from "../Spinner";
+import { useSnackBar } from "@/utils/snackbarContext";
 
 const columnData = (row, RenderCell)=> {
     return (
@@ -18,11 +20,16 @@ const DesktopResponsiveTable = (props) => {
         title, columns, dialogTitle, table, type, navigateOnRowClickEndpoint, 
         endPoint, dataPosition, rowId, reRender, setReRender
     } = props;
+
+    const { setSnackBar } = useSnackBar();
+
     const {isOpen, onOpen, onOpenChange, onClose } = useDisclosure();
     const [searchFor, setSearchFor] = useState('');
     const [data, setData] = useState([]);
+    const [loading, setLoading] = useState(false);
 
     const fetchData = async (page) => {
+        setLoading(true);
         const params = new URLSearchParams({
             searchFor,
             page,
@@ -32,8 +39,10 @@ const DesktopResponsiveTable = (props) => {
             const apiResponse = await fetch(`${process.env.NEXT_PUBLIC_WEBSITE_URL}${endPoint}?${params.toString()}`);
             const result = await apiResponse.json();
             setData(result?.data)
+            setLoading(false);
             return result?.data;
         } catch (error) {
+            setLoading(false);
             throw new Error(error)
         }
     }
@@ -118,7 +127,6 @@ const DesktopResponsiveTable = (props) => {
                                 key={row?.[rowId]} 
                                 style={{ borderBottom: "1px solid #ddd", cursor:'pointer' }} 
                                 onClick={() => {
-                                // const permissible = CheckRoleBasedPermission(auth?.user, services?.[service], permission?.read);
                                     if (navigateOnRowClickEndpoint) {
                                         const url = `${navigateOnRowClickEndpoint}/${row?.id || row?.[rowId]}`;
                                         window.open(url, '_blank');
@@ -134,6 +142,8 @@ const DesktopResponsiveTable = (props) => {
                         ))}
                     </tbody>
                 </table>
+
+                {loading ? <Spinner /> : null}
 
                 {/* Pagination Controls */}
                 <div className="p-4 flex justify-between bg-white">
