@@ -1,11 +1,12 @@
 import { useSnackBar } from "@/utils/snackbarContext";
 import InputField from "../formsFields/InputField";
 import { Grade, Percent } from '@mui/icons-material';
-import { Button } from "@nextui-org/react";
+import { Button, Spinner } from "@nextui-org/react";
 import { useState } from "react";
 
 const GradeForm = ({ type, data, onClose, setReRender }) => {
     const { setSnackBar } = useSnackBar();
+    const [loading, setLoading] = useState(false);
 
     const [formValues, setFormValues] = useState({
         level: data?.level || '',
@@ -20,6 +21,7 @@ const GradeForm = ({ type, data, onClose, setReRender }) => {
     };
 
     const handleSubmit = async (event) => {
+        setLoading(true);
         event.preventDefault();
 
         const formData = {
@@ -38,6 +40,8 @@ const GradeForm = ({ type, data, onClose, setReRender }) => {
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify(formData),
             });
+
+            setLoading(false);
         
             const result = await response.json();
             onClose();
@@ -55,6 +59,7 @@ const GradeForm = ({ type, data, onClose, setReRender }) => {
                 }));
             }
         } catch (error) {
+            setLoading(false);
             setSnackBar((prevSnackBar) => ({
                 ...prevSnackBar, display: true, message: "Something went wrong. Please try again.", type: "error"
             }));
@@ -91,8 +96,8 @@ const GradeForm = ({ type, data, onClose, setReRender }) => {
                 <Button onPress={onClose} radius="full" className="bg-gradient-to-tr from-[#C6884C] to-yellow-500 text-white shadow-lg">
                     Close
                 </Button>
-                <Button type="submit" radius="full" className="bg-gradient-to-tr from-[#4CC67C] to-[#46DCDF] text-white shadow-lg">
-                    {type === 'create' ? 'Create' : 'Update'}
+                <Button type="submit" radius="full" className="bg-gradient-to-tr from-[#4CC67C] to-[#46DCDF] text-white shadow-lg" disabled={loading ? true : false}>
+                    {loading ? <Spinner size='sm' /> : type === 'create' ? 'Create' : 'Update'}
                 </Button>
             </div>
         </form>

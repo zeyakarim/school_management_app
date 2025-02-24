@@ -4,12 +4,13 @@ import DatePickerField from "../formsFields/DatePickerField";
 import { AirlineSeatReclineNormal, Assignment, AutoStories, School } from '@mui/icons-material';
 import { useCallback, useState } from "react";
 import useFetchData from "@/utils/useFetchData";
-import { Button } from "@nextui-org/react";
+import { Button, Spinner } from "@nextui-org/react";
 import { parseDate } from "@internationalized/date";
 import { useSnackBar } from "@/utils/snackbarContext";
 
 const AssignmentForm = ({ type, data, onClose, setReRender }) => {
     const { setSnackBar } = useSnackBar();
+    const [loading, setLoading] = useState(false);
 
     const formatTeacherLabel = useCallback(
         (item) => (item?.last_name ? `${item?.first_name} ${item?.last_name}` : item?.first_name), []
@@ -48,6 +49,7 @@ const AssignmentForm = ({ type, data, onClose, setReRender }) => {
     };
 
     const handleSubmit = async (event) => {
+        setLoading(true);
         event.preventDefault();
 
         const formData = {
@@ -71,6 +73,8 @@ const AssignmentForm = ({ type, data, onClose, setReRender }) => {
                 body: JSON.stringify(formData),
             });
 
+            setLoading(false);
+
             const result = await response.json();
             onClose();
             setReRender((prev) => !prev);
@@ -87,6 +91,7 @@ const AssignmentForm = ({ type, data, onClose, setReRender }) => {
                 }));
             }
         } catch (error) {
+            setLoading(false);
             setSnackBar((prevSnackBar) => ({
                 ...prevSnackBar, display: true, message: "Something went wrong. Please try again.", type: "error"
             }));
@@ -173,8 +178,8 @@ const AssignmentForm = ({ type, data, onClose, setReRender }) => {
                 <Button onPress={onClose} radius="full" className="bg-gradient-to-tr from-[#C6884C] to-yellow-500 text-white shadow-lg">
                     Close
                 </Button>
-                <Button type="submit" radius="full" className="bg-gradient-to-tr from-[#4CC67C] to-[#46DCDF] text-white shadow-lg">
-                    {type === 'create' ? 'Create' : 'Update'}
+                <Button type="submit" radius="full" className="bg-gradient-to-tr from-[#4CC67C] to-[#46DCDF] text-white shadow-lg" disabled={loading ? true : false}>
+                    {loading ? <Spinner size='sm' /> : type === 'create' ? 'Create' : 'Update'}
                 </Button>
             </div>
         </form>

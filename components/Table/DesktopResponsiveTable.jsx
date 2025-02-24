@@ -7,7 +7,6 @@ import PaginationControlled from "./newPagination";
 import { Button, InputAdornment, TextField } from "@mui/material";
 import { Search } from "@mui/icons-material";
 import Spinner from "../Spinner";
-import { useSnackBar } from "@/utils/snackbarContext";
 
 const columnData = (row, RenderCell)=> {
     return (
@@ -20,8 +19,6 @@ const DesktopResponsiveTable = (props) => {
         title, columns, dialogTitle, table, type, navigateOnRowClickEndpoint, 
         endPoint, dataPosition, rowId, reRender, setReRender
     } = props;
-
-    const { setSnackBar } = useSnackBar();
 
     const {isOpen, onOpen, onOpenChange, onClose } = useDisclosure();
     const [searchFor, setSearchFor] = useState('');
