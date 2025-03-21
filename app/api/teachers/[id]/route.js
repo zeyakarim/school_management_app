@@ -8,32 +8,19 @@ import { readDocumentsFromS3 } from "@/utils/s3";
 const bucketName = process.env.AWS_S3_BUCKET;
 
 export async function GET(req, { params }) {
-    console.log("Received params: 1111111111111111", params); 
     try {
-        console.log("Received params:", params); // Debugging log
-
-        const teacherId = Number(params?.id);
-        if (isNaN(teacherId)) {
-            return NextResponse.json({ msg: "Invalid teacher ID" }, { status: 400 });
-        }
-
         const teacherDetails = await prisma.teacher.findUnique({
-            where: { id: teacherId }
+            where: {id: parseInt(params?.id)}
         });
-
-        if (!teacherDetails) {
-            return NextResponse.json({ msg: "Teacher not found" }, { status: 404 });
-        }
-
         // const teacherDetailsItems = await fetchIcons();
-
-        const attachDocsUrl = await readDocumentsFromS3('teachers', teacherId, bucketName);
+        
+        const attachDocsUrl = await readDocumentsFromS3('teachers', teacherDetails?.id, bucketName);
         if (attachDocsUrl) teacherDetails['img'] = attachDocsUrl?.[0] || null;
 
         const data = {
             ...teacherDetails,
-            // detailsItems: teacherDetailsItems
-        };
+            // detailsItems: studentDetailsItems
+        }
 
         return NextResponse.json(success(data, 'Teacher Details Fetched Successfully'));
     } catch (error) {
