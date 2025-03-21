@@ -15,16 +15,29 @@ const DetailsPage = ({scheduleTitle, shortcutItems, id, endPoint, dataPosition }
   const [loading, setLoading] = useState(false);
 
   const fetchDetails = async (id) => {
-    try {
-      const apiResponse = await fetch(`${process.env.NEXT_PUBLIC_WEBSITE_URL}${endPoint}/${id}`);
-      const result = await apiResponse.json();
-      // console.log(result?.data,'data')
-      setDetails(result?.data);
-      setLoading(false);
-    } catch (error) {
-      throw new Error(error)
+    if (!id) {
+      console.error("fetchDetails: ID is missing");
+      return;
     }
-  }
+  
+    const apiUrl = `${process.env.NEXT_PUBLIC_WEBSITE_URL}${endPoint}/${id}`;
+  
+    try {
+      const apiResponse = await fetch(apiUrl);
+  
+      if (!apiResponse.ok) {
+        throw new Error(`API Error: ${apiResponse.status} ${apiResponse.statusText}`);
+      }
+  
+      const result = await apiResponse.json();
+      setDetails(result?.data);
+    } catch (error) {
+      console.error("Error fetching details:", error);
+    } finally {
+      setLoading(false);
+    }
+  };
+  
 
   useEffect(() => {
     setLoading(true);

@@ -139,10 +139,10 @@ const Students = () => {
             renderCell: (params) => (
                 <Tooltip title="Open Details">
                     <IconButton
-                    style={{ padding: "0px" }}
-                    onClick={() => router.push(`/students/${params?.id}`)}
+                        style={{ padding: "0px" }}
+                        onClick={() => router.push(`/students/${params?.id}`)}
                     >
-                    <Visibility />
+                        <Visibility />
                     </IconButton>
                 </Tooltip>
             )

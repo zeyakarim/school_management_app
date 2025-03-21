@@ -8,6 +8,7 @@ const bucketName = process.env.AWS_S3_BUCKET;
 
 export async function GET(req, { params }) {
     try {
+        console.log(params?.id,'params?.id')
         const studentDetails = await prisma.student.findUnique({
             where: {id: parseInt(params?.id)}
         });
