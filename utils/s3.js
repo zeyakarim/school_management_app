@@ -89,7 +89,7 @@ const putSingleDocumentS3 = async (commonPrefix, uniqueKey, file, bucketName = p
 const readDocumentsFromS3 = async (
     commonPrefix,
     uniqueKey,
-    bucketName = 'depo24-portal',
+    bucketName,
 ) => {
     // Build the S3 path conditionally
     const prefix = uniqueKey ? `${commonPrefix}/${uniqueKey}` : commonPrefix + '/';
