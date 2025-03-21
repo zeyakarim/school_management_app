@@ -38,7 +38,7 @@ export async function GET(req, { params }) {
         return NextResponse.json(success(data, 'Teacher Details Fetched Successfully'));
     } catch (error) {
         console.error("Error fetching teacher:", error);
-        return NextResponse.json({ msg: "Something went wrong" }, { status: 500 });
+        return NextResponse.json(failure(error, error?.message));
     }
 }
 
