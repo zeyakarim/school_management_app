@@ -9,8 +9,16 @@ const bucketName = process.env.AWS_S3_BUCKET;
 export async function GET(req, { params }) {
     try {
         const teacherDetails = await prisma.teacher.findUnique({
-            where: {id: parseInt(params?.id)}
+            where: { id: parseInt(params.id) }
+        }).catch(error => {
+            console.error("Prisma Error:", error);
+            return null;
         });
+          
+        if (!teacherDetails) {
+            return NextResponse.json({ msg: "Teacher not found" }, { status: 404 });
+        }
+          
         const teacherDetailsItems = await fetchIcons();
 
         const attachDocsUrl = await readDocumentsFromS3('teachers', teacherDetails?.id, bucketName);
@@ -23,7 +31,7 @@ export async function GET(req, { params }) {
         return NextResponse.json(success(data, 'Teacher Details Fetched Successfully'));
     } catch (error) {
         console.log("Error:",error)
-        return NextResponse.json({"msg": "something went wrong"},  {status:'400'})
+        return NextResponse.json({ msg: "Something went wrong" }, { status: 400 });
     }
 }
 

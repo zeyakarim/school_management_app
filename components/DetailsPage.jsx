@@ -21,12 +21,16 @@ const DetailsPage = ({scheduleTitle, shortcutItems, id, endPoint, dataPosition }
     }
   
     const apiUrl = `${process.env.NEXT_PUBLIC_WEBSITE_URL}${endPoint}/${id}`;
+    console.log("Fetching:", apiUrl); // Debugging log
   
     try {
       const apiResponse = await fetch(apiUrl);
   
+      // Check if response is not OK (400, 404, 500)
       if (!apiResponse.ok) {
-        throw new Error(`API Error: ${apiResponse.status} ${apiResponse.statusText}`);
+        const errorData = await apiResponse.json(); // Get detailed error message
+        console.error("API Error:", apiResponse.status, errorData);
+        throw new Error(`API Error: ${apiResponse.status} - ${errorData.message || "Unknown Error"}`);
       }
   
       const result = await apiResponse.json();
@@ -36,7 +40,7 @@ const DetailsPage = ({scheduleTitle, shortcutItems, id, endPoint, dataPosition }
     } finally {
       setLoading(false);
     }
-  };
+  };  
   
 
   useEffect(() => {
