@@ -91,6 +91,11 @@ const readDocumentsFromS3 = async (
     uniqueKey,
     bucketName,
 ) => {
+    console.log("AWS_ACCESS_KEY_ID:", process.env.AWS_S3_ACCESS_KEY_ID ? "Exists" : "Missing");
+    console.log("AWS_SECRET_ACCESS_KEY:", process.env.AWS_S3_SECRET_ACCESS_KEY ? "Exists" : "Missing");
+    console.log("Bucket Name:", process.env.AWS_S3_BUCKET);
+
+
     // Build the S3 path conditionally
     const prefix = uniqueKey ? `${commonPrefix}/${uniqueKey}` : commonPrefix + '/';
     console.log(prefix,'prefix')
