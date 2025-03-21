@@ -4,60 +4,78 @@ import { NextResponse } from "next/server";
 import { deleteTeacher, updateTeacher } from "../services";
 import { failure, success } from "@/utils/responseHandler";
 import { readDocumentsFromS3 } from "@/utils/s3";
+
 const bucketName = process.env.AWS_S3_BUCKET;
 
 export async function GET(req, { params }) {
     try {
+        console.log("Received params:", params); // Debugging log
+
+        const teacherId = Number(params?.id);
+        if (isNaN(teacherId)) {
+            return NextResponse.json({ msg: "Invalid teacher ID" }, { status: 400 });
+        }
+
         const teacherDetails = await prisma.teacher.findUnique({
-            where: { id: parseInt(params.id) }
-        }).catch(error => {
-            console.error("Prisma Error:", error);
-            return null;
+            where: { id: teacherId }
         });
-          
+
         if (!teacherDetails) {
             return NextResponse.json({ msg: "Teacher not found" }, { status: 404 });
         }
-          
+
         const teacherDetailsItems = await fetchIcons();
 
-        const attachDocsUrl = await readDocumentsFromS3('teachers', teacherDetails?.id, bucketName);
+        const attachDocsUrl = await readDocumentsFromS3('teachers', teacherId, bucketName);
         if (attachDocsUrl) teacherDetails['img'] = attachDocsUrl?.[0] || null;
 
         const data = {
             ...teacherDetails,
             detailsItems: teacherDetailsItems
-        }
+        };
+
         return NextResponse.json(success(data, 'Teacher Details Fetched Successfully'));
     } catch (error) {
-        console.log("Error:",error)
-        return NextResponse.json({ msg: "Something went wrong" }, { status: 400 });
+        console.error("Error fetching teacher:", error);
+        return NextResponse.json({ msg: "Something went wrong" }, { status: 500 });
     }
 }
 
 export async function PUT(req, { params }) {
     try {
+        console.log("Updating teacher with params:", params); // Debugging log
+
+        const teacherId = Number(params?.id);
+        if (isNaN(teacherId)) {
+            return NextResponse.json({ msg: "Invalid teacher ID" }, { status: 400 });
+        }
+
         const formData = await req.formData();
         const file = formData.get("file"); // Extract file
 
-        const teacherId = parseInt(params?.id);
-
         const updatedTeacher = await updateTeacher(teacherId, formData, file);
-        
+
         return NextResponse.json(success(updatedTeacher, 'Teacher Updated Successfully'));
     } catch (error) {
-        return NextResponse.json(failure(error, error?.message))
+        console.error("Error updating teacher:", error);
+        return NextResponse.json(failure(error, error?.message));
     }
 }
 
 export async function DELETE(req, { params }) {
     try {
-        const teacherId = parseInt(params?.id);
+        console.log("Deleting teacher with params:", params); // Debugging log
+
+        const teacherId = Number(params?.id);
+        if (isNaN(teacherId)) {
+            return NextResponse.json({ msg: "Invalid teacher ID" }, { status: 400 });
+        }
 
         const deletedTeacher = await deleteTeacher(teacherId);
-        
+
         return NextResponse.json(success(deletedTeacher, 'Teacher Deleted Successfully'));
     } catch (error) {
-        return NextResponse.json(failure(error, error?.message))
+        console.error("Error deleting teacher:", error);
+        return NextResponse.json(failure(error, error?.message));
     }
 }
