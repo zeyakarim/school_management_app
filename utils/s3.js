@@ -93,9 +93,11 @@ const readDocumentsFromS3 = async (
 ) => {
     // Build the S3 path conditionally
     const prefix = uniqueKey ? `${commonPrefix}/${uniqueKey}` : commonPrefix + '/';
+    console.log(prefix,'prefix')
 
     // List objects in the S3 bucket
     const objectsOnS3 = await listObjects(bucketName, prefix);
+    console.log(objectsOnS3,'objectsOnS3')
 
     if (!objectsOnS3?.Contents?.length) {
         return false;
