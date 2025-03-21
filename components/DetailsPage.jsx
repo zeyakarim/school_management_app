@@ -22,6 +22,9 @@ const DetailsPage = ({scheduleTitle, shortcutItems, id, endPoint, dataPosition }
   
     const apiUrl = `${process.env.NEXT_PUBLIC_WEBSITE_URL}${endPoint}/${id}`;
     console.log("Fetching:", apiUrl); // Debugging log
+
+    console.log("Bucket Name:", process.env.AWS_S3_BUCKET_NAME);
+    console.log("Access Key ID:", process.env.AWS_S3_ACCESS_KEY_ID ? "Exists" : "Not Found");
   
     try {
       const apiResponse = await fetch(apiUrl);
