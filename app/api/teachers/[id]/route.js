@@ -9,21 +9,24 @@ const bucketName = process.env.AWS_S3_BUCKET;
 
 export async function GET(req, { params }) {
     try {
-        const teacherDetails = await prisma.teacher.findUnique({
-            where: {id: parseInt(params?.id)}
-        });
-        // const teacherDetailsItems = await fetchIcons();
+        // const teacherDetails = await prisma.teacher.findUnique({
+        //     where: {id: parseInt(params?.id)}
+        // });
+        // // const teacherDetailsItems = await fetchIcons();
 
-        const attachDocsUrl = await readDocumentsFromS3('teachers', teacherDetails?.id, bucketName);
-        console.log(attachDocsUrl,'attachDocsUrl')
-        if (attachDocsUrl) teacherDetails['img'] = attachDocsUrl?.[0] || null;
+        // const attachDocsUrl = await readDocumentsFromS3('teachers', teacherDetails?.id, bucketName);
+        // console.log(attachDocsUrl,'attachDocsUrl')
+        // if (attachDocsUrl) teacherDetails['img'] = attachDocsUrl?.[0] || null;
 
-        const data = {
-            ...teacherDetails,
-            // detailsItems: studentDetailsItems
-        }
+        // const data = {
+        //     ...teacherDetails,
+        //     // detailsItems: studentDetailsItems
+        // }
+        console.log("Bucket Name:", process.env.AWS_S3_BUCKET); // ✅ Should work in API routes
+  console.log("Access Key ID:", process.env.AWS_S3_ACCESS_KEY_ID ? "Exists" : "Not Found");
+  return Response.json({ message: "Env check complete" });
 
-        return NextResponse.json(success(data, 'Teacher Details Fetched Successfully'));
+        // return NextResponse.json(success(data, 'Teacher Details Fetched Successfully'));
     } catch (error) {
         console.error("Error fetching teacher:", error);
         return NextResponse.json(failure(error, error?.message));
