@@ -25,14 +25,14 @@ export async function GET(req, { params }) {
             return NextResponse.json({ msg: "Teacher not found" }, { status: 404 });
         }
 
-        const teacherDetailsItems = await fetchIcons();
+        // const teacherDetailsItems = await fetchIcons();
 
-        const attachDocsUrl = await readDocumentsFromS3('teachers', teacherId, bucketName);
-        if (attachDocsUrl) teacherDetails['img'] = attachDocsUrl?.[0] || null;
+        // const attachDocsUrl = await readDocumentsFromS3('teachers', teacherId, bucketName);
+        // if (attachDocsUrl) teacherDetails['img'] = attachDocsUrl?.[0] || null;
 
         const data = {
             ...teacherDetails,
-            detailsItems: teacherDetailsItems
+            // detailsItems: teacherDetailsItems
         };
 
         return NextResponse.json(success(data, 'Teacher Details Fetched Successfully'));
