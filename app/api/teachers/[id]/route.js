@@ -8,6 +8,7 @@ import { readDocumentsFromS3 } from "@/utils/s3";
 const bucketName = process.env.AWS_S3_BUCKET;
 
 export async function GET(req, { params }) {
+    console.log("Received params: 1111111111111111", params); 
     try {
         console.log("Received params:", params); // Debugging log
 
