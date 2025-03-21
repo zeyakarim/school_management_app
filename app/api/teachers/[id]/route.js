@@ -13,8 +13,9 @@ export async function GET(req, { params }) {
             where: {id: parseInt(params?.id)}
         });
         // const teacherDetailsItems = await fetchIcons();
-        
+
         const attachDocsUrl = await readDocumentsFromS3('teachers', teacherDetails?.id, bucketName);
+        console.log(attachDocsUrl,'attachDocsUrl')
         if (attachDocsUrl) teacherDetails['img'] = attachDocsUrl?.[0] || null;
 
         const data = {

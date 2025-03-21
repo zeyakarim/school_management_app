@@ -33,6 +33,7 @@ const createTeacher = async (formData, file) => {
 const prepareTeachersData = async (teachers) => {
     const structuredData = await Promise.all(teachers?.map(async (teacher) => {
         let attachDocsUrl = null;
+        console.log(bucketName,'bucketName')
         if (teacher?.img) {
             attachDocsUrl = await readDocumentsFromS3('teachers', teacher?.id, bucketName);
         }
