@@ -12,7 +12,7 @@ export async function GET(req, { params }) {
         const studentDetails = await prisma.student.findUnique({
             where: {id: parseInt(params?.id)}
         });
-        const studentDetailsItems = await fetchIcons();
+        // const studentDetailsItems = await fetchIcons();
 
         const attachDocsUrl = await readDocumentsFromS3('students', studentDetails?.id, bucketName);
         if (attachDocsUrl) studentDetails['img'] = attachDocsUrl?.[0] || null;

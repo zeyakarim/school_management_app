@@ -35,7 +35,6 @@ const listObjects = async (bucket, key) => {
     console.log(params,'params')
   
     try {
-        console.log(s3,'s3')
       const objectList = await s3.listObjectsV2(params);
       console.log(objectList,'objectList')
       return objectList;
