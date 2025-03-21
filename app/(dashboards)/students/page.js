@@ -4,11 +4,12 @@ import ConfirmDialog from "@/components/ConfirmDialog";
 import Dialog from "@/components/Dialog";
 import EditIcon from "@/components/EditIcon";
 import Table from "@/components/Table/Table";
-import { Delete } from "@mui/icons-material";
+import { Delete, Visibility } from "@mui/icons-material";
 import { IconButton, Tooltip } from "@mui/material";
 import { useDisclosure } from "@nextui-org/react";
 import { useState } from "react";
 import { useSnackBar } from "@/utils/snackbarContext";
+import { useRouter } from "next/navigation";
 
 const columnVisibilityModel = {
     username: false,
@@ -23,6 +24,7 @@ const Students = () => {
     const [dialogType, setDialogType] = useState(null)
     const [reRender, setReRender] = useState(false);
     const { setSnackBar } = useSnackBar();
+    const router = useRouter();
 
     const columns = [
         {
@@ -127,8 +129,24 @@ const Students = () => {
                     </IconButton>
                 </Tooltip>
             )
+        },
+        {
+            field: 'View',
+            headerName: 'View',
+            flex: 0.5,
+            sortable: false,
+            filterable: false,
+            renderCell: (params) => (
+                <Tooltip title="Open Details">
+                    <IconButton
+                    style={{ padding: "0px" }}
+                    onClick={() => router.push(`/students/${params?.id}`)}
+                    >
+                    <Visibility />
+                    </IconButton>
+                </Tooltip>
+            )
         }
-        
     ];
 
     const handleUpdateStudent = async (event, row) => {

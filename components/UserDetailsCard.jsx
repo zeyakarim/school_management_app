@@ -2,12 +2,12 @@ import {Card, CardBody} from "@nextui-org/react";
 import Image from "next/image";
 import { Bloodtype, CalendarMonth, Email, LocationOn, Man, Phone, Woman } from '@mui/icons-material';
 
-const UserDetailsCard = ({ name, title, bloodGroup, dateOfJoing, email, phone, address, gender }) => {
+const UserDetailsCard = ({ name, title, bloodGroup, dateOfJoing, email, phone, address, gender, img }) => {
     return (
         <Card className="flex flex-1 rounded-md">
             <CardBody className="bg-lamaSky py-6 px-4 flex flex-col lg:flex-row gap-4">
             <div className="w-1/3">
-                <Image src='/user.jpg' alt='' width={144} height={144} className="w-36 h-36 rounded-full object-cover"/>
+                <Image src={img} alt='' width={144} height={144} className="w-36 h-36 rounded-full object-cover"/>
             </div>
 
             <div className="md:w-full w-2/3 flex flex-col justify-between gap-4">

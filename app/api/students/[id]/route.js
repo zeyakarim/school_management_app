@@ -1,6 +1,32 @@
 import { NextResponse } from "next/server";
 import { deleteStudent, updateStudent } from "../services";
 import { failure, success } from "@/utils/responseHandler";
+import { fetchIcons } from "@/utils/helper";
+import { readDocumentsFromS3 } from "@/utils/s3";
+import prisma from "@/config/database";
+const bucketName = process.env.AWS_S3_BUCKET;
+
+export async function GET(req, { params }) {
+    try {
+        const studentDetails = await prisma.student.findUnique({
+            where: {id: parseInt(params?.id)}
+        });
+        const studentDetailsItems = await fetchIcons();
+
+        const attachDocsUrl = await readDocumentsFromS3('students', studentDetails?.id, bucketName);
+        if (attachDocsUrl) studentDetails['img'] = attachDocsUrl?.[0] || null;
+
+        const data = {
+            ...studentDetails,
+            detailsItems: studentDetailsItems
+        }
+
+        return NextResponse.json(success(data, 'Student Details Fetched Successfully'));
+    } catch (error) {
+        console.log("Error:",error)
+        return NextResponse.json({"msg": "something went wrong"},  {status:'400'})
+    }
+}
 
 export async function PUT(req, { params }) {
     try {

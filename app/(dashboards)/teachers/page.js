@@ -4,11 +4,12 @@ import ConfirmDialog from "@/components/ConfirmDialog";
 import Dialog from "@/components/Dialog";
 import EditIcon from "@/components/EditIcon";
 import Table from "@/components/Table/Table";
-import { Delete } from "@mui/icons-material";
+import { Delete, Visibility } from "@mui/icons-material";
 import { IconButton, Tooltip } from "@mui/material";
 import { useDisclosure } from "@nextui-org/react";
 import { useState } from "react";
 import { useSnackBar } from "@/utils/snackbarContext";
+import { useRouter } from "next/navigation";
 
 const Teachers = () => {
   const {isOpen, onOpen, onOpenChange, onClose } = useDisclosure();
@@ -17,6 +18,7 @@ const Teachers = () => {
   const [dialogType, setDialogType] = useState(null);
   const [reRender, setReRender] = useState(false);
   const { setSnackBar } = useSnackBar();
+  const router = useRouter()
 
   const columns = [
     {
@@ -107,7 +109,24 @@ const Teachers = () => {
           <IconButton style={{ padding:'0px' }}>
             <EditIcon />
           </IconButton>
-      </Tooltip>
+        </Tooltip>
+      )
+    },
+    {
+      field: 'View',
+      headerName: 'View',
+      flex: 0.5,
+      sortable: false,
+      filterable: false,
+      renderCell: (params) => (
+        <Tooltip title="Open Details">
+          <IconButton
+            style={{ padding: "0px" }}
+            onClick={() => router.push(`/teachers/${params?.id}`)}
+          >
+            <Visibility />
+          </IconButton>
+        </Tooltip>
       )
     }
   ];

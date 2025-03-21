@@ -123,12 +123,12 @@ const DesktopResponsiveTable = (props) => {
                             <tr 
                                 key={row?.[rowId]} 
                                 style={{ borderBottom: "1px solid #ddd", cursor:'pointer' }} 
-                                onClick={() => {
-                                    if (navigateOnRowClickEndpoint) {
-                                        const url = `${navigateOnRowClickEndpoint}/${row?.id || row?.[rowId]}`;
-                                        window.open(url, '_blank');
-                                    }
-                                }}
+                                // onClick={() => {
+                                //     if (navigateOnRowClickEndpoint) {
+                                //         const url = `${navigateOnRowClickEndpoint}/${row?.id || row?.[rowId]}`;
+                                //         window.open(url, '_blank');
+                                //     }
+                                // }}
                             >
                                 {columns?.map((column, index) => (
                                     <td key={index} className="p-[15px] text-[14px] bg-white text-start" style={{ fontFamily: "Roboto, Helvetica, Arial, sans-serif"}}>

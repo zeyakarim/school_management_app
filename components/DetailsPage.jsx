@@ -18,7 +18,8 @@ const DetailsPage = ({scheduleTitle, shortcutItems, id, endPoint, dataPosition }
     try {
       const apiResponse = await fetch(`${process.env.NEXT_PUBLIC_WEBSITE_URL}${endPoint}/${id}`);
       const result = await apiResponse.json();
-      setDetails(result?.data[dataPosition]);
+      // console.log(result?.data,'data')
+      setDetails(result?.data);
       setLoading(false);
     } catch (error) {
       throw new Error(error)
@@ -32,7 +33,6 @@ const DetailsPage = ({scheduleTitle, shortcutItems, id, endPoint, dataPosition }
 
   return (
     <div className='flex-1 p-4 flex flex-col gap-4 xl:flex-row'>
-      {console.log(details,'details')}
       <Backdrop
         sx={{ color: '#fff', zIndex: (theme) => theme.zIndex.drawer + 1 }}
         open={loading}
@@ -42,7 +42,7 @@ const DetailsPage = ({scheduleTitle, shortcutItems, id, endPoint, dataPosition }
       <div className="w-full lg:w-[70%]">
         <div className="flex flex-col lg:flex-row gap-2">
           <UserDetailsCard 
-            name={`${details?.first_name} ${details?.last_name && details?.last_name}`}
+            name={`${details?.first_name} ${details?.last_name ? details?.last_name : ''}`}
             title={'Lorem ipsum, dolor sit amet consectetur adipisicing elit.'}
             bloodGroup={details?.blood_type}
             dateOfJoing={moment(details?.birth_date).format('DD MMM, YYYY')}
@@ -50,6 +50,7 @@ const DetailsPage = ({scheduleTitle, shortcutItems, id, endPoint, dataPosition }
             phone={details?.phone}
             gender={details?.gender}
             address={details?.address}
+            img={details?.img}
           />
           
           <div className="flex-1 flex gap-2 justify-between flex-wrap">

@@ -9,6 +9,8 @@ const StudentDetails = ({params}) => {
                 id={id} 
                 scheduleTitle={`Student Schedule`}  
                 shortcutItems={studentShortcutItems}
+                endPoint={'/students'}
+                dataPosition={'studentDetails'}
             />
         </div>
     )

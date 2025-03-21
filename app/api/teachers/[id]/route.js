@@ -3,6 +3,8 @@ import { fetchIcons } from "@/utils/helper";
 import { NextResponse } from "next/server";
 import { deleteTeacher, updateTeacher } from "../services";
 import { failure, success } from "@/utils/responseHandler";
+import { readDocumentsFromS3 } from "@/utils/s3";
+const bucketName = process.env.AWS_S3_BUCKET;
 
 export async function GET(req, { params }) {
     try {
@@ -11,11 +13,14 @@ export async function GET(req, { params }) {
         });
         const teacherDetailsItems = await fetchIcons();
 
+        const attachDocsUrl = await readDocumentsFromS3('teachers', teacherDetails?.id, bucketName);
+        if (attachDocsUrl) teacherDetails['img'] = attachDocsUrl?.[0] || null;
+
         const data = {
             ...teacherDetails,
             detailsItems: teacherDetailsItems
         }
-        return NextResponse.json({data: {teacherDetails: data, status: 200 }});
+        return NextResponse.json(success(data, 'Teacher Details Fetched Successfully'));
     } catch (error) {
         console.log("Error:",error)
         return NextResponse.json({"msg": "something went wrong"},  {status:'400'})
