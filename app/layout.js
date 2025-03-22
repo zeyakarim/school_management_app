@@ -1,4 +1,5 @@
 import "./globals.css";
+import { Analytics } from '@vercel/analytics/next';
 import Navbar from "@/components/Navbar";
 import Header from "@/components/Header";
 import { Providers } from "./providers";
@@ -27,6 +28,7 @@ export default function DashboardLayout({ children }) {
               <div className="w-[84%] md:w-[92%] lg:w-[84%] bg-[#F7F8FA] flex flex-col">
                 <Header />
                 {children}
+                <Analytics />
               </div>
             </div>
           </Providers>
