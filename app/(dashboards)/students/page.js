@@ -10,6 +10,7 @@ import { useDisclosure } from "@nextui-org/react";
 import { useState } from "react";
 import { useSnackBar } from "@/utils/snackbarContext";
 import { useRouter } from "next/navigation";
+import Image from "next/image";
 
 const columnVisibilityModel = {
     username: false,
@@ -32,6 +33,19 @@ const Students = () => {
             headerName: 'Username',
             headerClassName: 'super-app-theme--header',
             flex: 1,
+            renderCell: (params) => (
+                <div className="flex gap-2">
+                    <Image 
+                        src={params.img || "/user.png"} 
+                        alt={params.username || "User"}
+                        width={30}
+                        height={30}
+                        style={{ width:40, height: 40 }}
+                        className="rounded-full"
+                    />
+                    <p className="my-auto">{params?.username}</p>
+                </div>
+            )
         },
         {
             field: 'first_name',
@@ -133,7 +147,7 @@ const Students = () => {
         {
             field: 'View',
             headerName: 'View',
-            flex: 0.5,
+            flex: 0.3,
             sortable: false,
             filterable: false,
             renderCell: (params) => (
@@ -155,7 +169,6 @@ const Students = () => {
         setDialogType("update");  // Open update dialog
         onOpen();
     }
-    
 
     const handleDeleteStudent = async () => {
         try {

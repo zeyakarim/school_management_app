@@ -31,8 +31,6 @@ export async function GET(req, { params }) {
 
 export async function PUT(req, { params }) {
     try {
-        console.log("Updating teacher with params:", params); // Debugging log
-
         const teacherId = Number(params?.id);
         if (isNaN(teacherId)) {
             return NextResponse.json({ msg: "Invalid teacher ID" }, { status: 400 });
@@ -52,8 +50,6 @@ export async function PUT(req, { params }) {
 
 export async function DELETE(req, { params }) {
     try {
-        console.log("Deleting teacher with params:", params); // Debugging log
-
         const teacherId = Number(params?.id);
         if (isNaN(teacherId)) {
             return NextResponse.json({ msg: "Invalid teacher ID" }, { status: 400 });

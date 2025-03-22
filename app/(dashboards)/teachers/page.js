@@ -10,6 +10,7 @@ import { useDisclosure } from "@nextui-org/react";
 import { useState } from "react";
 import { useSnackBar } from "@/utils/snackbarContext";
 import { useRouter } from "next/navigation";
+import Image from "next/image";
 
 const Teachers = () => {
   const {isOpen, onOpen, onOpenChange, onClose } = useDisclosure();
@@ -26,6 +27,19 @@ const Teachers = () => {
       headerName: 'Username',
       headerClassName: 'super-app-theme--header',
       flex: 1,
+      renderCell: (params) => (
+        <div className="flex gap-2">
+          <Image
+            src={params.img || "/user.png"} 
+            alt={params.username || "User"}
+            width={30}
+            height={30}
+            style={{ width:40, height: 40 }}
+            className="rounded-full"
+          />
+          <p className="my-auto">{params?.username}</p>
+        </div>
+      )
     },
     {
       field: 'first_name',
