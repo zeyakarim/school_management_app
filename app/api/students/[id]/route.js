@@ -13,7 +13,7 @@ export async function GET(req, { params }) {
         });
         // const studentDetailsItems = await fetchIcons();
 
-        const attachDocsUrl = await readDocumentsFromS3('students', studentDetails?.id, bucketName);
+        const attachDocsUrl = await readDocumentsFromS3('students', studentDetails?.img, bucketName);
         if (attachDocsUrl) studentDetails['img'] = attachDocsUrl?.[0] || null;
 
         const data = {

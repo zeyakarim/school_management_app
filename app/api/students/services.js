@@ -7,7 +7,7 @@ const simplifiedStudents = async (students) => {
     const structuredData = await Promise.all(students?.map(async (student) => {
         let attachDocsUrl = null;
         if (student?.img) {
-            attachDocsUrl = await readDocumentsFromS3('students', student?.id, bucketName);
+            attachDocsUrl = await readDocumentsFromS3('students', student?.img, bucketName);
         }
         student['parent'] =  student?.parent ? `${student.parent.first_name} ${student.parent.last_name}` : null,
         student['class'] = student?.class?.name || null,

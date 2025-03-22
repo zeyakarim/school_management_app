@@ -35,7 +35,7 @@ const prepareTeachersData = async (teachers) => {
         let attachDocsUrl = null;
         console.log(bucketName,'bucketName')
         if (teacher?.img) {
-            attachDocsUrl = await readDocumentsFromS3('teachers', teacher?.id, bucketName);
+            attachDocsUrl = await readDocumentsFromS3('teachers', teacher?.img, bucketName);
         }
         teacher['img'] = attachDocsUrl?.[0] || null;
         return teacher;
