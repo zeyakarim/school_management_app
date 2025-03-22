@@ -1,7 +1,7 @@
 const prisma = require("@/config/database");
 const { handlePrismaError } = require("@/utils/prismaErrorHandler");
 const { putSingleDocumentS3, readDocumentsFromS3 } = require("@/utils/s3");
-const bucketName = process.env.AWS_S3_BUCKET;
+const bucketName = process.env.AWS_BUCKET;
 
 const createTeacher = async (formData, file) => {
     try {

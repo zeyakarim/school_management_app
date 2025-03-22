@@ -1,7 +1,7 @@
 const prisma = require("@/config/database");
 const { handlePrismaError } = require("@/utils/prismaErrorHandler");
 const { readDocumentsFromS3, putSingleDocumentS3 } = require("@/utils/s3");
-const bucketName = process.env.AWS_S3_BUCKET;
+const bucketName = process.env.AWS_BUCKET;
 
 const simplifiedStudents = async (students) => {
     const structuredData = await Promise.all(students?.map(async (student) => {

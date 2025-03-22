@@ -1,30 +1,38 @@
 const { readDocumentsFromS3 } = require("./s3");
 
-const fetchIcons = async (items) => {
-    const urls = await readDocumentsFromS3('Icons', undefined, process.env.AWS_S3_BUCKET);
-    const detailsItems = [
+const fetchIcons = async () => {
+    const items = [
         {
-            icon: urls.find(url => url.includes("singleAttendance")),
+            // icon: urls.find(url => url.includes("singleAttendance")),
+            key: 'Icons/singleAttendance.png',
             title: "Attendance",
             number: "90%"
         },
         {
-            icon: urls.find(url => url.includes("singleBranch")),
+            key: 'Icons/singleBranch.png',
+            // icon: urls.find(url => url.includes("singleBranch")),
             title: "Branches",
             number: 20
         },
         {
-            icon: urls.find(url => url.includes("singleLesson")),
+            // icon: urls.find(url => url.includes("singleLesson")),
+            key: 'Icons/singleLesson.png',
             title: "Lessons",
             number: 10
         },
         {
-            icon: urls.find(url => url.includes("singleClass")),
+            // icon: urls.find(url => url.includes("singleClass")),
+            key: 'Icons/singleClass.png',
             title: "Classes",
             number: 15
         },
     ];
-    return detailsItems;
+
+    await Promise.all(items?.map(async (item) => {
+        item.icon = (await readDocumentsFromS3('Icons', item?.key, process.env.AWS_BUCKET))?.[0] || null;
+        return item;
+    }));
+    return items;
 }
 
 const formatTime = (time) => {

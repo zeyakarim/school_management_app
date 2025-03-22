@@ -4,14 +4,14 @@ import { failure, success } from "@/utils/responseHandler";
 import { fetchIcons } from "@/utils/helper";
 import { readDocumentsFromS3 } from "@/utils/s3";
 import prisma from "@/config/database";
-const bucketName = process.env.AWS_S3_BUCKET;
+const bucketName = process.env.AWS_BUCKET;
 
 export async function GET(req, { params }) {
     try {
         const studentDetails = await prisma.student.findUnique({
             where: {id: parseInt(params?.id)}
         });
-        // const studentDetailsItems = await fetchIcons();
+        const studentDetailsItems = await fetchIcons();
 
         const attachDocsUrl = await readDocumentsFromS3('students', studentDetails?.img, bucketName);
         if (attachDocsUrl) studentDetails['img'] = attachDocsUrl?.[0] || null;

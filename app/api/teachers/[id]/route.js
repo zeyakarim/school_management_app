@@ -5,21 +5,21 @@ import { deleteTeacher, updateTeacher } from "../services";
 import { failure, success } from "@/utils/responseHandler";
 import { readDocumentsFromS3 } from "@/utils/s3";
 
-const bucketName = process.env.AWS_S3_BUCKET;
+const bucketName = process.env.AWS_BUCKET;
 
 export async function GET(req, { params }) {
     try {
         const teacherDetails = await prisma.teacher.findUnique({
             where: {id: parseInt(params?.id)}
         });
-        // const teacherDetailsItems = await fetchIcons();
+        const teacherDetailsItems = await fetchIcons();
 
         const attachDocsUrl = await readDocumentsFromS3('teachers', teacherDetails?.img, bucketName);
         if (attachDocsUrl) teacherDetails['img'] = attachDocsUrl?.[0] || null;
 
         const data = {
             ...teacherDetails,
-            // detailsItems: studentDetailsItems
+            detailsItems: teacherDetailsItems
         }
 
         return NextResponse.json(success(data, 'Teacher Details Fetched Successfully'));
