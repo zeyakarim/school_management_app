@@ -32,11 +32,9 @@ const listObjects = async (bucket, key) => {
         Bucket: bucket,
         Prefix: key,
     };
-    console.log(params,'params')
   
     try {
       const objectList = await s3.listObjectsV2(params);
-      console.log(objectList,'objectList')
       return objectList;
     } catch (error) {
       return error;
@@ -93,18 +91,11 @@ const readDocumentsFromS3 = async (
     uniqueKey,
     bucketName,
 ) => {
-    console.log("AWS_ACCESS_KEY_ID:", process.env.AWS_S3_ACCESS_KEY_ID ? "Exists" : "Missing");
-    console.log("AWS_SECRET_ACCESS_KEY:", process.env.AWS_S3_SECRET_ACCESS_KEY ? "Exists" : "Missing");
-    console.log("Bucket Name:", process.env.AWS_S3_BUCKET);
-
-
     // Build the S3 path conditionally
     const prefix = uniqueKey ? `${commonPrefix}/${uniqueKey}` : commonPrefix + '/';
-    console.log(prefix,'prefix')
 
     // List objects in the S3 bucket
     const objectsOnS3 = await listObjects(bucketName, prefix);
-    console.log(objectsOnS3,'objectsOnS3')
 
     if (!objectsOnS3?.Contents?.length) {
         return false;
