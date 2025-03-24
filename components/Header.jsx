@@ -47,19 +47,19 @@ const Header = () => {
                 {authenticated ? (
                     <button 
                         type="button" 
-                        className="px-4 py-2 bg-[#5ABBC2] text-white hover:bg-[#4AA3A9] transition rounded-full text-[14px] font-semibold shadow-xl"
-                        onClick={() => setIsModalOpen(true)}
-                    >
-                        Sign Up
-                    </button>
-                ) : (
-                    <button 
-                        type="button" 
                         className="px-6 py-2 bg-[#5ABBC2] text-white hover:bg-[#4AA3A9] transition rounded-full text-[14px] font-semibold shadow-xl"
                         onClick={handleLogout}
                     >
                         Logout
                     </button>
+                ) : (
+                    <button 
+                        type="button" 
+                        className="px-4 py-2 bg-[#5ABBC2] text-white hover:bg-[#4AA3A9] transition rounded-full text-[14px] font-semibold shadow-xl"
+                        onClick={() => setIsModalOpen(true)}
+                    >
+                        Sign Up
+                    </button> 
                 )}
             </div>
 
