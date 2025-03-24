@@ -1,10 +1,15 @@
-'use client'
-import {NextUIProvider} from '@nextui-org/react'
+"use client"; // Required for Client Components
 
-export function Providers({children}) {
+import { Provider } from "react-redux";
+import { NextUIProvider } from "@nextui-org/react";
+import store from "@/redux/store";
+
+export function Providers({ children }) {
   return (
-    <NextUIProvider>
-      {children}
-    </NextUIProvider>
-  )
+    <Provider store={store}>
+      <NextUIProvider>
+        {children}
+      </NextUIProvider>
+    </Provider>
+  );
 }

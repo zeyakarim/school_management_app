@@ -1,6 +1,6 @@
 import { Input } from "@nextui-org/react";
 
-const InputField = ({ type, label, name, icon, isRequired, className, value, onChange, min, max, step }) => {
+const InputField = ({ type, label, name, icon, isRequired, className, value, onChange, placeholder }) => {
     const handleChange = (e) => {
         let newValue = e?.target?.value;
 
@@ -44,6 +44,7 @@ const InputField = ({ type, label, name, icon, isRequired, className, value, onC
             className={className}
             labelPlacement="outside"
             autoComplete="off"
+            placeholder={placeholder || ''}
         />
     );
 };
