@@ -86,7 +86,7 @@ const SignUpForm = ({ onClose, openModel }) => {
                 <IconButton 
                     onClick={onClose}
                     className="absolute top-3 right-3 hover:bg-[#4AA3A9] rounded-full shadow-md transition p-1"
-                    style={{ backgroundColor: '#5ABBC2' }}
+                    style={{ backgroundColor: '#5ABBC2', position:'absolute' }}
                 >
                     <Close className="text-white" style={{ fontSize: "16px" }} />
                 </IconButton>
