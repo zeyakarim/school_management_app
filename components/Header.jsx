@@ -19,7 +19,7 @@ const Header = () => {
 
     const handleLogout = () => {
         dispatch(reset());
-        router.push("/signin");
+        // router.push("/signin");
     };
 
     const handleSignUp = () => {

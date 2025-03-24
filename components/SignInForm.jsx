@@ -83,10 +83,10 @@ const SignInForm = ({ onClose, openModel }) => {
             <Tooltip title="Close" placement="right">
                 <IconButton 
                     onClick={onClose}
-                    className="absolute top-3 right-3 hover:bg-[#4AA3A9] rounded-full shadow-md transition p-1"
+                    className="absolute top-3 right-[12px] hover:bg-[#4AA3A9] rounded-full shadow-md transition p-1"
                     style={{ backgroundColor: '#5ABBC2' }}
                 >
-                    <Close className="text-white" style={{ fontSize: "18px" }} />
+                    <Close className="text-white" style={{ fontSize: "16px" }} />
                 </IconButton>
             </Tooltip>
 
