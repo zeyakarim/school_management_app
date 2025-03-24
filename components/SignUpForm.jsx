@@ -56,7 +56,7 @@ const SignUpForm = ({ onClose, openModel }) => {
                     message: "Admin Created Successfully!",
                     type: "success",
                 });
-                router.push("/signin");
+                openModel();
             } else {
                 setSnackBar({
                     display: true,
@@ -82,13 +82,13 @@ const SignUpForm = ({ onClose, openModel }) => {
     return (
         <div className="w-[70%] relative">
             {/* Close Button */}
-            <Tooltip title="Close">
+            <Tooltip title="Close" placement="right">
                 <IconButton 
                     onClick={onClose}
-                    className="absolute top-3 right-3 bg-[#5ABBC2] rounded-full shadow-md hover:bg-[#4AA3A9] transition"
-                    style={{ padding: '4px' }}
+                    className="absolute top-3 right-3 hover:bg-[#4AA3A9] rounded-full shadow-md transition p-1"
+                    style={{ backgroundColor: '#5ABBC2' }}
                 >
-                    <Close className="text-white" style={{ fontSize: "16px" }} />
+                    <Close className="text-white" style={{ fontSize: "18px" }} />
                 </IconButton>
             </Tooltip>
 
