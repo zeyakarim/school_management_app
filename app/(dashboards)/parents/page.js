@@ -4,6 +4,7 @@ import ConfirmDialog from "@/components/ConfirmDialog";
 import Dialog from "@/components/Dialog";
 import EditIcon from "@/components/EditIcon";
 import Table from "@/components/Table/Table";
+import useAuth from "@/hooks/useAuth";
 import { useSnackBar } from "@/utils/snackbarContext";
 import { Delete } from "@mui/icons-material";
 import { IconButton, Tooltip } from "@mui/material";
@@ -17,6 +18,7 @@ const Parents = () => {
     const [dialogType, setDialogType] = useState(null)
     const [reRender, setReRender] = useState(false);
     const { setSnackBar } = useSnackBar();
+    const { authenticated } = useAuth();
 
     const columns = [
         {
@@ -102,6 +104,11 @@ const Parents = () => {
     }
 
     const handleDeleteParent = async () => {
+        if (!authenticated) {
+            setSnackBar({ display: true, message: "Please register with Codeial to delete Parent.", type: "error" });
+            return;
+        }
+
         try {
             const response = await fetch(`${process.env.NEXT_PUBLIC_WEBSITE_URL}/parents/${deleteId}`, {
                 method: "DELETE"

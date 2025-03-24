@@ -11,6 +11,7 @@ import { useState } from "react";
 import { useSnackBar } from "@/utils/snackbarContext";
 import { useRouter } from "next/navigation";
 import Image from "next/image";
+import useAuth from "@/hooks/useAuth";
 
 const columnVisibilityModel = {
     username: false,
@@ -26,6 +27,7 @@ const Students = () => {
     const [reRender, setReRender] = useState(false);
     const { setSnackBar } = useSnackBar();
     const router = useRouter();
+    const { authenticated } = useAuth();
 
     const columns = [
         {
@@ -171,6 +173,11 @@ const Students = () => {
     }
 
     const handleDeleteStudent = async () => {
+        if (!authenticated) {
+            setSnackBar({ display: true, message: "Please register with Codeial to delete Student.", type: "error" });
+            return;
+        }
+
         try {
             const response = await fetch(`${process.env.NEXT_PUBLIC_WEBSITE_URL}/students/${deleteId}`, {
                 method: "DELETE"

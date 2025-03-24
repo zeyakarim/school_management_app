@@ -9,6 +9,7 @@ import { IconButton, Tooltip } from "@mui/material";
 import { useDisclosure } from "@nextui-org/react";
 import { useState } from "react";
 import { useSnackBar } from "@/utils/snackbarContext";
+import useAuth from "@/hooks/useAuth";
 
 const Classes = () => {
     const {isOpen, onOpen, onOpenChange, onClose } = useDisclosure();
@@ -17,6 +18,7 @@ const Classes = () => {
     const [dialogType, setDialogType] = useState(null)
     const [reRender, setReRender] = useState(false);
     const { setSnackBar } = useSnackBar();
+    const { authenticated } = useAuth();
 
     const columns = [
         {
@@ -84,6 +86,11 @@ const Classes = () => {
     }
 
     const handleDeleteClass = async () => {
+        if (!authenticated) {
+            setSnackBar({ display: true, message: "Please register with Codeial to delete Class.", type: "error" });
+            return;
+        }
+
         try {
             const response = await fetch(`${process.env.NEXT_PUBLIC_WEBSITE_URL}/classes/${deleteId}`, {
                 method: "DELETE"

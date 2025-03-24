@@ -9,6 +9,7 @@ import { IconButton, Tooltip } from "@mui/material";
 import { useDisclosure } from "@nextui-org/react";
 import { useState } from "react";
 import { useSnackBar } from "@/utils/snackbarContext";
+import useAuth from "@/hooks/useAuth";
 
 const Events = () => {
     const {isOpen, onOpen, onOpenChange, onClose } = useDisclosure();
@@ -17,6 +18,7 @@ const Events = () => {
     const [dialogType, setDialogType] = useState(null)
     const [reRender, setReRender] = useState(false);
     const { setSnackBar } = useSnackBar();
+    const { authenticated } = useAuth();
 
     const columns = [
         {
@@ -95,6 +97,11 @@ const Events = () => {
     }
 
     const handleDeleteEvent = async () => {
+        if (!authenticated) {
+            setSnackBar({ display: true, message: "Please register with Codeial to delete Event.", type: "error" });
+            return;
+        }
+
         try {
             const response = await fetch(`${process.env.NEXT_PUBLIC_WEBSITE_URL}/events/${deleteId}`, {
                 method: "DELETE"
