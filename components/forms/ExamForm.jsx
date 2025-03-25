@@ -9,10 +9,12 @@ import { formatTime } from '@/utils/helper';
 import InputField from '../formsFields/InputField';
 import { parseAbsoluteToLocal, parseDate } from "@internationalized/date";
 import { useSnackBar } from '@/utils/snackbarContext';
+import useAuth from '@/hooks/useAuth';
 
 const ExamForm = ({ type, data, onClose, setReRender }) => {
     const { setSnackBar } = useSnackBar();
     const [loading, setLoading] = useState(false);
+    const { authenticated } = useAuth();
 
     const formatSubjectLabel = useCallback((item) => item?.name, []);
 
@@ -44,8 +46,15 @@ const ExamForm = ({ type, data, onClose, setReRender }) => {
     };
 
     const handleSubmit = async (event) => {
-        setLoading(true);
         event.preventDefault();
+
+        const formType = type === 'create' ? 'Create' : 'Update';
+        if (!authenticated) {
+            setSnackBar({ display: true, message: `Please register with Codeial to ${formType} Exam.`, type: "info" });
+            return;
+        }
+
+        setLoading(true);
 
         const date = event?.target?.date?.value;
         const formattedDate = date ? new Date(date).toISOString() : null;

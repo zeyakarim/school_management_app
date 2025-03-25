@@ -6,10 +6,12 @@ import { Button, Spinner } from '@nextui-org/react';
 import DatePickerField from '../formsFields/DatePickerField';
 import { parseDate } from '@internationalized/date';
 import { useSnackBar } from '@/utils/snackbarContext';
+import useAuth from '@/hooks/useAuth';
 
 const AttendanceForm = ({ type, data, onClose, setReRender }) => {
     const { setSnackBar } = useSnackBar();
     const [loading, setLoading] = useState(false);
+    const { authenticated } = useAuth();
 
     const formatTeacherLabel = useCallback(
         (item) => (item?.last_name ? `${item?.first_name} ${item?.last_name}` : item?.first_name), []
@@ -41,8 +43,15 @@ const AttendanceForm = ({ type, data, onClose, setReRender }) => {
     });
 
     const handleSubmit = async (event) => {
-        setLoading(true);
         event.preventDefault();
+
+        const formType = type === 'create' ? 'Create' : 'Update';
+        if (!authenticated) {
+            setSnackBar({ display: true, message: `Please register with Codeial to ${formType} Attendance.`, type: "info" });
+            return;
+        }
+
+        setLoading(true);
 
         const formData = {
             subject_id: formValues?.subject,

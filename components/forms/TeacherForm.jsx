@@ -6,6 +6,7 @@ import SelectField from '../formsFields/SelectField';
 import { Button, Spinner } from '@nextui-org/react';
 import { parseDate } from "@internationalized/date";
 import { useSnackBar } from '@/utils/snackbarContext';
+import useAuth from '@/hooks/useAuth';
 
 const genders = [
     { label: "MALE", key: "MALE", id: "MALE" },
@@ -15,6 +16,7 @@ const genders = [
 const TeacherForm = ({ type, data, onClose, setReRender }) => {
     const { setSnackBar } = useSnackBar();
     const [loading, setLoading] = useState(false);
+    const { authenticated } = useAuth();
 
     const [isVisible, setIsVisible] = useState(false);
     const toggleVisibility = () => setIsVisible(!isVisible);
@@ -48,8 +50,15 @@ const TeacherForm = ({ type, data, onClose, setReRender }) => {
     };
 
     const handleSubmit = async (event) => {
-        setLoading(true);
         event.preventDefault();
+
+        const formType = type === 'create' ? 'Create' : 'Update';
+        if (!authenticated) {
+            setSnackBar({ display: true, message: `Please register with Codeial to ${formType} Teacher.`, type: "info" });
+            return;
+        }
+
+        setLoading(true);
 
         const formObject = new FormData();
         const file = event.target.file?.files[0];

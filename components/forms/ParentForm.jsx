@@ -3,10 +3,12 @@ import { useState } from 'react';
 import InputField from '../formsFields/InputField';
 import { Button, Spinner } from '@nextui-org/react';
 import { useSnackBar } from '@/utils/snackbarContext';
+import useAuth from '@/hooks/useAuth';
 
 const ParentForm = ({ type, data, onClose, setReRender }) => {
     const { setSnackBar } = useSnackBar();
     const [loading, setLoading] = useState(false);
+    const { authenticated } = useAuth();
 
     const [isVisible, setIsVisible] = useState(false);
     const toggleVisibility = () => setIsVisible(!isVisible);
@@ -29,8 +31,15 @@ const ParentForm = ({ type, data, onClose, setReRender }) => {
     };
 
     const handleSubmit = async (event) => {
-        setLoading(true);
         event.preventDefault();
+
+        const formType = type === 'create' ? 'Create' : 'Update';
+        if (!authenticated) {
+            setSnackBar({ display: true, message: `Please register with Codeial to ${formType} Parent.`, type: "info" });
+            return;
+        }
+
+        setLoading(true);
 
         const formData = {
             username: formValues.username,

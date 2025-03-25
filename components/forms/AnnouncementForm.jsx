@@ -70,7 +70,7 @@ const AnnouncementForm = ({ type, data, onClose, setReRender }) => {
             });
     
             const result = await response.json().catch(() => null); // Handle potential JSON parse errors
-    
+            onClose()
             setLoading(false);
     
             if (response.ok && result?.success) {

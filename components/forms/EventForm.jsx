@@ -9,10 +9,12 @@ import { Button, Spinner } from '@nextui-org/react';
 import { formatTime } from '@/utils/helper';
 import DatePickerField from '../formsFields/DatePickerField';
 import { useSnackBar } from '@/utils/snackbarContext';
+import useAuth from '@/hooks/useAuth';
 
 const EventForm = ({ type, data, onClose, setReRender }) => {
     const { setSnackBar } = useSnackBar();
     const [loading, setLoading] = useState(false);
+    const { authenticated } = useAuth();
 
     const formatSubjectLabel = useCallback((item) => item?.name, []);
     const { data: classes, loading: classesLoading } = useFetchData("classes", formatSubjectLabel);
@@ -42,8 +44,15 @@ const EventForm = ({ type, data, onClose, setReRender }) => {
     };
 
     const handleSubmit = async (event) => {
-        setLoading(true);
         event.preventDefault();
+
+        const formType = type === 'create' ? 'Create' : 'Update';
+        if (!authenticated) {
+            setSnackBar({ display: true, message: `Please register with Codeial to ${formType} Event.`, type: "info" });
+            return;
+        }
+
+        setLoading(true);
         
         const formData = {
             title: formValues?.title,
