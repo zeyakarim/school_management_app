@@ -4,9 +4,11 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { menuItems } from '@/lib/data';
 import { usePathname } from 'next/navigation';
+import { IconButton, Tooltip, useMediaQuery } from '@mui/material';
 
 const Navbar = () => {
     const pathname = usePathname();
+    const isSmallScreen = useMediaQuery('(max-width: 1024px)');
 
     // Text to type
     const textToType = "Codeial Public School";
@@ -78,8 +80,20 @@ const Navbar = () => {
                                 className={`flex items-center justify-center lg:justify-start gap-4 py-2 md:px-2 rounded-md hover:bg-[#EDF9FD] ${
                                     isActive(item?.href) ? 'bg-[#C3EBFA] text-black font-semibold' : 'text-gray-500'
                                 }`}
-                            >
-                                {item.icon && <span>{item.icon}</span>}
+                            >   
+                                <Tooltip 
+                                    title={isSmallScreen ? item?.label : ''} 
+                                    placement="right"
+                                    disableHoverListener={false} 
+                                    disableTouchListener={false} // Ensures tooltips show on touch devices
+                                >
+                                    <IconButton 
+                                        style={{ padding: 0 }} 
+                                        size="small" // Keeps button compact
+                                    >
+                                        {item.icon}
+                                    </IconButton>
+                                </Tooltip>
                                 <span className="hidden lg:block">{item.label}</span>
                             </Link>
                         ))}
