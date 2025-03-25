@@ -36,17 +36,17 @@ const Students = () => {
             headerClassName: 'super-app-theme--header',
             flex: 1,
             renderCell: (params) => (
-                <div className="flex gap-2">
-                    <Image 
-                        src={params.img || "/user.png"} 
-                        alt={params.username || "User"}
-                        width={30}
-                        height={30}
-                        style={{ width:40, height: 40 }}
-                        className="rounded-full"
-                    />
+                // <div className="flex gap-2">
+                //     <Image 
+                //         src={params.img || "/user.png"} 
+                //         alt={params.username || "User"}
+                //         width={30}
+                //         height={30}
+                //         style={{ width:40, height: 40 }}
+                //         className="rounded-full"
+                //     />
                     <p className="my-auto">{params?.username}</p>
-                </div>
+                // </div>
             )
         },
         {
