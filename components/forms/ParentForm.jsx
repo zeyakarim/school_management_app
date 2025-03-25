@@ -97,7 +97,7 @@ const ParentForm = ({ type, data, onClose, setReRender }) => {
                     type='text'
                     label='Username'
                     name='username'
-                    className="w-[32%]"
+                    className="w-[48%] md:w-[32%]"
                     isRequired={true}
                     value={formValues.username}
                     onChange={handleChange}
@@ -107,7 +107,7 @@ const ParentForm = ({ type, data, onClose, setReRender }) => {
                     type='email'
                     label='Email'
                     name='email'
-                    className="w-[32%]"
+                    className="w-[48%] md:w-[32%]"
                     isRequired={true}
                     value={formValues.email}
                     onChange={handleChange}
@@ -117,7 +117,7 @@ const ParentForm = ({ type, data, onClose, setReRender }) => {
                     type={isVisible ? "text" : "password"}
                     label='Password'
                     name='password'
-                    className="w-[32%]"
+                    className="w-[48%] md:w-[32%]"
                     isRequired={true}
                     value={formValues.password}
                     onChange={handleChange}
@@ -139,7 +139,7 @@ const ParentForm = ({ type, data, onClose, setReRender }) => {
                     type='text'
                     label='First Name'
                     name='firstName'
-                    className="w-[49%]"
+                    className="w-[48%]"
                     isRequired={true}
                     value={formValues.firstName}
                     onChange={handleChange}
@@ -149,7 +149,7 @@ const ParentForm = ({ type, data, onClose, setReRender }) => {
                     type='text'
                     label='Last Name'
                     name='lastName'
-                    className="w-[49%]"
+                    className="w-[48%]"
                     isRequired={false}
                     value={formValues.lastName}
                     onChange={handleChange}
@@ -159,7 +159,7 @@ const ParentForm = ({ type, data, onClose, setReRender }) => {
                     type='number'
                     label='Phone'
                     name='phone'
-                    className="w-[49%]"
+                    className="w-[48%]"
                     isRequired={true}
                     value={formValues.phone}
                     onChange={handleChange}
@@ -169,7 +169,7 @@ const ParentForm = ({ type, data, onClose, setReRender }) => {
                     type='text'
                     label='Address'
                     name='address'
-                    className="w-[49%]"
+                    className="w-[48%]"
                     isRequired={true}
                     value={formValues.address}
                     onChange={handleChange}

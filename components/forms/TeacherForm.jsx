@@ -122,7 +122,7 @@ const TeacherForm = ({ type, data, onClose, setReRender }) => {
                     type='text'
                     label='Username'
                     name='username'
-                    className="w-[32%]"
+                    className="w-[48%] md:w-[32%]"
                     isRequired={true}
                     value={formValues.username}
                     onChange={handleChange}
@@ -132,7 +132,7 @@ const TeacherForm = ({ type, data, onClose, setReRender }) => {
                     type='email'
                     label='Email'
                     name='email'
-                    className="w-[32%]"
+                    className="w-[48%] md:w-[32%]"
                     isRequired={true}
                     value={formValues.email}
                     onChange={handleChange}
@@ -142,7 +142,7 @@ const TeacherForm = ({ type, data, onClose, setReRender }) => {
                     type={isVisible ? "text" : "password"}
                     label='Password'
                     name='password'
-                    className="w-[32%]"
+                    className="w-[48%] md:w-[32%]"
                     isRequired={type === 'create'}
                     value={formValues.password}
                     onChange={handleChange}
@@ -165,7 +165,7 @@ const TeacherForm = ({ type, data, onClose, setReRender }) => {
                     type='text'
                     label='First Name'
                     name='firstName'
-                    className="w-[32%]"
+                    className="w-[48%] md:w-[32%]"
                     isRequired={true}
                     value={formValues.firstName}
                     onChange={handleChange}
@@ -175,7 +175,7 @@ const TeacherForm = ({ type, data, onClose, setReRender }) => {
                     type='text'
                     label='Last Name'
                     name='lastName'
-                    className="w-[32%]"
+                    className="w-[48%] md:w-[32%]"
                     isRequired={false}
                     value={formValues.lastName}
                     onChange={handleChange}
@@ -185,7 +185,7 @@ const TeacherForm = ({ type, data, onClose, setReRender }) => {
                     type='number'
                     label='Phone'
                     name='phone'
-                    className="w-[32%]"
+                    className="w-[48%] md:w-[32%]"
                     isRequired={true}
                     value={formValues.phone}
                     onChange={handleChange}
@@ -195,7 +195,7 @@ const TeacherForm = ({ type, data, onClose, setReRender }) => {
                     type='text'
                     label='Address'
                     name='address'
-                    className="w-[32%]"
+                    className="w-[48%] md:w-[32%]"
                     isRequired={true}
                     value={formValues.address}
                     onChange={handleChange}
@@ -205,7 +205,7 @@ const TeacherForm = ({ type, data, onClose, setReRender }) => {
                     type='text'
                     label='Blood Type'
                     name='bloodType'
-                    className="w-[32%]"
+                    className="w-[48%] md:w-[32%]"
                     isRequired={false}
                     value={formValues.bloodType}
                     onChange={handleChange}
@@ -215,7 +215,7 @@ const TeacherForm = ({ type, data, onClose, setReRender }) => {
                     isRequired={false}
                     label='Birth Date'
                     name='birthDate'
-                    className="w-[32%]"
+                    className="w-[48%] md:w-[32%]"
                     value={formValues.birthDate}
                     onChange={handleChange}
                 />
@@ -224,7 +224,7 @@ const TeacherForm = ({ type, data, onClose, setReRender }) => {
                     selectionMode="single"
                     label='Gender'
                     name='gender'
-                    className="w-[32%]"
+                    className="w-[48%] md:w-[32%]"
                     datas={genders}
                     value={formValues.gender}
                     onChange={handleChange}
@@ -235,7 +235,7 @@ const TeacherForm = ({ type, data, onClose, setReRender }) => {
                     name='file'
                     value={formValues.file}
                     onChange={handleChange}
-                    className="w-[32%]"
+                    className="w-[48%] md:w-[32%]"
                     isRequired={type === 'create'}
                     icon={<Person style={{ fontSize: '20px' }} className="text-default-400 pointer-events-none flex-shrink-0" />}
                 />

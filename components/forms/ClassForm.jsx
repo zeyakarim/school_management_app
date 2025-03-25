@@ -92,7 +92,7 @@ const ClassForm = ({ type, data, onClose, setReRender }) => {
                     type="text"
                     label="Class Name"
                     name='class'
-                    className="w-[32%]"
+                    className="w-[48%] md:w-[32%]"
                     isRequired={true}
                     value={formValues.class}
                     onChange={handleChange}
@@ -102,7 +102,7 @@ const ClassForm = ({ type, data, onClose, setReRender }) => {
                     type="number"
                     label="Capacity"
                     name='capacity'
-                    className="w-[32%]"
+                    className="w-[48%] md:w-[32%]"
                     isRequired={true}
                     value={formValues.capacity}
                     onChange={handleChange}
@@ -113,7 +113,7 @@ const ClassForm = ({ type, data, onClose, setReRender }) => {
                     selectionMode="single"
                     label="Supervisor"
                     name='supervisor'
-                    className="w-[32%]"
+                    className="w-[48%] md:w-[32%]"
                     datas={teachers}
                     value={formValues.supervisor}
                     onChange={handleChange}

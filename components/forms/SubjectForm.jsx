@@ -94,7 +94,7 @@ const SubjectForm = ({ type, data, onClose, setReRender }) => {
                     type="text"
                     label="Subject"
                     name='subject'
-                    className="w-[32%]"
+                    className="w-[48%] md:w-[32%]"
                     isRequired={true}
                     value={formValues.subject}
                     onChange={handleChange}
@@ -105,7 +105,7 @@ const SubjectForm = ({ type, data, onClose, setReRender }) => {
                     selectionMode="single"
                     label="Class Name"
                     name='class'
-                    className="w-[32%]"
+                    className="w-[48%] md:w-[32%]"
                     datas={classes}
                     value={formValues.class}
                     onChange={handleChange}
@@ -116,7 +116,7 @@ const SubjectForm = ({ type, data, onClose, setReRender }) => {
                     selectionMode="single"
                     label="Teacher"
                     name='teacher'
-                    className="w-[32%]"
+                    className="w-[48%] md:w-[32%]"
                     datas={teachers}
                     value={formValues.teacher}
                     onChange={handleChange}

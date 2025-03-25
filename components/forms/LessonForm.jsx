@@ -116,7 +116,7 @@ const LessonForm = ({ type, data, onClose, setReRender }) => {
                     type="text"
                     label="Lesson"
                     name='lesson'
-                    className="w-[32%] mt-1"
+                    className="w-[48%] md:w-[32%]  mt-1"
                     isRequired={true}
                     value={formValues.lesson}
                     onChange={handleChange}
@@ -127,7 +127,7 @@ const LessonForm = ({ type, data, onClose, setReRender }) => {
                     selectionMode="single"
                     label="Subject Name"
                     name='subject'
-                    className="w-[32%] mt-1"
+                    className="w-[48%] md:w-[32%] mt-1"
                     datas={subjects}
                     value={formValues.subject}
                     onChange={handleChange}
@@ -138,7 +138,7 @@ const LessonForm = ({ type, data, onClose, setReRender }) => {
                     selectionMode="single"
                     label="Class Name"
                     name='class'
-                    className="w-[32%] mt-1"
+                    className="w-[48%] md:w-[32%] mt-1"
                     datas={classes}
                     value={formValues.class}
                     onChange={handleChange}
@@ -149,7 +149,7 @@ const LessonForm = ({ type, data, onClose, setReRender }) => {
                     selectionMode="single"
                     label="Teacher"
                     name='teacher'
-                    className="w-[32%] mt-1"
+                    className="w-[48%] md:w-[32%] mt-1"
                     datas={teachers}
                     value={formValues.teacher}
                     onChange={handleChange}
@@ -161,7 +161,7 @@ const LessonForm = ({ type, data, onClose, setReRender }) => {
                     name='startTime'
                     value={formValues.startTime}
                     onChange={handleChange}
-                    className="w-[32%] mt-1"
+                    className="w-[48%] md:w-[32%] mt-1 overflow-hidden"
                     icon={<AccessTime className="text-xl text-default-400 pointer-events-none flex-shrink-0" /> }
                 />
                 <TimeInputField
@@ -170,7 +170,7 @@ const LessonForm = ({ type, data, onClose, setReRender }) => {
                     name='endTime'
                     value={formValues.endTime}
                     onChange={handleChange} 
-                    className="w-[32%] mt-1"
+                    className="w-[48%] md:w-[32%] mt-1 overflow-hidden"
                     icon={<AccessTime className="text-xl text-default-400 pointer-events-none flex-shrink-0" /> }
                 />
                 <SelectField
@@ -178,7 +178,7 @@ const LessonForm = ({ type, data, onClose, setReRender }) => {
                     selectionMode="single"
                     label="Day"
                     name='day'
-                    className="w-[32%] mt-1"
+                    className="w-[48%] md:w-[32%] mt-1"
                     datas={days}
                     value={formValues.day}
                     onChange={handleChange}

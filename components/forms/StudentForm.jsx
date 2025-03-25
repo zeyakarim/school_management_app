@@ -139,7 +139,7 @@ const StudentForm = ({ type, data, onClose, setReRender }) => {
                     type='text'
                     label='Username'
                     name='username'
-                    className="w-[32%]"
+                    className="w-[48%] md:w-[32%]"
                     isRequired={true}
                     value={formValues.username}
                     onChange={handleChange}
@@ -149,7 +149,7 @@ const StudentForm = ({ type, data, onClose, setReRender }) => {
                     type='email'
                     label='Email'
                     name='email'
-                    className="w-[32%]"
+                    className="w-[48%] md:w-[32%]"
                     isRequired={true}
                     value={formValues.email}
                     onChange={handleChange}
@@ -159,7 +159,7 @@ const StudentForm = ({ type, data, onClose, setReRender }) => {
                     type={isVisible ? "text" : "password"}
                     label='Password'
                     name='password'
-                    className="w-[32%]"
+                    className="w-[48%] md:w-[32%]"
                     isRequired={true}
                     value={formValues.password}
                     onChange={handleChange}
@@ -181,7 +181,7 @@ const StudentForm = ({ type, data, onClose, setReRender }) => {
                     type='text'
                     label='First Name'
                     name='firstName'
-                    className="w-[32%]"
+                    className="w-[48%] md:w-[32%]"
                     isRequired={true}
                     value={formValues.firstName}
                     onChange={handleChange}
@@ -191,7 +191,7 @@ const StudentForm = ({ type, data, onClose, setReRender }) => {
                     type='text'
                     label='Last Name'
                     name='lastName'
-                    className="w-[32%]"
+                    className="w-[48%] md:w-[32%]"
                     isRequired={false}
                     value={formValues.lastName}
                     onChange={handleChange}
@@ -201,7 +201,7 @@ const StudentForm = ({ type, data, onClose, setReRender }) => {
                     type='number'
                     label='Phone'
                     name='phone'
-                    className="w-[32%]"
+                    className="w-[48%] md:w-[32%]"
                     isRequired={true}
                     value={formValues.phone}
                     onChange={handleChange}
@@ -211,7 +211,7 @@ const StudentForm = ({ type, data, onClose, setReRender }) => {
                     type='text'
                     label='Address'
                     name='address'
-                    className="w-[32%]"
+                    className="w-[48%] md:w-[32%]"
                     isRequired={true}
                     value={formValues.address}
                     onChange={handleChange}
@@ -221,7 +221,7 @@ const StudentForm = ({ type, data, onClose, setReRender }) => {
                     type='text'
                     label='Blood Type'
                     name='bloodType'
-                    className="w-[32%]"
+                    className="w-[48%] md:w-[32%]"
                     isRequired={false}
                     value={formValues.bloodType}
                     onChange={handleChange}
@@ -231,7 +231,7 @@ const StudentForm = ({ type, data, onClose, setReRender }) => {
                     isRequired={true}
                     label='Birth Date'
                     name='birthDate'
-                    className="w-[32%]"
+                    className="w-[48%] md:w-[32%]"
                     value={formValues.birthDate}
                     onChange={handleChange}
                 />
@@ -240,7 +240,7 @@ const StudentForm = ({ type, data, onClose, setReRender }) => {
                     selectionMode="single"
                     label='Gender'
                     name='gender'
-                    className="w-[32%]"
+                    className="w-[48%] md:w-[32%]"
                     datas={genders}
                     value={formValues.gender}
                     onChange={handleChange}
@@ -250,7 +250,7 @@ const StudentForm = ({ type, data, onClose, setReRender }) => {
                     selectionMode="single"
                     label="Parent"
                     name='parent'
-                    className="w-[32%]"
+                    className="w-[48%] md:w-[32%]"
                     datas={parents}
                     value={formValues.parent}
                     onChange={handleChange}
@@ -261,7 +261,7 @@ const StudentForm = ({ type, data, onClose, setReRender }) => {
                     selectionMode="single"
                     label="Class Name"
                     name='class'
-                    className="w-[32%] mt-1"
+                    className="w-[48%] md:w-[32%] mt-1"
                     datas={classes}
                     value={formValues.class}
                     onChange={handleChange}
@@ -271,7 +271,7 @@ const StudentForm = ({ type, data, onClose, setReRender }) => {
                     type='file'
                     label='Upload a Photo'
                     name='file'
-                    className="w-[66%]"
+                    className="w-[48%] md:w-[66%]"
                     isRequired={type === 'create' ? true : false}
                     value={formValues.file}
                     onChange={handleChange}
