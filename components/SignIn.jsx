@@ -21,7 +21,7 @@ const SignInComponent = ({ isOpen, onClose, openModel }) => {
                 onClick={(e) => e.stopPropagation()} // Prevent modal from closing when clicking inside
             >
                 {/* Left Section */}
-                <div className="w-[30%] p-8 relative">
+                <div className="w-[30%] p-8 relative hidden md:block">
                     <Image src="/schoolLogo.png" alt="schoolLogo" width={55} height={50} />
                     <h1 className="text-white text-[26px] mt-3">
                         Thanks For Registering <br /> Codeial Public School
@@ -35,10 +35,16 @@ const SignInComponent = ({ isOpen, onClose, openModel }) => {
                     />
                 </div>
 
-                {/* Right Section (SignIn Form) */}
-                <div className="w-[70%] p-8 bg-[#fff] rounded-[20px] flex items-center justify-center h-full">
+                <div className="relative overflow-hidden md:static md:overflow-visible w-full md:w-[70%] p-8 bg-[#fff] rounded-[20px] flex items-center justify-center h-full">
                     <SignInForm onClose={onClose} openModel={openModel} />
+
+                    {/* Top Right Semi-Circle */}
+                    <div className="w-32 h-32 bg-[#5ABBC2] rounded-full absolute top-[-40px] right-[-40px] block md:hidden"></div>
+
+                    {/* Bottom Left Semi-Circle */}
+                    <div className="w-48 h-40 bg-[#5ABBC2] rounded-full absolute bottom-[-80px] left-[-80px] block md:hidden"></div>
                 </div>
+
             </div>
         </div>
     );

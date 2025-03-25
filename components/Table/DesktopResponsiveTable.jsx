@@ -78,10 +78,9 @@ const DesktopResponsiveTable = (props) => {
     return (
         <div className="w-full mt-3">
             <div className="flex justify-end mb-3">
-                <button 
-                    variant="contained" 
-                    // className="font-semibold capitalize"
-                     className="px-6 py-2 bg-[#5ABBC2] text-white hover:bg-[#4AA3A9] transition rounded-full text-[14px] font-semibold shadow-lg"
+                <button
+                    type='button' 
+                    className="px-6 py-2 bg-[#5ABBC2] text-white hover:bg-[#4AA3A9] transition rounded-full text-[14px] font-semibold shadow-lg"
                     onClick={onOpen}
                 >{dialogTitle}</button>
             </div>

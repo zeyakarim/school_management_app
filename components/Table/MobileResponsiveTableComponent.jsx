@@ -103,11 +103,11 @@ const MobileResponsiveTableComponent = (props) => {
             <div>
                 <div className="flex justify-between items-center mb-3 mt-2">
                     <h2 className="font-semibold">{title}</h2>
-                    <Button 
-                        variant="contained" 
-                        className="font-semibold capitalize"
+                    <button
+                        type='button' 
+                        className="px-6 py-2 bg-[#5ABBC2] text-white hover:bg-[#4AA3A9] transition rounded-full text-[14px] font-semibold shadow-lg"
                         onClick={onOpen}
-                    >{dialogTitle}</Button>
+                    >{dialogTitle}</button>
                 </div>
 
                 <SearchInput searchFor={searchFor} handleSearch={handleSearch} />

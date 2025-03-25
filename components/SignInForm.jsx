@@ -79,7 +79,7 @@ const SignInForm = ({ onClose, openModel }) => {
     };
 
     return (
-        <div className='w-[70%] relative'>
+        <div className='w-full md:w-[70%] relative'>
             <Tooltip title="Close" placement="right">
                 <IconButton 
                     onClick={onClose}
