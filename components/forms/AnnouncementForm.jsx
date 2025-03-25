@@ -7,10 +7,12 @@ import { Button, Spinner } from '@nextui-org/react';
 import DatePickerField from '../formsFields/DatePickerField';
 import { parseDate } from '@internationalized/date';
 import { useSnackBar } from '@/utils/snackbarContext';
+import useAuth from "@/hooks/useAuth";
 
 const AnnouncementForm = ({ type, data, onClose, setReRender }) => {
     const { setSnackBar } = useSnackBar();
     const [loading, setLoading] = useState(false);
+    const { authenticated } = useAuth();
 
     const formatSubjectLabel = useCallback((item) => item?.name, []);
     const { data: classes, loading: classesLoading } = useFetchData("classes", formatSubjectLabel);
@@ -38,53 +40,63 @@ const AnnouncementForm = ({ type, data, onClose, setReRender }) => {
     });
 
     const handleSubmit = async (event) => {
-        setLoading(true);
         event.preventDefault();
         
+        const formType = type === 'create' ? 'Create' : 'Update';
+        if (!authenticated) {
+            setSnackBar({ display: true, message: `Please register with Codeial to ${formType} Announcement.`, type: "info" });
+            return;
+        }
+    
+        setLoading(true);
+    
         const formData = {
             title: formValues?.title,
             description: formValues?.description,
             class_id: formValues?.class,
             date: event.target.date.value ? new Date(event.target.date.value).toISOString() : null
-        }
-
-        try {
-            const method = type === 'create' ? 'POST' : 'PUT';
+        };
+    
+        try {  
+            const method = type === 'create' ? 'POST' : 'PUT'; 
             const url = type === 'create'
                 ? `${process.env.NEXT_PUBLIC_WEBSITE_URL}/annoucements`
                 : `${process.env.NEXT_PUBLIC_WEBSITE_URL}/annoucements/${data.id}`;
-
+    
             const response = await fetch(url, {
                 method,
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify(formData),
             });
-
+    
+            const result = await response.json().catch(() => null); // Handle potential JSON parse errors
+    
             setLoading(false);
-
-            const result = await response.json();
-            onClose();
-            setReRender((prev) => !prev);
-
-            if (response.ok && result.success) {
-                const successMessage = `Announcement ${type === 'create' ? 'created' : 'updated'} successfully!`;
-                setSnackBar((prevSnackBar) => ({
-                    ...prevSnackBar, display: true, message: successMessage, type: "success"
-                }));
+    
+            if (response.ok && result?.success) {
+                setSnackBar({
+                    display: true,
+                    message: `Announcement ${type === 'create' ? 'created' : 'updated'} successfully!`,
+                    type: "success",
+                });
             } else {
-                const errorMessage = result?.message || `Failed to ${type === 'create' ? 'create' : 'update'} announcement.`;
-                setSnackBar((prevSnackBar) => ({
-                    ...prevSnackBar, display: true, message: errorMessage, type: "error"
-                }));
+                setSnackBar({
+                    display: true,
+                    message: result?.message || `Failed to ${type === 'create' ? 'create' : 'update'} announcement.`,
+                    type: "error",
+                });
             }
         } catch (error) {
-            setLoading(false);
-            setSnackBar((prevSnackBar) => ({
-                ...prevSnackBar, display: true, message: "Something went wrong. Please try again.", type: "error"
-            }));
-            setReRender((prev) => !prev);
+            console.error("Error submitting announcement:", error);
+            setSnackBar({
+                display: true,
+                message: "Something went wrong. Please try again.",
+                type: "error",
+            });
+        } finally {
+            setReRender((prev) => !prev); // Ensure rerender happens once
         }
-    }
+    };    
 
     return (
         <form method="post" onSubmit={handleSubmit}>
