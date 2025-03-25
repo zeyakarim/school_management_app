@@ -104,7 +104,7 @@ const Exams = () => {
 
     const handleDeleteExam = async () => {
         if (!authenticated) {
-            setSnackBar({ display: true, message: "Please register with Codeial to delete Exam.", type: "error" });
+            setSnackBar({ display: true, message: "Please register with Codeial to delete Exam.", type: "info" });
             return;
         }
 

@@ -128,7 +128,7 @@ const Results = () => {
 
     const handleDeleteResult = async () => {
         if (!authenticated) {
-            setSnackBar({ display: true, message: "Please register with Codeial to delete Result.", type: "error" });
+            setSnackBar({ display: true, message: "Please register with Codeial to delete Result.", type: "info" });
             return;
         }
 

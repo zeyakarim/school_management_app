@@ -156,7 +156,7 @@ const Teachers = () => {
 
   const handleDeleteTeacher = async () => {
     if (!authenticated) {
-      setSnackBar({ display: true, message: "Please register with Codeial to delete Teacher.", type: "error" });
+      setSnackBar({ display: true, message: "Please register with Codeial to delete Teacher.", type: "info" });
       return;
     }
 

@@ -105,7 +105,7 @@ const Parents = () => {
 
     const handleDeleteParent = async () => {
         if (!authenticated) {
-            setSnackBar({ display: true, message: "Please register with Codeial to delete Parent.", type: "error" });
+            setSnackBar({ display: true, message: "Please register with Codeial to delete Parent.", type: "info" });
             return;
         }
 

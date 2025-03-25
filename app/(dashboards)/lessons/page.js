@@ -110,7 +110,7 @@ const Lessons = () => {
 
     const handleDeleteLesson = async () => {
         if (!authenticated) {
-            setSnackBar({ display: true, message: "Please register with Codeial to delete Lesson.", type: "error" });
+            setSnackBar({ display: true, message: "Please register with Codeial to delete Lesson.", type: "info" });
             return;
         }
 

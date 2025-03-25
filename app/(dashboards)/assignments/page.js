@@ -110,7 +110,7 @@ const Assignments = () => {
 
     const handleDeleteAssignment = async () => {
         if (!authenticated) {
-            setSnackBar({ display: true, message: "Please register with Codeial to delete Assignment.", type: "error" });
+            setSnackBar({ display: true, message: "Please register with Codeial to delete Assignment.", type: "info" });
             return;
         }
 

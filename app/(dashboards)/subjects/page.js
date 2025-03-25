@@ -86,7 +86,7 @@ const Subjects = () => {
 
     const handleDeleteSubject = async () => {
         if (!authenticated) {
-            setSnackBar({ display: true, message: "Please register with Codeial to delete Subject.", type: "error" });
+            setSnackBar({ display: true, message: "Please register with Codeial to delete Subject.", type: "info" });
             return;
         }
 

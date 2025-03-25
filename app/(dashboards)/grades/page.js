@@ -80,7 +80,7 @@ const Exams = () => {
 
     const handleDeleteGrade = async () => {
         if (!authenticated) {
-            setSnackBar({ display: true, message: "Please register with Codeial to delete Grade.", type: "error" });
+            setSnackBar({ display: true, message: "Please register with Codeial to delete Grade.", type: "info" });
             return;
         }
 

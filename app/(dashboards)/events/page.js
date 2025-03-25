@@ -98,7 +98,7 @@ const Events = () => {
 
     const handleDeleteEvent = async () => {
         if (!authenticated) {
-            setSnackBar({ display: true, message: "Please register with Codeial to delete Event.", type: "error" });
+            setSnackBar({ display: true, message: "Please register with Codeial to delete Event.", type: "info" });
             return;
         }
 

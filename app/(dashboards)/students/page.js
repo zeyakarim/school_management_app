@@ -174,7 +174,7 @@ const Students = () => {
 
     const handleDeleteStudent = async () => {
         if (!authenticated) {
-            setSnackBar({ display: true, message: "Please register with Codeial to delete Student.", type: "error" });
+            setSnackBar({ display: true, message: "Please register with Codeial to delete Student.", type: "info" });
             return;
         }
 

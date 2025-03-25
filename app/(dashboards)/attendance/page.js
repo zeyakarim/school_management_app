@@ -98,7 +98,7 @@ const Attendance = () => {
 
     const handleDeleteAttendance = async () => {
         if (!authenticated) {
-            setSnackBar({ display: true, message: "Please register with Codeial to delete Attendance.", type: "error" });
+            setSnackBar({ display: true, message: "Please register with Codeial to delete Attendance.", type: "info" });
             return;
         }
 
