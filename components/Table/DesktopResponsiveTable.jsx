@@ -83,7 +83,14 @@ const DesktopResponsiveTable = (props) => {
                     aria-haspopup="true"
                     onClick={(e) => setAnchorEl(e.currentTarget)}
                     startIcon={<Visibility />}
-                    className="px-4 py-2 text-white bg-[#5ABBC2] rounded-full hover:bg-[#4AA3A9] transition-all shadow-md flex items-center capitalize"
+                    sx={{
+                        backgroundColor: "#5ABBC2", 
+                        borderRadius: "9999px", 
+                        color: "white",
+                        textTransform: "capitalize",
+                        "&:hover": { backgroundColor: "#4AA3A9" }
+                    }}
+                    className="px-4 py-2 shadow-md flex items-center"
                 >
                     Manage columns
                 </Button>
