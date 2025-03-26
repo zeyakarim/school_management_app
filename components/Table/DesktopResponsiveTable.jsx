@@ -88,9 +88,10 @@ const DesktopResponsiveTable = (props) => {
                         borderRadius: "9999px", 
                         color: "white",
                         textTransform: "capitalize",
+                        padding: '8px 16px',
                         "&:hover": { backgroundColor: "#4AA3A9" }
                     }}
-                    className="px-4 py-2 shadow-md flex items-center"
+                    className="shadow-md flex items-center"
                 >
                     Manage columns
                 </Button>
