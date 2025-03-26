@@ -1,18 +1,18 @@
 "use client";
 import React, { useState } from "react";
+import { signIn } from "next-auth/react"; // Import signIn from next-auth
 import InputField from "./formsFields/InputField";
 import { Email, Person, Visibility, VisibilityOff, Close } from "@mui/icons-material";
 import { Button, Spinner } from "@nextui-org/react";
 import { useSnackBar } from "@/utils/snackbarContext";
-import { useRouter } from "next/navigation";
 import { IconButton, Tooltip } from "@mui/material";
+import Image from "next/image";
 
 const SignUpForm = ({ onClose, openModel }) => {
     const [isVisible, setIsVisible] = useState(false);
     const [loading, setLoading] = useState(false);
     const toggleVisibility = () => setIsVisible(!isVisible);
     const { setSnackBar } = useSnackBar();
-    const router = useRouter();
 
     const [formValues, setFormValues] = useState({
         fullName: "",
@@ -23,8 +23,8 @@ const SignUpForm = ({ onClose, openModel }) => {
 
     const handleChange = (name, value) => {
         setFormValues((prev) => ({
-        ...prev,
-        [name]: value,
+            ...prev,
+            [name]: value,
         }));
     };
 
@@ -74,6 +74,10 @@ const SignUpForm = ({ onClose, openModel }) => {
         }
     };
 
+    const handleGoogleSignIn = async () => {
+        signIn("google", { callbackUrl: "/" }); // Redirect to home after signing in
+    };
+
     const handleSignIn = () => {
         onClose();
         openModel();
@@ -94,6 +98,19 @@ const SignUpForm = ({ onClose, openModel }) => {
 
             {/* Title */}
             <h2 className="text-3xl font-bold text-center">Create Account</h2>
+
+            {/* Google Sign-In Button */}
+            <div className="flex justify-center md:mt-4">
+                <Button
+                    type="button"
+                    radius="md"
+                    className="bg-white text-gray-700 mt-1 md:mt-4 font-bold text-[16px] flex items-center justify-center border border-gray-300 hover:bg-gray-100 transition shadow-lg"
+                    onClick={handleGoogleSignIn}
+                >
+                    <Image src="https://img.icons8.com/color/48/google-logo.png" width={20} height={20} alt="Google" className="mr-2" />
+                    Sign up with Google
+                </Button>
+            </div>
 
             {/* Form */}
             <form className="mt-8 flex flex-col gap-5" onSubmit={handleSubmit}>

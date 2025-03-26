@@ -35,10 +35,10 @@ const SignUpComponent = ({ isOpen, onClose, openModel }) => {
                     <SignUpForm onClose={onClose} openModel={openModel} />
 
                     {/* Top Right Semi-Circle */}
-                    <div className="w-32 h-32 bg-[#5ABBC2] rounded-full absolute top-[-40px] right-[-40px] block md:hidden"></div>
+                    <div className="w-24 h-24 bg-[#5ABBC2] rounded-full absolute top-[-40px] right-[-40px] block md:hidden"></div>
 
                     {/* Bottom Left Semi-Circle */}
-                    <div className="w-48 h-40 bg-[#5ABBC2] rounded-full absolute bottom-[-80px] left-[-80px] block md:hidden"></div>
+                    <div className="w-36 h-36 bg-[#5ABBC2] rounded-full absolute bottom-[-80px] left-[-80px] block md:hidden"></div>
                 </div>
             </div>
         </div>

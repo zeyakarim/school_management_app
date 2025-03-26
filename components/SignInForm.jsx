@@ -1,6 +1,7 @@
 'use client'
 import React, { useState } from 'react'
-import InputField from './formsFields/InputField'
+import InputField from './formsFields/InputField';
+import { signIn } from "next-auth/react"; // Import signIn from next-auth
 import { Close, Person, Visibility, VisibilityOff } from '@mui/icons-material';
 import { Button, Spinner } from '@nextui-org/react';
 import { useSnackBar } from '@/utils/snackbarContext';
@@ -8,6 +9,7 @@ import { useRouter } from 'next/navigation';
 import { useDispatch } from 'react-redux';
 import { setAuth } from '@/redux/slices/authSlice';
 import { IconButton, Tooltip } from '@mui/material';
+import Image from 'next/image';
 
 const SignInForm = ({ onClose, openModel }) => {
     const [isVisible, setIsVisible] = useState(false);
@@ -78,6 +80,10 @@ const SignInForm = ({ onClose, openModel }) => {
         openModel();
     };
 
+    const handleGoogleSignIn = async () => {
+        signIn("google", { callbackUrl: "/" }); // Redirect to home after signing in
+    };
+
     return (
         <div className='w-full md:w-[70%] relative'>
             <Tooltip title="Close" placement="right">
@@ -91,6 +97,20 @@ const SignInForm = ({ onClose, openModel }) => {
             </Tooltip>
 
             <h2 className='text-3xl font-bold text-center'>Sign In Account</h2>
+
+            {/* Google Sign-In Button */}
+            <div className="flex justify-center mt-4">
+                <Button
+                    type="button"
+                    radius="md"
+                    className="bg-white text-gray-700 font-bold text-[16px] flex items-center justify-center border border-gray-300 hover:bg-gray-100 transition shadow-lg"
+                    onClick={handleGoogleSignIn}
+                >
+                    <Image src="https://img.icons8.com/color/48/google-logo.png" width={20} height={20} alt="Google" className="mr-2" />
+                    Sign in with Google
+                </Button>
+            </div>
+
             <form method="post" className='mt-8 flex flex-col gap-5' onSubmit={handleSubmit}>
                 <InputField
                     type="text"
