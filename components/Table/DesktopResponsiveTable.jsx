@@ -82,13 +82,12 @@ const DesktopResponsiveTable = (props) => {
                     aria-controls="column-menu"
                     aria-haspopup="true"
                     onClick={(e) => setAnchorEl(e.currentTarget)}
-                    variant="contained"
                     startIcon={<Visibility />}
-                    className="px-4 py-2 bg-[#5ABBC2] text-white hover:bg-[#4AA3A9] transition-all rounded-full shadow-md flex items-center capitalize"
+                    className="px-4 py-2 text-white bg-[#5ABBC2] rounded-full hover:bg-[#4AA3A9] transition-all shadow-md flex items-center capitalize"
                 >
-                    Manage Columns
+                    Manage columns
                 </Button>
-                
+
                 <Menu
                     id="column-menu"
                     anchorEl={anchorEl}
