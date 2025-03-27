@@ -77,7 +77,7 @@ const Header = () => {
                 <Message className='text-gray-400 text-[20px]' />
             </div>
             <div className='relative cursor-pointer' onClick={() => setIsAnnouncementModalOpen(true)}>
-                <Campaign className='pt-2 text-gray-400 text-[38px]' />
+                <Campaign className='pt-2 text-gray-400' style={{ fontSize:'38px'}} />
                 <p className='bg-[#615fb8] text-[#fff] text-center text-xs rounded-full px-[6px] py-[2px] absolute bottom-[68%] left-[50%]'>{announcementCount}</p>
             </div>
             <div className='flex gap-4 items-center'>
