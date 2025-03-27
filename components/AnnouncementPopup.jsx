@@ -100,7 +100,7 @@ const AnnouncementDialog = (props) => {
                                     <ListItemText
                                         primary={
                                             <Typography
-                                                style={{ fontSize: '14px', fontWeight: 'font-bold'  }}
+                                                style={{ fontSize: '14px', fontWeight: '600'  }}
                                                 className="text-gray-500 font-bold"
                                             >
                                                 {item.title}
