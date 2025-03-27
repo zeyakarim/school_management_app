@@ -25,8 +25,9 @@ const AnnouncementDialog = (props) => {
             open={isOpen}
             onClose={onClose}
             TransitionComponent={Transition}
+            sx={{ position:'absolute' }}
             PaperProps={{
-                className: "absolute top-[7%] right-[1%] m-0 rounded-[15px]"
+                className: "absolute top-[0%] right-[1%] m-0 rounded-[15px]"
             }}
         >
             <DialogTitle className='flex justify-between'>
