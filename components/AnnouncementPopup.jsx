@@ -100,11 +100,8 @@ const AnnouncementDialog = (props) => {
                                     <ListItemText
                                         primary={
                                             <Typography
-                                                className={`text-sm ${
-                                                    item?.isRead
-                                                        ? "text-gray-400 font-normal"
-                                                        : "text-gray-500 font-bold"
-                                                }`}
+                                                style={{ fontSize: '14px', fontWeight: 'font-bold'  }}
+                                                className="text-gray-500 font-bold"
                                             >
                                                 {item.title}
                                             </Typography>
@@ -112,16 +109,14 @@ const AnnouncementDialog = (props) => {
                                         secondary={
                                             <>
                                                 <Typography
-                                                    className={`text-gray-400 ${
-                                                        item?.isRead ? "" : "text-gray-500"
-                                                    }`}
+                                                    style={{ fontSize:'14px' }}
+                                                    className={`text-gray-400 ${item?.isRead ? "" : "text-gray-500"}`}
                                                 >
                                                     {item.description}
                                                 </Typography>
                                                 <Typography
-                                                    className={`text-gray-400 text-sm ${
-                                                        item?.isRead ? "" : "text-gray-500"
-                                                    }`}
+                                                    style={{ fontSize:'14px' }}
+                                                    className={`text-gray-400 text-sm ${item?.isRead ? "" : "text-gray-500"}`}
                                                 >
                                                     {formattedDate(item?.created_at)}
                                                 </Typography>
