@@ -20,61 +20,72 @@ const AnnouncementDialog = (props) => {
   
     return (
         <Dialog
-            // fullScreen
             keepMounted
             open={isOpen}
             onClose={onClose}
             TransitionComponent={Transition}
             PaperProps={{
-                style: { position:'absolute', borderRadius:'15px' },
+                style: { position: 'absolute', borderRadius: '15px' },
                 className: "top-[0%] right-[1%] m-0"
             }}
         >
-            <DialogTitle className='flex justify-between'>
+            <DialogTitle className="flex justify-between">
                 <p>Announcements</p>
                 <div>
-                    <span className='mr-3 cursor-pointer' onClick={handleSeeAllNotifications}>
-                        <Tooltip title="See All" arrow> <ReadMore color='primary'/> </Tooltip>
+                    <span className="mr-3 cursor-pointer" onClick={handleSeeAllNotifications}>
+                        <Tooltip title="See All" arrow>
+                            <ReadMore color="primary" />
+                        </Tooltip>
                     </span>
-              
-                    <span className='mr-3 cursor-pointer'>
-                        <Tooltip title="Mark all as read" arrow> <DraftsOutlined color='primary'/> </Tooltip>
+        
+                    <span className="mr-3 cursor-pointer">
+                        <Tooltip title="Mark all as read" arrow>
+                            <DraftsOutlined color="primary" />
+                        </Tooltip>
                     </span>
-
+        
                     <Close className="cursor-pointer text-gray-500 hover:text-gray-700" onClick={onClose} />
                 </div>
             </DialogTitle>
-
-            <DialogContent dividers className='p-0 px-4 overflow-y-hidden rounded-xl'>
-                {announcements?.length !== 0 && 
+        
+            {/* Remove overflow from DialogContent and let InfiniteScroll handle it */}
+            <DialogContent
+                dividers
+                className="p-0 pl-4"
+                sx={{
+                    overflow: "hidden", // Prevent DialogContent from adding a scrollbar
+                    height: "75vh", // Set a height limit
+                }}
+            >
+                {announcements?.length !== 0 && (
                     <InfiniteScroll
                         dataLength={announcements?.length}
                         next={fetchMoreData}
-                        hasMore={true}
-                        height={'auto'}
-                        style={{maxHeight:'75vh'}}
+                        hasMore={page - 1 < maxPages}
+                        height={"100%"} // Ensure it fills the parent DialogContent
+                        style={{ overflowX: "hidden" }} // Prevent horizontal scrollbar
                         loader={
-                            page-1 !== maxPages ? 
-                            <ListItem>
-                                <ListItemIcon>
-                                    <Skeleton variant="circular" width={40} height={40} />
-                                </ListItemIcon>
-                                <ListItemText>
-                                    <Skeleton variant="text"  />
-                                    <Skeleton variant="text"  />
-                                    <Skeleton variant="text"  width='50%'/>
-                                </ListItemText>
-                            </ListItem>
-                            : ''
+                            page - 1 !== maxPages && (
+                                <ListItem>
+                                    <ListItemIcon>
+                                        <Skeleton variant="circular" width={40} height={40} />
+                                    </ListItemIcon>
+                                    <ListItemText>
+                                        <Skeleton variant="text" />
+                                        <Skeleton variant="text" />
+                                        <Skeleton variant="text" width="50%" />
+                                    </ListItemText>
+                                </ListItem>
+                            )
                         }
                     >
-                        <List>
-                            {announcements?.map((item,index) => (
+                        <List sx={{ overflowY: "auto", maxHeight: "calc(75vh - 64px)" }}>
+                            {announcements?.map((item, index) => (
                                 <ListItemButton
                                     key={item?.id}
                                     sx={{
-                                        backgroundColor: item?.isRead === true ? 'white': '#f9f9f9',
-                                        borderRadius: 5,  
+                                        backgroundColor: item?.isRead ? "white" : "#f9f9f9",
+                                        borderRadius: 5,
                                         marginBottom: index === announcements?.length - 1 ? 0 : 1,
                                     }}
                                 >
@@ -85,21 +96,33 @@ const AnnouncementDialog = (props) => {
                                             <MarkEmailUnreadOutlined className="text-gray-500" />
                                         )}
                                     </ListItemIcon>
-
-                                    <ListItemText 
+        
+                                    <ListItemText
                                         primary={
-                                            <Typography 
-                                                className={`text-sm ${item?.isRead ? 'text-gray-400 font-normal' : 'text-gray-500 font-bold'}`}
+                                            <Typography
+                                                className={`text-sm ${
+                                                    item?.isRead
+                                                        ? "text-gray-400 font-normal"
+                                                        : "text-gray-500 font-bold"
+                                                }`}
                                             >
                                                 {item.title}
                                             </Typography>
                                         }
                                         secondary={
                                             <>
-                                                <Typography className={`text-gray-400 ${item?.isRead ? '' : 'text-gray-500'}`}>
+                                                <Typography
+                                                    className={`text-gray-400 ${
+                                                        item?.isRead ? "" : "text-gray-500"
+                                                    }`}
+                                                >
                                                     {item.description}
                                                 </Typography>
-                                                <Typography className={`text-gray-400 text-sm ${item?.isRead ? '' : 'text-gray-500'}`}>
+                                                <Typography
+                                                    className={`text-gray-400 text-sm ${
+                                                        item?.isRead ? "" : "text-gray-500"
+                                                    }`}
+                                                >
                                                     {formattedDate(item?.created_at)}
                                                 </Typography>
                                             </>
@@ -107,19 +130,18 @@ const AnnouncementDialog = (props) => {
                                     />
                                 </ListItemButton>
                             ))}
-                            {/* Not have Notifications */}
+                            {/* No notifications */}
                             {maxPages === 0 && (
                                 <ListItem>
                                     <ListItemIcon>
                                         <DraftsOutlined className="text-gray-400" />
                                     </ListItemIcon>
-                                    <ListItemText primary = "No notifications have been received.">
-                                    </ListItemText>
+                                    <ListItemText primary="No notifications have been received." />
                                 </ListItem>
                             )}
                         </List>
                     </InfiniteScroll>
-                }
+                )}
             </DialogContent>
         </Dialog>
     );
