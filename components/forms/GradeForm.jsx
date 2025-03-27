@@ -4,11 +4,13 @@ import { Grade, Percent } from '@mui/icons-material';
 import { Button, Spinner } from "@nextui-org/react";
 import { useState } from "react";
 import useAuth from "@/hooks/useAuth";
+import { useSession } from "next-auth/react";
 
 const GradeForm = ({ type, data, onClose, setReRender }) => {
     const { setSnackBar } = useSnackBar();
     const [loading, setLoading] = useState(false);
     const { authenticated } = useAuth();
+    const { data: session } = useSession();
 
     const [formValues, setFormValues] = useState({
         level: data?.level || '',
@@ -26,7 +28,7 @@ const GradeForm = ({ type, data, onClose, setReRender }) => {
         event.preventDefault();
 
         const formType = type === 'create' ? 'Create' : 'Update';
-        if (!authenticated) {
+        if (!(session || authenticated)) {
             setSnackBar({ display: true, message: `Please register with Codeial to ${formType} Grade.`, type: "info" });
             return;
         }

@@ -8,11 +8,13 @@ import DatePickerField from '../formsFields/DatePickerField';
 import { parseDate } from '@internationalized/date';
 import { useSnackBar } from '@/utils/snackbarContext';
 import useAuth from "@/hooks/useAuth";
+import { useSession } from 'next-auth/react';
 
 const AnnouncementForm = ({ type, data, onClose, setReRender }) => {
     const { setSnackBar } = useSnackBar();
     const [loading, setLoading] = useState(false);
     const { authenticated } = useAuth();
+    const { data: session } = useSession();
 
     const formatSubjectLabel = useCallback((item) => item?.name, []);
     const { data: classes, loading: classesLoading } = useFetchData("classes", formatSubjectLabel);
@@ -43,7 +45,7 @@ const AnnouncementForm = ({ type, data, onClose, setReRender }) => {
         event.preventDefault();
         
         const formType = type === 'create' ? 'Create' : 'Update';
-        if (!authenticated) {
+        if (!(session || authenticated)) {
             setSnackBar({ display: true, message: `Please register with Codeial to ${formType} Announcement.`, type: "info" });
             return;
         }

@@ -9,6 +9,7 @@ import { formatTime } from '@/utils/helper';
 import { parseAbsoluteToLocal } from "@internationalized/date";
 import { useSnackBar } from '@/utils/snackbarContext';
 import useAuth from '@/hooks/useAuth';
+import { useSession } from 'next-auth/react';
 
 const days = [
     { "label": 'MONDAY',    "key": 'MONDAY', "id": 'MONDAY'  },
@@ -23,6 +24,7 @@ const LessonForm = ({ type, data, onClose, setReRender }) => {
     const { setSnackBar } = useSnackBar();
     const [loading, setLoading] = useState(false);
     const { authenticated } = useAuth();
+    const { data: session } = useSession();
 
     const formatTeacherLabel = useCallback(
         (item) => (item?.last_name ? `${item?.first_name} ${item?.last_name}` : item?.first_name), []
@@ -54,7 +56,7 @@ const LessonForm = ({ type, data, onClose, setReRender }) => {
         event.preventDefault();
 
         const formType = type === 'create' ? 'Create' : 'Update';
-        if (!authenticated) {
+        if (!(session || authenticated)) {
             setSnackBar({ display: true, message: `Please register with Codeial to ${formType} Lesson.`, type: "info" });
             return;
         }
