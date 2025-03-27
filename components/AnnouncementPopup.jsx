@@ -26,8 +26,8 @@ const AnnouncementDialog = (props) => {
             onClose={onClose}
             TransitionComponent={Transition}
             PaperProps={{
-                style: { position:'absolute' },
-                className: "absolute top-[0%] right-[1%] m-0 rounded-[15px]"
+                style: { position:'absolute', borderRadius:'15px' },
+                className: "top-[0%] right-[1%] m-0"
             }}
         >
             <DialogTitle className='flex justify-between'>
