@@ -8,11 +8,16 @@ import { useDispatch } from 'react-redux';
 import SignUpComponent from './SignUp';
 import SignInComponent from './SignIn';
 import { useSession, signOut } from "next-auth/react";
+import AnnouncementDialog from './AnnouncementPopup';
 
 const Header = () => {
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [isSignInModalOpen, setIsSignInModalOpen] = useState(false);
-    const [announcementCount, setAnnouncementCount] = useState(null)
+    const [isAnnouncementModalOpen, setIsAnnouncementModalOpen] = useState(false)
+    const [announcementCount, setAnnouncementCount] = useState(null);
+    const [announcements, setAnnouncements] = useState([])
+    const [page, setPages] = useState(1);
+    const [maxPages, setMaxPage] = useState(1);
     const { authenticated, loading, user } = useAuth();
     const dispatch = useDispatch();
     const { data: session } = useSession();
@@ -24,14 +29,46 @@ const Header = () => {
         dispatch(reset());
     };
 
-    const fetchAnnouncement = async () => {
-        const apiResponse = await fetch(`${process.env.NEXT_PUBLIC_WEBSITE_URL}/annoucements/counts`)
-        const result = await apiResponse.json();
-        setAnnouncementCount(result?.data)
+    // const fetchAnnouncement = async () => {
+    //     const apiResponse = await fetch(`${process.env.NEXT_PUBLIC_WEBSITE_URL}/annoucements/counts`)
+    //     const result = await apiResponse.json();
+    //     setAnnouncementCount(result?.data)
+    // }
+
+    const fetchData = async () => {
+        try {
+            const res = await fetch(`${process.env.NEXT_PUBLIC_WEBSITE_URL}/annoucements?page=${page}`);
+            const data = await res.json(); // Convert response to JSON
+            setAnnouncements(data?.data?.annoucements)
+            setAnnouncementCount(data?.data?.totalRows)
+        } catch (error) {
+            console.error("Error fetching annoucements:", error);
+        }
     }
 
+    const fetchMoreData = async () => {
+        if (maxPages >= page) {
+            setTimeout(async () => { // Move `async` here
+                try {
+                    const res = await fetch(`${process.env.NEXT_PUBLIC_WEBSITE_URL}/announcements?page=${page}`);
+                    const data = await res.json(); // Convert response to JSON
+                
+                    if (data.data.maxPage >= page) {
+                        setPages(page + 1);
+                    }
+                    
+                    setAnnouncements((prev) => [...prev, ...data?.data?.annoucements]);
+                } catch (error) {
+                    console.error("Error fetching annoucements:", error);
+                }
+            }, 1500);
+        }
+    };
+      
+
     useEffect(() => {
-        fetchAnnouncement()
+        fetchData()
+        // fetchAnnouncement()
     }, [])
     
     return (
@@ -39,7 +76,7 @@ const Header = () => {
             <div className='pt-3'>
                 <Message className='text-gray-400 text-[20px]' />
             </div>
-            <div className='relative cursor-pointer'>
+            <div className='relative cursor-pointer' onClick={() => setIsAnnouncementModalOpen(true)}>
                 <Campaign className='pt-2 text-gray-400 text-[35px]' />
                 <p className='bg-[#615fb8] text-[#fff] text-center text-xs rounded-full px-[6px] py-[2px] absolute bottom-[68%] left-[50%]'>{announcementCount}</p>
             </div>
@@ -81,6 +118,16 @@ const Header = () => {
                 isOpen={isSignInModalOpen} 
                 openModel={() => setIsModalOpen(true)} 
                 onClose={() => setIsSignInModalOpen(false)} 
+            />
+
+            <AnnouncementDialog
+                isOpen={isAnnouncementModalOpen}
+                onClose={() => setIsAnnouncementModalOpen(false)}
+                setOpen={setIsAnnouncementModalOpen}
+                announcements={announcements}
+                fetchMoreData={fetchMoreData}
+                maxPages={maxPages}
+                page={page}
             />
         </div>
     )
