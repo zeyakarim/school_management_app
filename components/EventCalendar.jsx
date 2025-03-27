@@ -1,5 +1,6 @@
 'use client'
 import { MoreHoriz } from '@mui/icons-material';
+import Link from 'next/link';
 import { useState } from 'react';
 import Calendar from 'react-calendar';
 import 'react-calendar/dist/Calendar.css';
@@ -33,7 +34,9 @@ const EventCalendar = () => {
             <div className='bg-white rounded-md mt-3 p-4 shadow-small'>
                 <div className='flex justify-between items-center'>
                     <p className='font-semibold'>Events</p>
-                    <MoreHoriz className='text-gray-400' />
+                    <Link href="/events" className="text-xs text-[#1976D2] hover:underline">
+                        View All
+                    </Link>
                 </div>
 
                 <div className='flex flex-col gap-4 pt-2'>

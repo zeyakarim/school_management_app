@@ -1,3 +1,5 @@
+import Link from "next/link";
+
 const announcements = [
     {
         title: "Picture Day Reminder",
@@ -21,7 +23,9 @@ const Announcements = () => {
         <div className='bg-white rounded-md mt-3 p-4 shadow-small'>
             <div className='flex justify-between items-center'>
                 <p className='font-semibold'>Announcements</p>
-                <p className="text-xs text-gray-600">View All</p>
+                <Link href="/announcements" className="text-xs text-[#1976D2] hover:underline">
+                    View All
+                </Link>
             </div>
 
             <div className='flex flex-col gap-3 pt-2'>
