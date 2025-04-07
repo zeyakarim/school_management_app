@@ -12,6 +12,11 @@ export async function GET(req, { params }) {
         const teacherDetails = await prisma.teacher.findUnique({
             where: {id: parseInt(params?.id)}
         });
+
+        if(!teacherDetails) {
+            throw { message: 'Teacher Details Not Exist in the Database.' }
+        }
+
         const teacherDetailsItems = await fetchIcons();
 
         const attachDocsUrl = await readDocumentsFromS3('teachers', teacherDetails?.img, bucketName);

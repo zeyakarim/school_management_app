@@ -40,6 +40,23 @@ model Teacher {
   subjects    Subject[]
   results     Result[]
   attendances Attendance[]
+  schedules   TeacherSchedule[]
+}
+
+model TeacherSchedule {
+  id          Int       @id @default(autoincrement())
+  day         Day
+  teacher_id  Int
+  subject_id  Int
+  class_id    Int
+  start_time  DateTime
+  end_time    DateTime
+  created_at  DateTime     @default(now())
+  updated_at  DateTime     @updatedAt
+  deleted_at  DateTime?
+  teacher     Teacher      @relation(fields: [teacher_id], references: [id])
+  class       Class        @relation(fields: [class_id], references: [id])
+  subject     Subject      @relation(fields: [subject_id], references: [id])
 }
 
 model Subject {
@@ -57,6 +74,7 @@ model Subject {
   class       Class        @relation(fields: [class_id], references: [id])
   result      Result[]
   attendances Attendance[]
+  schedules   TeacherSchedule[]
 }
 
 model Student {
@@ -120,6 +138,7 @@ model Class {
   subjects      Subject[]
   assignments   Assignment[]
   results       Result[]
+  schedules     TeacherSchedule[]
 }
 
 model Lesson {

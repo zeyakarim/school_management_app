@@ -78,7 +78,7 @@ const DetailsPage = ({scheduleTitle, shortcutItems, id, endPoint, dataPosition }
 
         <div className="mt-4 bg-white rounded-md p-4 h-[800px] shadow-small">
           <h1>{scheduleTitle}</h1>
-          <BigCalendar type="teacherId" />
+          <BigCalendar type="teacherId" id={id} />
         </div>
       </div>
 

@@ -33,6 +33,6 @@ export default function DashboardLayout({ children }) {
           </Providers>
         </SnackBarProvider>
       </body>
-  </html>
+    </html>
   );
 }
